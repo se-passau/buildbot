@@ -1,79 +1,84 @@
 import sys
 
 from ..builders import register
-from ..utils import (builder, define, git, cmd, rmdir, ip, benchbuild_slurm, trigger, s_trigger, s_force)
+from ..utils import (builder, define, git, cmd, rmdir, ip, benchbuild_slurm,
+                     trigger, s_trigger, s_force)
 from ..repos import make_cb, codebases
 from .. import slaves
 from buildbot.plugins import util
 from buildbot.plugins import *
 
 P = util.Property
-cb_chimaira = make_cb(['polli', 'llvm', 'clang', 'polly', 'openmp', 'benchbuild'])
+cb_chimaira = make_cb(['polli', 'llvm', 'clang', 'polly', 'openmp',
+                       'benchbuild'])
 cb_benchbuild = make_cb(['benchbuild', 'stats'])
 accepted_builders = slaves.get_hostlist(slaves.infosun)
 
 exps = {
-    "raw" : {
-        "exclusive" : "true",
-        "experiment" : "raw",
-        "dirname" : "raw",
+    "raw": {
+        "exclusive": "true",
+        "experiment": "raw",
+        "dirname": "raw",
         "group": ["polybench", "benchbuild", "lnt", "gentoo"]
     },
     "pj-raw": {
-        "exclusive" : "true",
-        "experiment" : "pj-raw",
-        "dirname" : "pj-raw",
+        "exclusive": "true",
+        "experiment": "pj-raw",
+        "dirname": "pj-raw",
         "group": ["polybench", "benchbuild", "lnt", "gentoo"]
     },
     "pj-papi": {
-        "exclusive" : "true",
-        "experiment" : "pj-papi",
-        "dirname" : "pj-papi",
+        "exclusive": "true",
+        "experiment": "pj-papi",
+        "dirname": "pj-papi",
         "group": ["polybench", "benchbuild", "lnt", "gentoo"]
     },
     "cs": {
-        "cores": P("cores", default="1"),
-        "exclusive" : "false",
-        "experiment" : "cs",
-        "dirname" : "cs",
+        "cores": P("cores",
+                   default="1"),
+        "exclusive": "false",
+        "experiment": "cs",
+        "dirname": "cs",
     },
     "pj-cs": {
-        "cores": P("cores", default="1"),
-        "exclusive" : "false",
-        "experiment" : "pj-cs",
-        "dirname" : "pj-cs",
+        "cores": P("cores",
+                   default="1"),
+        "exclusive": "false",
+        "experiment": "pj-cs",
+        "dirname": "pj-cs",
     },
     "pj-collect": {
-        "cores": P("cores", default="1"),
-        "exclusive" : "false",
-        "experiment" : "pj-collect",
-        "dirname" : "pj-collect",
+        "cores": P("cores",
+                   default="1"),
+        "exclusive": "false",
+        "experiment": "pj-collect",
+        "dirname": "pj-collect",
     },
     "polly": {
-        "exclusive" : "true",
-        "experiment" : "polly",
-        "dirname" : "polly",
+        "exclusive": "true",
+        "experiment": "polly",
+        "dirname": "polly",
     },
     "polly-openmp": {
-        "exclusive" : "true",
-        "experiment" : "polly-openmp",
-        "dirname" : "polly-openmp",
+        "exclusive": "true",
+        "experiment": "polly-openmp",
+        "dirname": "polly-openmp",
     },
-    "polly-openmpvect" : {
-        "exclusive" : "true",
-        "experiment" : "polly-openmpvect",
-        "dirname" : "polly-openmpvect",
+    "polly-openmpvect": {
+        "exclusive": "true",
+        "experiment": "polly-openmpvect",
+        "dirname": "polly-openmpvect",
     },
-    "polly-vectorize" : {
-        "exclusive" : "true",
-        "experiment" : "polly-vectorize",
-        "dirname" : "polly-vectorize",
+    "polly-vectorize": {
+        "exclusive": "true",
+        "experiment": "polly-vectorize",
+        "dirname": "polly-vectorize",
     },
-    "perf-pj-papi" : {
-        "exclusive" : "true",
-        "experiment" : "pj-papi",
-        "dirname" : "perf-pj-papi",
-        "branch" : "perf",
+    "perf-pj-papi": {
+        "exclusive": "true",
+        "experiment": "pj-papi",
+        "dirname": "perf-pj-papi",
+        "branch": "perf",
     }
 }
 
@@ -85,6 +90,8 @@ ip_dirname = "%(prop:dirname:~empty)s"
 ip_str = ip_scratch + "/" + ip_dirname
 SetPropertiesFromEnv = steps.SetPropertiesFromEnv
 
+
+# yapf: disable
 def configure(c):
     c['builders'].append(builder("spawn-chimaira", None, accepted_builders,
         factory = BuildFactory([
@@ -154,25 +161,31 @@ def configure(c):
                 env={"PATH": P("BB_PATH")})
         ])))
 
-    # Add experiment builders
+    # yapf: enable
     for name in exps:
-        c['builders'].append(builder(name, None, accepted_builders,
-            factory = BuildFactory([
-                trigger(schedulerNames=['trigger-build-jit'],
-                        set_properties=exps[name],
-                        waitForFinish=True),
-                trigger(schedulerNames=['trigger-spawn-chimaira'],
-                        set_properties=exps[name],
-                        waitForFinish=True)
-            ])))
+        c['builders'].append(
+            builder(name,
+                    None,
+                    accepted_builders,
+                    factory=BuildFactory([
+                        trigger(schedulerNames=['trigger-build-jit'],
+                                set_properties=exps[name],
+                                waitForFinish=True),
+                        trigger(schedulerNames=['trigger-spawn-chimaira'],
+                                set_properties=exps[name],
+                                waitForFinish=True)
+                    ])))
+
 
 def schedule(c):
-    c['schedulers'].append(
-        s_trigger("trigger-spawn-chimaira", cb_benchbuild, ["spawn-chimaira"])
-    )
+    c['schedulers'].append(s_trigger("trigger-spawn-chimaira", cb_benchbuild,
+                                     ["spawn-chimaira"]))
 
     for name in exps:
-        c['schedulers'].append(s_trigger("t-{}".format(name), cb_chimaira, [name]))
-        c['schedulers'].append(s_force("f-{}".format(name), cb_chimaira, [name]))
+        c['schedulers'].append(s_trigger("t-{}".format(name), cb_chimaira,
+                                         [name]))
+        c['schedulers'].append(s_force("f-{}".format(name), cb_chimaira, [name
+                                                                          ]))
+
 
 register(sys.modules[__name__])

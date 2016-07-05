@@ -2,7 +2,8 @@ import sys
 
 from . import register
 from .. import slaves
-from ..utils import (builder, git, cmd, rmdir, pylint, s_sbranch, s_force, s_trigger)
+from ..utils import (builder, git, cmd, rmdir, pylint, s_sbranch, s_force,
+                     s_trigger)
 from ..repos import make_cb, codebases
 
 from buildbot.plugins import util
@@ -18,6 +19,8 @@ ip_str = ip_scratch + "/" + ip_dirname
 cb_benchbuild = make_cb(['benchbuild', 'stats'])
 accepted_builders = slaves.get_hostlist(slaves.infosun)
 
+
+# yapf: disable
 def configure(c):
     c['builders'].append(builder("build-benchbuild", None, accepted_builders,
         factory=BuildFactory([
@@ -38,14 +41,20 @@ def configure(c):
                    flunkOnFailure=False, haltOnFailure=False),
             rmdir("_venv")
         ])))
+# yapf: enable
+
 
 def schedule(c):
     c['schedulers'].append([
-        s_sbranch("build-benchbuild-sched", cb_benchbuild, ["build-benchbuild"],
+        s_sbranch("build-benchbuild-sched",
+                  cb_benchbuild,
+                  ["build-benchbuild"],
                   change_filter=filter.ChangeFilter(branch='develop'),
                   treeStableTimer=2 * 60),
         s_force("force-build-benchbuild", cb_benchbuild, ["build-benchbuild"]),
-        s_trigger("trigger-build-benchbuild", cb_benchbuild, ["build-benchbuild"])
+        s_trigger("trigger-build-benchbuild", cb_benchbuild,
+                  ["build-benchbuild"])
     ])
+
 
 register(sys.modules[__name__])

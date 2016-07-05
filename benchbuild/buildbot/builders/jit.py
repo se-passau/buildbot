@@ -2,13 +2,14 @@ import sys
 
 from . import register
 from .. import slaves
-from ..utils import (builder, define, git, cmd, compile, upload_file, rmdir, ip,
-                     test, s_sbranch, s_force, s_trigger)
+from ..utils import (builder, define, git, cmd, compile, upload_file, rmdir,
+                     ip, test, s_sbranch, s_force, s_trigger)
 from ..repos import make_cb, codebases
 from buildbot.plugins import util
 from buildbot.changes import filter
 
-cb_polli = make_cb(['polli', 'llvm', 'clang', 'polly', 'openmp', 'libcxx', 'libcxx_abi'])
+cb_polli = make_cb(['polli', 'llvm', 'clang', 'polly', 'openmp', 'libcxx',
+                    'libcxx_abi'])
 
 P = util.Property
 BuildFactory = util.BuildFactory
@@ -20,6 +21,8 @@ ip_str = ip_scratch + "/" + ip_dirname
 
 accepted_builders = slaves.get_hostlist(slaves.infosun)
 
+
+# yapf: disable
 def configure(c):
     c['builders'].append(builder("build-jit", None, accepted_builders,
         factory = BuildFactory([
@@ -87,17 +90,23 @@ def configure(c):
             rmdir(P("INSTALL_PREFIX"), haltOnFailure=False,
                   name="clean install/", description="remove old install/")
         ])))
+# yapf: enable
 
 def schedule(c):
     c['schedulers'].append([
-        s_sbranch("build-jit-sched", cb_polli, ["build-jit"],
+        s_sbranch("build-jit-sched",
+                  cb_polli,
+                  ["build-jit"],
                   change_filter=filter.ChangeFilter(branch_re='next|develop'),
                   treeStableTimer=2 * 60),
-        s_sbranch("build-jit-sched-daily", cb_polli, ["build-jit"],
+        s_sbranch("build-jit-sched-daily",
+                  cb_polli,
+                  ["build-jit"],
                   change_filter=filter.ChangeFilter(branch_re='master'),
-                  treeStableTimer=30 * 60),
-        s_force("force-build-jit", cb_polli, ["build-jit"]),
-        s_trigger("trigger-build-jit", cb_polli, ['build-jit'])
+                  treeStableTimer=30 * 60), s_force(
+                      "force-build-jit", cb_polli, ["build-jit"]), s_trigger(
+                          "trigger-build-jit", cb_polli, ['build-jit'])
     ])
+
 
 register(sys.modules[__name__])

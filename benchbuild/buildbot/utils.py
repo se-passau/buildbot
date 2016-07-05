@@ -2,12 +2,16 @@ from buildbot.plugins import *
 from buildbot.steps.trigger import Trigger
 from buildbot.steps import master
 
+
 def builder(name, workdir, slaves, **kwargs):
     if workdir:
-        return util.BuilderConfig(name=name, slavebuilddir=workdir,
-                                 slavenames=slaves, **kwargs)
+        return util.BuilderConfig(name=name,
+                                  slavebuilddir=workdir,
+                                  slavenames=slaves,
+                                  **kwargs)
     else:
         return util.BuilderConfig(name=name, slavenames=slaves, **kwargs)
+
 
 def define(prop, value, **kwargs):
     """Hide SetProperty steps from waterfall by default."""
@@ -15,6 +19,7 @@ def define(prop, value, **kwargs):
                               value=value,
                               hideStepIf=True,
                               **kwargs)
+
 
 def ip(text):
     return util.Interpolate(text)
@@ -36,10 +41,10 @@ def git(name, branch, cb, **kwargs):
 def compile(*args, **kwargs):
     return steps.Compile(command=args, logEnviron=False, **kwargs)
 
+
 def upload_file(src, tgt, **kwargs):
-    return steps.FileUpload(slavesrc=src,
-                            masterdest=tgt,
-                            **kwargs)
+    return steps.FileUpload(slavesrc=src, masterdest=tgt, **kwargs)
+
 
 def rmdir(target, **kwargs):
     return steps.RemoveDirectory(dir=target, **kwargs)
@@ -60,9 +65,9 @@ def test(*args, **kwargs):
                       warnOnFailure=True,
                       **kwargs)
 
+
 def pylint(*args, **kwargs):
     return steps.PyLint(command=args, **kwargs)
-
 
 
 def upload_dir(srcdir, tgtdir, **kwargs):
@@ -70,6 +75,7 @@ def upload_dir(srcdir, tgtdir, **kwargs):
                                  masterdest=tgtdir,
                                  compress="bz2",
                                  **kwargs)
+
 
 def master_cmd(command, **kwargs):
     if not "haltOnFailure" in kwargs:

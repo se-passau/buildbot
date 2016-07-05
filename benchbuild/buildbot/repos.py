@@ -2,7 +2,7 @@ from buildbot.plugins import *
 
 codebases = {
     'benchbuild': {'repository': 'git://github.com/simbuerg/benchbuild.git',
-              'branches': ['master', 'develop', 'perf']},
+                   'branches': ['master', 'develop', 'perf']},
     'stats': {'repository': 'git://github.com/simbuerg/pprof-stats.git',
               'branches': ['master']},
     'polli': {'repository': 'git://github.com/simbuerg/polli.git',
@@ -64,4 +64,3 @@ def configure(c):
                               project="polyjit",
                               pollinterval=5 * 60)
     ]
-
