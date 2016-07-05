@@ -1,12 +1,14 @@
 from buildbot.plugins import *
 
 codebases = {
-    'benchbuild': {'repository': 'git://github.com/simbuerg/benchbuild.git',
+    'benchbuild': {'repository': 'https://github.com/PolyJIT/benchbuild.git',
                    'branches': ['master', 'develop', 'perf']},
-    'stats': {'repository': 'git://github.com/simbuerg/pprof-stats.git',
+    'stats': {'repository': 'https://github.com/simbuerg/pprof-stats.git',
               'branches': ['master']},
-    'polli': {'repository': 'git://github.com/simbuerg/polli.git',
+    'polli': {'repository': 'https://github.com/PolyJIT/polli.git',
               'branches': ['master', 'next', 'perf']},
+    'polli-simbuerg': {'repository': 'https://github.com/simbuerg/polli.git',
+                       'branches': ['master', 'next', 'perf']},
     'llvm': {'repository': 'http://llvm.org/git/llvm.git',
              'branches': ['master']},
     'clang': {'repository': 'http://llvm.org/git/clang.git',
@@ -31,6 +33,7 @@ def make_cb(bases):
     return b_dict
 
 
+# yapf: disable
 def configure(c):
     c['change_source'] = [
         changes.GitPoller(repourl=codebases["benchbuild"]["repository"],
@@ -41,6 +44,11 @@ def configure(c):
         changes.GitPoller(repourl=codebases["polli"]["repository"],
                           workdir='gitpoller-polli',
                           branches=codebases["polli"]["branches"],
+                          project="polyjit",
+                          pollinterval=5 * 60),
+        changes.GitPoller(repourl=codebases["polli-simbuerg"]["repository"],
+                          workdir='gitpoller-polli-simbuerg',
+                          branches=codebases["polli-simbuerg"]["branches"],
                           project="polyjit",
                           pollinterval=5 * 60),
         changes.GitPoller(repourl=codebases["llvm"]["repository"],
@@ -57,10 +65,11 @@ def configure(c):
                           workdir='gitpoller-polly',
                           branches=codebases["polly"]["branches"],
                           project="polyjit",
-                          pollinterval=5 * 60), changes.GitPoller(
-                              repourl=codebases["stats"]["repository"],
-                              workdir='gitpoller-stats',
-                              branches=codebases["stats"]["branches"],
-                              project="polyjit",
-                              pollinterval=5 * 60)
+                          pollinterval=5 * 60),
+        changes.GitPoller(repourl=codebases["stats"]["repository"],
+                          workdir='gitpoller-stats',
+                          branches=codebases["stats"]["branches"],
+                          project="polyjit",
+                          pollinterval=5 * 60)
     ]
+# yapf: enable
