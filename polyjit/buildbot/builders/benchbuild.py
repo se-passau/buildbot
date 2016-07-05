@@ -45,7 +45,7 @@ def configure(c):
 
 
 def schedule(c):
-    c['schedulers'].append([
+    c['schedulers'].extend([
         s_sbranch("build-benchbuild-sched",
                   cb_benchbuild,
                   ["build-benchbuild"],

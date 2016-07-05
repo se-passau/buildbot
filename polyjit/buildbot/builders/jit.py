@@ -94,7 +94,7 @@ def configure(c):
 # yapf: enable
 
 def schedule(c):
-    c['schedulers'].append([
+    c['schedulers'].extend([
         s_sbranch("build-jit-sched",
                   cb_polli,
                   ["build-jit"],
