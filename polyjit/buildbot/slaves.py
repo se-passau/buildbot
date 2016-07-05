@@ -1,5 +1,4 @@
 from buildbot.plugins import *
-import os
 
 infosun = {
     "polyjit-ci": {

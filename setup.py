@@ -13,6 +13,6 @@ setup(name='polyjit.buildbot',
           'Development Status :: 4 - Beta', 'Intended Audience :: Developers',
           'Topic :: Software Development :: Testing',
           'License :: OSI Approved :: MIT License',
-          'Programming Language :: Python :: 3'
+          'Programming Language :: Python :: 2'
       ],
-      keywords="benchbuild buildbot", )
+      keywords="polyjit buildbot", )

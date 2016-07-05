@@ -1,10 +1,11 @@
 import sys
 
-from ..builders import register
-from ..utils import (builder, define, git, cmd, rmdir, ip, benchbuild_slurm,
-                     trigger, s_trigger, s_force)
-from ..repos import make_cb, codebases
-from .. import slaves
+from polyjit.buildbot.builders import register
+from polyjit.buildbot.utils import (builder, define, git, cmd, rmdir, ip,
+                                    benchbuild_slurm, trigger, s_trigger,
+                                    s_force)
+from polyjit.buildbot.repos import make_cb, codebases
+from polyjit.buildbot import slaves
 from buildbot.plugins import util
 from buildbot.plugins import *
 
