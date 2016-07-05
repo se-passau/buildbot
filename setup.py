@@ -1,11 +1,9 @@
 #!/usr/bin/env python2
 from setuptools import setup, find_packages
-setup(name='benchbuild.buildbot',
+setup(name='polyjit.buildbot',
       version='0.1',
       url='https://github.com/PolyJIT/buildbot',
-      packages=[
-          'benchbuild', 'benchbuild.buildbot', 'benchbuild.buildbot.builders'
-      ],
+      packages=find_packages(),
       install_requires=["buildbot>=0.8.9"],
       author="Andreas Simbuerger",
       author_email="simbuerg@fim.uni-passau.de",
