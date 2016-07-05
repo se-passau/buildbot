@@ -8,13 +8,17 @@ infosun = {
     "debussy-1": {
         "host": "debussy-1",
         "password": None
+    },
+    "local": {
+        "host": "local",
+        "password": None
     }
 }
 
 
 def get_hostlist(slave_dict):
     hosts = []
-    for k in infosun:
+    for k in slave_dict:
         hosts.append(infosun[k]["host"])
     return hosts
 
