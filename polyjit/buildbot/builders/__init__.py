@@ -7,7 +7,6 @@ def register(builder):
 
 
 def configure(master_config):
-    print __ALL__
     for b in __ALL__:
         b.configure(master_config)
 
