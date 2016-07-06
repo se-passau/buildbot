@@ -9,8 +9,7 @@ from polyjit.buildbot.repos import make_cb, codebases
 from buildbot.plugins import util
 from buildbot.changes import filter
 
-cb_polli = make_cb(['polli', 'llvm', 'clang', 'polly', 'openmp', 'libcxx',
-                    'libcxx_abi'])
+cb_polli = make_cb(['polli', 'llvm', 'clang', 'polly', 'openmp'])
 
 P = util.Property
 BuildFactory = util.BuildFactory
