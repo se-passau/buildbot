@@ -35,6 +35,7 @@ def git(name, branch, cb, **kwargs):
                      mode="incremental",
                      timeout=1200,
                      codebase=name,
+                     progress=True,
                      **kwargs)
 
 
