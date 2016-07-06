@@ -2,6 +2,7 @@ from buildbot.plugins import *
 from buildbot.steps.trigger import Trigger
 from buildbot.steps import master
 
+P = util.Property
 
 def builder(name, workdir, slaves, **kwargs):
     if workdir:
@@ -38,7 +39,6 @@ def git(name, branch, cb, **kwargs):
                      progress=True,
                      **kwargs)
 
-
 def compile(*args, **kwargs):
     return steps.Compile(command=args, logEnviron=False, **kwargs)
 
@@ -57,6 +57,26 @@ def cmd(*args, **kwargs):
     if not "logEnviron" in kwargs:
         kwargs["logEnviron"] = False
     return steps.ShellCommand(command=args, **kwargs)
+
+def ucmd(*args, **kwargs):
+    uid = kwargs.pop('uid', 0)
+    gid = kwargs.pop('gid', 0)
+
+    return cmd(P("uchroot_binary"), "-C", "-E", "-A",
+               "-u", uid, "-g", gid,
+               '-r', P("uchroot_image_path"), '-w', '/mnt',
+               '-M', ip("%(prop:workdir)s:/mnt"),
+               *args, **kwargs)
+
+def ucompile(*args, **kwargs):
+    uid = kwargs.pop('uid', 0)
+    gid = kwargs.pop('gid', 0)
+
+    return compile(P("uchroot_binary"), "-C", "-E", "-A",
+               "-u", uid, "-g", gid,
+               '-r', P("uchroot_image_path"), '-w', '/mnt',
+               '-M', ip("%(prop:workdir)s:/mnt"),
+               *args, **kwargs)
 
 
 def test(*args, **kwargs):
