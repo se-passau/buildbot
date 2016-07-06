@@ -3,15 +3,19 @@ from buildbot.plugins import *
 infosun = {
     "polyjit-ci": {
         "host": "polyjit-ci",
-        "password": None
-    },
-    "debussy-1": {
-        "host": "debussy-1",
-        "password": None
+        "password": None,
+        "properties" : {
+            "uchroot_image_path": "/data/polyjit/trusty-image/",
+            "uchroot_binary": "/data/polyjit/erlent/build/uchroot"
+        }
     },
     "local": {
         "host": "local",
-        "password": None
+        "password": None,
+        "properties" : {
+            "uchroot_image_path": "/dock/buildbot/trusty-image/",
+            "uchroot_binary": "/dock/buildbot/erlent/build/uchroot"
+        }
     }
 }
 
@@ -26,5 +30,8 @@ def get_hostlist(slave_dict):
 def configure(c):
     for k in infosun:
         slave = infosun[k]
+        props = {}
+        if "properties" in slave:
+            props = slave["properties"]
         c['slaves'].append(buildslave.BuildSlave(slave["host"], slave[
-            "password"]))
+            "password"], properties = props))
