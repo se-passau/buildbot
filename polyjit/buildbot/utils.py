@@ -2,6 +2,8 @@ from buildbot.plugins import *
 from buildbot.steps.trigger import Trigger
 from buildbot.steps import master
 
+import os
+
 P = util.Property
 
 def builder(name, workdir, slaves, **kwargs):
@@ -61,20 +63,24 @@ def cmd(*args, **kwargs):
 def ucmd(*args, **kwargs):
     uid = kwargs.pop('uid', 0)
     gid = kwargs.pop('gid', 0)
+    workdir = kwargs.pop('workdir', "build")
 
     return cmd(P("uchroot_binary"), "-C", "-E", "-A",
                "-u", uid, "-g", gid,
-               '-r', P("uchroot_image_path"), '-w', '/mnt',
+               '-r', P("uchroot_image_path"),
+               '-w', os.path.join("/mnt", workdir),
                '-M', ip("%(prop:workdir)s:/mnt"),
-               *args, **kwargs)
+                *args, **kwargs)
 
 def ucompile(*args, **kwargs):
     uid = kwargs.pop('uid', 0)
     gid = kwargs.pop('gid', 0)
+    workdir = kwargs.pop('workdir', "build")
 
     return compile(P("uchroot_binary"), "-C", "-E", "-A",
                "-u", uid, "-g", gid,
-               '-r', P("uchroot_image_path"), '-w', '/mnt',
+               '-r', P("uchroot_image_path"),
+               '-w', os.path.join("/mnt", workdir),
                '-M', ip("%(prop:workdir)s:/mnt"),
                *args, **kwargs)
 
