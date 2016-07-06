@@ -16,6 +16,14 @@ infosun = {
             "uchroot_image_path": "/dock/buildbot/trusty-image/",
             "uchroot_binary": "/dock/buildbot/erlent/build/uchroot"
         }
+    },
+    "ivy-vm": {
+        "host": "ivy-vm",
+        "password": None,
+        "properties" : {
+            "uchroot_image_path": "/buildbot/trusty-image/",
+            "uchroot_binary": "/buildbot/erlent/build/uchroot"
+        }
     }
 }
 
