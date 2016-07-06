@@ -60,7 +60,7 @@ def configure(c):
                  },
                  name="cmake",
                  description="cmake O3, Assertions, PIC, Static"),
-            ucompile("ninja", haltOnFailure=True, name="build jit")),
+            ucompile("ninja", haltOnFailure=True, name="build jit"),
         #    test("ninja", "check-polli",
         #         workdir=P("BUILD_PREFIX"),
         #         name="check-polli",
