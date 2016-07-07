@@ -53,7 +53,7 @@ def configure(c):
             download_file(src="public_html/llvm.tar.gz",
                           tgt="llvm.tar.gz",
                           doStepIf=property_is_false("have_newest_llvm")),
-            git('polli', 'next', codebases,
+            git('polli', 'next', codebases),
             rmdir("build/llvm", doStepIf=property_is_false("have_newest_llvm")),
             mkdir("build/llvm"),
             mkdir("build/polli"),
