@@ -41,8 +41,6 @@ def property_is_false(propname):
 def configure(c):
     c['builders'].append(builder("build-jit", None, accepted_builders,
         factory = BuildFactory([
-            define("POLLI_ROOT", ip("%(prop:builddir)s/polli")),
-            define("POLLI_BUILD", ip("%(prop:builddir)s/")),
             define("UCHROOT_SRC_ROOT", "/mnt/polli"),
             cmddef(command="stat llvm.tar.gz",
                    extract_fn=extract_rc('have_llvm')),
@@ -55,8 +53,8 @@ def configure(c):
             download_file(src="public_html/llvm.tar.gz",
                           tgt="llvm.tar.gz",
                           doStepIf=property_is_false("have_newest_llvm")),
-            git('polli', 'next', codebases, workdir=P("POLLI_ROOT")),
-            rmdir(ip(%)"build/llvm", doStepIf=property_is_false("have_newest_llvm")),
+            git('polli', 'next', codebases,
+            rmdir("build/llvm", doStepIf=property_is_false("have_newest_llvm")),
             mkdir("build/llvm"),
             mkdir("build/polli"),
             cmd("tar", "xzf", "llvm.tar.gz", "-C", ip("%(prop:builddir)s/llvm")),
