@@ -6,10 +6,11 @@ from polyjit.buildbot.utils import (builder, define, git, cmd, ucmd, ucompile,
                                     upload_file, download_file, ip, mkdir,
                                     s_sbranch, s_force, s_trigger)
 from polyjit.buildbot.repos import make_cb, codebases
+from polyjit.buildbot.master import URL
 from buildbot.plugins import util
 from buildbot.changes import filter
 
-cb_polli = make_cb(['polli', 'llvm', 'clang', 'polly', 'openmp'])
+cb_polli = make_cb(['polli', 'llvm', 'clang', 'polly', 'openmp', 'compiler-rt'])
 
 P = util.Property
 BuildFactory = util.BuildFactory
@@ -46,24 +47,17 @@ def configure(c):
             cmd("tar", "czf", "../polyjit.tar.gz", "."),
             upload_file(src="../polyjit.tar.gz",
                         tgt="public_html/polyjit.tar.gz",
-                        url="/polyjit.tar.gz")
+                        url=URL + "/polyjit.tar.gz")
         ])))
 # yapf: enable
 
 def schedule(c):
     c['schedulers'].extend([
-        s_sbranch("build-jit-sched",
-                  cb_polli,
-                  ["build-jit"],
+        s_sbranch("build-jit-sched", codebase, ["build-jit"],
                   change_filter=filter.ChangeFilter(branch_re='next|develop'),
                   treeStableTimer=2 * 60),
-        s_sbranch("build-jit-sched-daily",
-                  cb_polli,
-                  ["build-jit"],
-                  change_filter=filter.ChangeFilter(branch_re='master'),
-                  treeStableTimer=30 * 60), s_force(
-                      "force-build-jit", cb_polli, ["build-jit"]), s_trigger(
-                          "trigger-build-jit", cb_polli, ['build-jit'])
+        s_force("force-build-jit", cb_polli, ["build-jit"]),
+        s_trigger("trigger-build-jit", cb_polli, ['build-jit'])
     ])
 
 
