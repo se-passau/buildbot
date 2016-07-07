@@ -49,9 +49,15 @@ def upload_file(src, tgt, **kwargs):
     return steps.FileUpload(slavesrc=src, masterdest=tgt, **kwargs)
 
 
+def download_file(src, tgt, **kwargs):
+    return steps.FileDownload(mastersrc=src, slavedest=tgt, **kwargs)
+
+
 def rmdir(target, **kwargs):
     return steps.RemoveDirectory(dir=target, **kwargs)
 
+def mkdir(target, **kwargs):
+    return steps.MakeDirectory(dir=target, **kwargs)
 
 def cmd(*args, **kwargs):
     if not "haltOnFailure" in kwargs:
@@ -59,6 +65,7 @@ def cmd(*args, **kwargs):
     if not "logEnviron" in kwargs:
         kwargs["logEnviron"] = False
     return steps.ShellCommand(command=args, **kwargs)
+
 
 def ucmd(*args, **kwargs):
     uid = kwargs.pop('uid', 0)

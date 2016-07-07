@@ -50,10 +50,11 @@ def configure(c):
                  },
                  name="cmake",
                  description="cmake O3, Assertions, PIC, Static"),
-            ucompile("ninja", haltOnFailure=True, name="build jit"),
-            cmd("tar", "czf", "../llvm-polyjit.tar.gz", "."),
-            upload_file(src="llvm-polyjit.tar.gz", tgt="public_html/llvm-polyjit.tar.gz",
-                        url=URL + "/public_html/llvm-polyjit.tar.gz")
+            ucompile("ninja", haltOnFailure=True, name="build llvm"),
+            cmd("tar", "czf", "../llvm.tar.gz", "."),
+            upload_file(src="../llvm.tar.gz",
+                        tgt="public_html/llvm.tar.gz",
+                        url=URL + "/llvm.tar.gz")
         ])))
 
 def schedule(c):
