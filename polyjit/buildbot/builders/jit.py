@@ -26,7 +26,7 @@ def configure(c):
             define("UCHROOT_SRC_ROOT", "/mnt/polli"),
             download_file(src="public_html/llvm.tar.gz",
                           tgt="llvm.tar.gz"),
-            git('polli', 'devel', codebases, workdir=P("POLLI_ROOT")),
+            git('polli', 'next', codebases, workdir=P("POLLI_ROOT")),
             mkdir("llvm"),
             mkdir("polli"),
             cmd("tar", "xzf", "llvm-polyjit.tar.gz", "-C", "llvm"),
