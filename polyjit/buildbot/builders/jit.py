@@ -57,7 +57,7 @@ def configure(c):
             rmdir("build/llvm", doStepIf=property_is_false("have_newest_llvm")),
             mkdir("build/llvm"),
             mkdir("build/polli"),
-            cmd("tar", "xzf", "llvm.tar.gz", "-C", ip("%(prop:builddir)s/llvm")),
+            cmd("tar", "xzf", "llvm.tar.gz", "-C", "llvm")),
             ucmd('cmake', P("UCHROOT_SRC_ROOT"),
                  '-DLLVM_DIR=/mnt/llvm/lib/cmake/llvm',
                  '-DLLVM_INSTALL_ROOT=/mnt/llvm',
