@@ -18,14 +18,12 @@ def builder(name, workdir, slaves, **kwargs):
 
 def define(prop, value, **kwargs):
     """Hide SetProperty steps from waterfall by default."""
-    return master.SetProperty(property=prop,
-                              value=value,
-                              hideStepIf=True,
+    return master.SetProperty(property=prop, value=value, hideStepIf=True,
                               **kwargs)
 
-def slave_define(*args, **kwargs):
-    return shell.SetProperty(*args, **kwargs,
-                             warnOnFailure=True, warnOnWarnings=True)
+
+def slave_define(**kwargs):
+    return shell.SetProperty(warnOnFailure=True, warnOnWarnings=True, **kwargs)
 
 
 def ip(text):
