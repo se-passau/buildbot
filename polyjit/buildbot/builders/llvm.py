@@ -2,7 +2,7 @@ import sys
 
 from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
-from polyjit.buildbot.utils import (builder, define, git, ucmd, ucompile,
+from polyjit.buildbot.utils import (builder, define, git, ucmd, ucompile, cmd,
                                     upload_file, rmdir, ip, test, s_sbranch,
                                     s_force, s_trigger)
 from polyjit.buildbot.repos import make_cb, codebases
@@ -61,18 +61,9 @@ def configure(c):
                  name="cmake",
                  description="cmake O3, Assertions, PIC, Static"),
             ucompile("ninja", haltOnFailure=True, name="build jit"),
-        #    test("ninja", "check-polli",
-        #         workdir=P("BUILD_PREFIX"),
-        #         name="check-polli",
-        #         description="run polli unit tests"),
-        #    cmd("ninja", "install",
-        #        workdir=P("BUILD_PREFIX"),
-        #        name="deploy",
-        #        description=ip("install " + ip_experiment + " version")),
-        #    cmd("tar", "czf", P("LLVM_ARCHIVE"), P("experiment")),
-        #    upload_file(P("LLVM_ARCHIVE"), P("MASTER_LLVM_ARCHIVE")),
-        #    rmdir(P("INSTALL_PREFIX"), haltOnFailure=False,
-        #          name="clean install/", description="remove old install/")
+            cmd("tar", "czf", "llvm-polyjit.tar.gz", "-C", "build", "."),
+            upload_file(src="llvm-polyjit.tar.gz", tgt="public_html",
+                        url="")
         ])))
 
 def schedule(c):
