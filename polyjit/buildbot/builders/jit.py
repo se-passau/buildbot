@@ -21,7 +21,7 @@ def configure(c):
     c['builders'].append(builder("build-jit", None, accepted_builders,
         factory = BuildFactory([
             define("POLLI_ROOT", ip("%(prop:builddir)s/polli")),
-            define("POLLI_BUILD", ip("%(prop:builddir)s/"))
+            define("POLLI_BUILD", ip("%(prop:builddir)s/")),
             define("UCHROOT_SRC_ROOT", "/mnt/polli"),
             download_file(src="public_html/llvm-polyjit.tar.gz",
                           tgt="llvm-polyjit.tar.gz"),
