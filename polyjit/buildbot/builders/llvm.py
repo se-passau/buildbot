@@ -50,7 +50,7 @@ def configure(c):
                  name="cmake",
                  description="cmake O3, Assertions, PIC, Static"),
             ucompile("ninja", haltOnFailure=True, name="build jit"),
-            cmd("tar", "czf", "llvm-polyjit.tar.gz", "-C", "build", "."),
+            cmd("tar", "czf", "../llvm-polyjit.tar.gz", "."),
             upload_file(src="llvm-polyjit.tar.gz", tgt="public_html",
                         url="")
         ])))
