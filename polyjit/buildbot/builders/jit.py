@@ -10,7 +10,7 @@ from polyjit.buildbot.master import URL
 from buildbot.plugins import util
 from buildbot.changes import filter
 
-cb_polli = make_cb(['polli', 'llvm', 'clang', 'polly', 'openmp', 'compiler-rt'])
+codebase = make_cb(['polli', 'llvm', 'clang', 'polly', 'openmp', 'compiler-rt'])
 
 P = util.Property
 BuildFactory = util.BuildFactory
@@ -56,8 +56,8 @@ def schedule(c):
         s_sbranch("build-jit-sched", codebase, ["build-jit"],
                   change_filter=filter.ChangeFilter(branch_re='next|develop'),
                   treeStableTimer=2 * 60),
-        s_force("force-build-jit", cb_polli, ["build-jit"]),
-        s_trigger("trigger-build-jit", cb_polli, ['build-jit'])
+        s_force("force-build-jit", codebase, ["build-jit"]),
+        s_trigger("trigger-build-jit", codebase, ['build-jit'])
     ])
 
 
