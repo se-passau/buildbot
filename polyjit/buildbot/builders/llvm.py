@@ -3,7 +3,7 @@ import sys
 from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, define, git, ucmd, ucompile, cmd,
-                                    upload_file, rmdir, ip, test, s_sbranch,
+                                    upload_file, ip, s_sbranch,
                                     s_force, s_trigger)
 from polyjit.buildbot.repos import make_cb, codebases
 from buildbot.plugins import util
@@ -13,12 +13,6 @@ codebase = make_cb(['llvm', 'clang', 'polly', 'openmp', 'compiler-rt'])
 
 P = util.Property
 BuildFactory = util.BuildFactory
-ip_branch = "%(prop:branch:~next)s"
-ip_experiment = "%(prop:experiment:~empty)s"
-ip_scratch = "%(prop:scratch:~/scratch/pjtest)s"
-ip_dirname = "%(prop:dirname:~empty)s"
-ip_str = ip_scratch + "/" + ip_dirname
-
 accepted_builders = slaves.get_hostlist(slaves.infosun)
 
 
@@ -26,17 +20,12 @@ accepted_builders = slaves.get_hostlist(slaves.infosun)
 def configure(c):
     c['builders'].append(builder("build-llvm", None, accepted_builders,
         factory = BuildFactory([
-            #define("scratch", P("scratch", default="/scratch/pjtest")),
-            #define("MASTER_PREFIX", ip(ip_str)),
-            #define("LLVM_ARCHIVE", ip("llvm-" + ip_experiment + ".tar.gz")),
-            #define("MASTER_LLVM_ARCHIVE", ip("%(prop:MASTER_PREFIX)s/%(prop:LLVM_ARCHIVE)s")),
             define("LLVM_ROOT", ip("%(prop:builddir)s/llvm")),
             define("UCHROOT_SRC_ROOT", "/mnt/llvm"),
             define("CLANG_ROOT", ip("%(prop:LLVM_ROOT)s/tools/clang")),
             define("POLLY_ROOT", ip("%(prop:LLVM_ROOT)s/tools/polly")),
             define("COMPILERRT_ROOT", ip("%(prop:LLVM_ROOT)s/projects/compiler-rt")),
             define("OPENMP_ROOT", ip("%(prop:LLVM_ROOT)s/projects/openmp")),
-            #define("INSTALL_PREFIX", ip("%(prop:builddir)s/%(prop:experiment)s")),
 
             git('llvm', 'master', codebases, workdir=P("LLVM_ROOT")),
             git('clang', 'master', codebases, workdir=P("CLANG_ROOT")),
