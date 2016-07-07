@@ -4,7 +4,8 @@ from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, define, git, cmd, ucmd, ucompile,
                                     upload_file, download_file, ip, mkdir,
-                                    s_sbranch, s_force, s_trigger, slave_define)
+                                    rmdir, s_sbranch, s_force, s_trigger,
+                                    slave_define)
 from polyjit.buildbot.repos import make_cb, codebases
 from polyjit.buildbot.master import URL
 from buildbot.plugins import util
@@ -55,6 +56,7 @@ def configure(c):
                           tgt="llvm.tar.gz",
                           doStepIf=property_is_false("have_newest_llvm")),
             git('polli', 'next', codebases, workdir=P("POLLI_ROOT")),
+            rmdir("llvm", doStepIf=property_is_false("have_newest_llvm")),
             mkdir("llvm"),
             mkdir("polli"),
             cmd("tar", "xzf", "llvm.tar.gz", "-C", ip("%(prop:builddir)s/llvm")),
