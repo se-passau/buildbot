@@ -3,7 +3,7 @@ import sys
 from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, define, git, cmd, ucmd, ucompile,
-                                    upload_file, download_file, ip, test, mkdir
+                                    upload_file, download_file, ip, mkdir,
                                     s_sbranch, s_force, s_trigger)
 from polyjit.buildbot.repos import make_cb, codebases
 from buildbot.plugins import util
