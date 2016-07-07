@@ -17,19 +17,19 @@ BuildFactory = util.BuildFactory
 accepted_builders = slaves.get_hostlist(slaves.infosun)
 
 
-def extract_rc(propertyname, rc, stdout, stderr):
+def extract_rc(propertyname):
     name = propertyname
     def extract_rc_wrapper(rc, stdout, stderr):
         return { name: rc == 0 }
     return extract_rc_wrapper
 
-def property_is_true(propname, step):
+def property_is_true(propname):
     prop = propname
     def property_is_true_wrapper(step):
         return bool(step.getProperty(prop))
     return property_is_true_wrapper
 
-def property_is_false(propname, step):
+def property_is_false(propname):
     prop = propname
     def property_is_false_wrapper(step):
         return not bool(step.getProperty(prop))
