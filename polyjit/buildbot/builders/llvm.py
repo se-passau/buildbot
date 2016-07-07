@@ -6,6 +6,7 @@ from polyjit.buildbot.utils import (builder, define, git, ucmd, ucompile, cmd,
                                     upload_file, ip, s_sbranch,
                                     s_force, s_trigger)
 from polyjit.buildbot.repos import make_cb, codebases
+from polyjit.buildbot.master import URL
 from buildbot.plugins import util
 from buildbot.changes import filter
 
@@ -51,8 +52,8 @@ def configure(c):
                  description="cmake O3, Assertions, PIC, Static"),
             ucompile("ninja", haltOnFailure=True, name="build jit"),
             cmd("tar", "czf", "../llvm-polyjit.tar.gz", "."),
-            upload_file(src="llvm-polyjit.tar.gz", tgt="public_html",
-                        url="")
+            upload_file(src="llvm-polyjit.tar.gz", tgt="public_html/llvm-polyjit.tar.gz",
+                        url=URL + "/public_html/llvm-polyjit.tar.gz")
         ])))
 
 def schedule(c):
