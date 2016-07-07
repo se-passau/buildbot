@@ -33,7 +33,7 @@ def property_is_false(propname):
     prop = propname
     def property_is_false_wrapper(step):
         return not bool(step.getProperty(prop))
-    return property_is_fales_wrapper
+    return property_is_false_wrapper
 
 
 # yapf: disable
