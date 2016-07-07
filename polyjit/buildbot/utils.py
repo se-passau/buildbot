@@ -24,7 +24,8 @@ def define(prop, value, **kwargs):
                               **kwargs)
 
 def slave_define(*args, **kwargs):
-    return shell.SetProperty(*args, **kwargs)
+    return shell.SetProperty(*args, **kwargs,
+                             warnOnFailure=True, warnOnWarnings=True)
 
 
 def ip(text):
