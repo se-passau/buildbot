@@ -5,7 +5,7 @@ from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, define, git, cmd, ucmd, ucompile,
                                     upload_file, download_file, ip, mkdir,
                                     rmdir, s_sbranch, s_force, s_trigger,
-                                    slave_define)
+                                    cmddef)
 from polyjit.buildbot.repos import make_cb, codebases
 from polyjit.buildbot.master import URL
 from buildbot.plugins import util
@@ -44,21 +44,21 @@ def configure(c):
             define("POLLI_ROOT", ip("%(prop:builddir)s/polli")),
             define("POLLI_BUILD", ip("%(prop:builddir)s/")),
             define("UCHROOT_SRC_ROOT", "/mnt/polli"),
-            slave_define(command="stat llvm.tar.gz",
-                         extract_fn=extract_rc('have_llvm')),
+            cmddef(command="stat llvm.tar.gz",
+                   extract_fn=extract_rc('have_llvm')),
             download_file(src="public_html/llvm.tar.gz.md5",
                           tgt="llvm.tar.gz.md5",
                           doStepIf=property_is_true("have_llvm")),
-            slave_define(command="md5sum -c llvm.tar.gz.md5",
-                         extract_fn=extract_rc('have_newest_llvm'),
-                         doStepIf=property_is_true("have_llvm")),
+            cmddef(command="md5sum -c llvm.tar.gz.md5",
+                   extract_fn=extract_rc('have_newest_llvm'),
+                   doStepIf=property_is_true("have_llvm")),
             download_file(src="public_html/llvm.tar.gz",
                           tgt="llvm.tar.gz",
                           doStepIf=property_is_false("have_newest_llvm")),
             git('polli', 'next', codebases, workdir=P("POLLI_ROOT")),
-            rmdir("llvm", doStepIf=property_is_false("have_newest_llvm")),
-            mkdir("llvm"),
-            mkdir("polli"),
+            rmdir(ip(%)"build/llvm", doStepIf=property_is_false("have_newest_llvm")),
+            mkdir("build/llvm"),
+            mkdir("build/polli"),
             cmd("tar", "xzf", "llvm.tar.gz", "-C", ip("%(prop:builddir)s/llvm")),
             ucmd('cmake', P("UCHROOT_SRC_ROOT"),
                  '-DLLVM_DIR=/mnt/llvm/lib/cmake/llvm',
