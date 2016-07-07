@@ -29,7 +29,7 @@ def configure(c):
             git('polli', 'next', codebases, workdir=P("POLLI_ROOT")),
             mkdir("llvm"),
             mkdir("polli"),
-            cmd("tar", "xzf", "llvm-polyjit.tar.gz", "-C", "llvm"),
+            cmd("tar", "xzf", "llvm.tar.gz", "-C", "llvm"),
             ucmd('cmake', P("UCHROOT_SRC_ROOT"),
                  '-DLLVM_DIR=/mnt/llvm/lib/cmake/llvm',
                  '-DLLVM_INSTALL_ROOT=/mnt/llvm',
