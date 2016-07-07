@@ -1,6 +1,6 @@
 from buildbot.plugins import *
 from buildbot.steps.trigger import Trigger
-from buildbot.steps import master
+from buildbot.steps import master, shell
 
 import os
 
@@ -22,6 +22,9 @@ def define(prop, value, **kwargs):
                               value=value,
                               hideStepIf=True,
                               **kwargs)
+
+def slave_define(*args, **kwargs):
+    return shell.SetProperty(*args, **kwargs)
 
 
 def ip(text):

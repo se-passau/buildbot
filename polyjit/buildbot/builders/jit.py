@@ -4,7 +4,7 @@ from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, define, git, cmd, ucmd, ucompile,
                                     upload_file, download_file, ip, mkdir,
-                                    s_sbranch, s_force, s_trigger)
+                                    s_sbranch, s_force, s_trigger, slave_define)
 from polyjit.buildbot.repos import make_cb, codebases
 from polyjit.buildbot.master import URL
 from buildbot.plugins import util
@@ -17,6 +17,25 @@ BuildFactory = util.BuildFactory
 accepted_builders = slaves.get_hostlist(slaves.infosun)
 
 
+def extract_rc(propertyname, rc, stdout, stderr):
+    name = propertyname
+    def extract_rc_wrapper(rc, stdout, stderr):
+        return { name: rc == 0 }
+    return extract_rc_wrapper
+
+def property_is_true(propname, step):
+    prop = propname
+    def property_is_true_wrapper(step):
+        return bool(step.getProperty(prop))
+    return property_is_true_wrapper
+
+def property_is_false(propname, step):
+    prop = propname
+    def property_is_false_wrapper(step):
+        return not bool(step.getProperty(prop))
+    return property_is_fales_wrapper
+
+
 # yapf: disable
 def configure(c):
     c['builders'].append(builder("build-jit", None, accepted_builders,
@@ -24,8 +43,17 @@ def configure(c):
             define("POLLI_ROOT", ip("%(prop:builddir)s/polli")),
             define("POLLI_BUILD", ip("%(prop:builddir)s/")),
             define("UCHROOT_SRC_ROOT", "/mnt/polli"),
+            slave_define(command="stat llvm.tar.gz",
+                         extract_fn=extract_rc('have_llvm')),
+            download_file(src="public_html/llvm.tar.gz.md5",
+                          tgt="llvm.tar.gz.md5",
+                          doStepIf=property_is_true("have_llvm")),
+            slave_define(command="md5sum -c llvm.tar.gz.md5",
+                         extract_fn=extract_rc('need_new_llvm'),
+                         doStepIf=property_is_true("have_llvm")),
             download_file(src="public_html/llvm.tar.gz",
-                          tgt="llvm.tar.gz"),
+                          tgt="llvm.tar.gz",
+                          doStepIf=property_is_false("have_llvm")),
             git('polli', 'next', codebases, workdir=P("POLLI_ROOT")),
             mkdir("llvm"),
             mkdir("polli"),
