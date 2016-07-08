@@ -17,6 +17,12 @@ codebases = {
                'branches': ['master']},
     'stats': {'repository': 'https://github.com/simbuerg/pprof-stats.git',
               'branches': ['master']},
+    'isl' : {'repository': 'https://github.com/simbuerg/isl.git',
+             'branches': ['master', 'isl-0.16.1-cpp']},
+    'isl-cpp': {'repository': 'https://github.com/simbuerg/isl-cpp.git',
+                'branches': ['master']},
+    'likwid': {'repository': 'https://github.com/RRZE-HPC/likwid.git',
+                'branches': ['v4.1']},
 }
 
 

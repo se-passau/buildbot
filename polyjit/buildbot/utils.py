@@ -75,25 +75,39 @@ def ucmd(*args, **kwargs):
     uid = kwargs.pop('uid', 0)
     gid = kwargs.pop('gid', 0)
     workdir = kwargs.pop('workdir', "build")
+    env = {
+        "LC_ALL": "C",
+    }
+    env.update(kwargs.pop('env', {}))
 
     return cmd(P("uchroot_binary"), "-C", "-E", "-A",
                "-u", uid, "-g", gid,
                '-r', P("uchroot_image_path"),
                '-w', os.path.join("/mnt", workdir),
                '-M', ip("%(prop:workdir)s:/mnt"),
-                *args, **kwargs)
+               workdir=workdir,
+               usePTY=True,
+               env=env,
+               *args, **kwargs)
 
 def ucompile(*args, **kwargs):
     uid = kwargs.pop('uid', 0)
     gid = kwargs.pop('gid', 0)
     workdir = kwargs.pop('workdir', "build")
+    env = {
+        "LC_ALL": "C",
+    }
+    env.update(kwargs.pop('env', {}))
 
     return compile(P("uchroot_binary"), "-C", "-E", "-A",
                "-u", uid, "-g", gid,
                '-r', P("uchroot_image_path"),
                '-w', os.path.join("/mnt", workdir),
                '-M', ip("%(prop:workdir)s:/mnt"),
-               workdir=workdir, *args, **kwargs)
+               workdir=workdir,
+               usePTY=True,
+               env=env,
+               *args, **kwargs)
 
 
 def test(*args, **kwargs):
