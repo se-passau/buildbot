@@ -93,7 +93,7 @@ def ucompile(*args, **kwargs):
                '-r', P("uchroot_image_path"),
                '-w', os.path.join("/mnt", workdir),
                '-M', ip("%(prop:workdir)s:/mnt"),
-               *args, **kwargs)
+               workdir=workdir, *args, **kwargs)
 
 
 def test(*args, **kwargs):
