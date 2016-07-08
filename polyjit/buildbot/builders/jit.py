@@ -41,7 +41,7 @@ def property_is_false(propname):
 def configure(c):
     c['builders'].append(builder("build-jit", None, accepted_builders,
         factory = BuildFactory([
-            define("UCHROOT_SRC_ROOT", "/mnt/polli"),
+            define("UCHROOT_SRC_ROOT", "/mnt/build"),
             cmddef(command="stat llvm.tar.gz",
                    extract_fn=extract_rc('have_llvm')),
             download_file(src="public_html/llvm.tar.gz.md5",
