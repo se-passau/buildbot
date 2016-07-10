@@ -64,11 +64,15 @@ def mkdir(target, **kwargs):
     return steps.MakeDirectory(dir=target, **kwargs)
 
 def cmd(*args, **kwargs):
+    command = args
+    if isinstance(args[0], str):
+        command = str(args[0])
+
     if not "haltOnFailure" in kwargs:
         kwargs["haltOnFailure"] = True
     if not "logEnviron" in kwargs:
         kwargs["logEnviron"] = False
-    return steps.ShellCommand(command=args, **kwargs)
+    return steps.ShellCommand(command=command, **kwargs)
 
 
 def ucmd(*args, **kwargs):
