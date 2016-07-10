@@ -65,7 +65,7 @@ def mkdir(target, **kwargs):
 
 def cmd(*args, **kwargs):
     command = args
-    if isinstance(args[0], str):
+    if (len(args) == 1) and isinstance(args[0], str):
         command = str(args[0])
 
     if not "haltOnFailure" in kwargs:
