@@ -23,8 +23,13 @@ def define(prop, value, **kwargs):
 
 
 def cmddef(**kwargs):
+    env = {
+        "LC_ALL": "C",
+    }
+    env.update(kwargs.pop('env', {}))
     return steps.SetPropertyFromCommand(warnOnFailure=True,
                                         warnOnWarnings=True,
+                                        env=env,
                                         **kwargs)
 
 
