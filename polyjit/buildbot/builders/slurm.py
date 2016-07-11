@@ -67,7 +67,7 @@ def configure(c):
                 'BB_SRC_DIR': ip('%(prop:scratch)s/benchbuild'),
                 'BB_UNIONFS_ENABLE': 'false'
             },
-            workdir=P('%(prop:scratch)s')),
+            workdir=P('scratch')),
     ])
 
     c['builders'].append(builder("build-slurm-set", None, accepted_builders,
