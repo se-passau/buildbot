@@ -6,7 +6,8 @@ from polyjit.buildbot.utils import (builder, define, git, cmd, ucmd, ucompile,
                                     upload_file, ip, mkdir,
                                     rmdir, s_sbranch, s_force, s_trigger,
                                     property_is_false,
-                                    hash_download_from_master)
+                                    hash_download_from_master,
+                                    hash_upload_to_master)
 from polyjit.buildbot.repos import make_cb, codebases
 from polyjit.buildbot.master import URL
 from buildbot.plugins import util
@@ -91,6 +92,9 @@ def configure(c):
                     description="Uploading PolyJIT",
                     descriptionDone="Uploaded PolyJIT")
     ])
+    polyjit_ul = hash_upload_to_master("polyjit.tar.gz", "polyjit.tar.gz",
+        "public_html/polyjit.tar.gz", URL)
+    steps.extend(polyjit_ul)
 
     c['builders'].append(builder("build-jit", None, accepted_builders,
         factory=BuildFactory(steps)))

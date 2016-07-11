@@ -208,6 +208,22 @@ def hash_download_from_master(mastersrc, slavedst, tag):
     ]
     return steps
 
+def hash_upload_to_master(filename, slavesrc, masterdst, url):
+    steps = [
+        cmd("md5sum {0} > {0}.md5".format(filename), workdir=P("workdir")),
+        upload_file(src=slavesrc,
+                    tgt=masterdst,
+                    url="{0}/{1}".format(url, filename),
+                    description="Uploading {0}".format(filename),
+                    descriptionDone="Uploaded {0}".format(filename)),
+        upload_file(src="{0}.md5".format(slavesrc),
+                    tgt="{0}.md5".format(masterdst),
+                    url="{0}/{1}.md5".format(url, filename),
+                    description="Uploading {0}.md5".format(filename),
+                    descriptionDone="Uploaded {0}.md5".format(filename))
+    ]
+    return steps
+
 @util.renderer
 def benchbuild_slurm(props):
     experiment = "empty"
