@@ -199,7 +199,7 @@ def hash_download_from_master(mastersrc, slavedst, tag):
         download_file(src="{0}.md5".format(mastersrc),
                       tgt="{0}.md5".format(slavedst),
                       doStepIf=property_is_true("have_{0}".format(tag))),
-        cmddef(command="md5sum -c {0}".format(slavedst),
+        cmddef(command="md5sum -c {0}.md5".format(slavedst),
            extract_fn=extract_rc('have_newest_{0}'.format(tag)),
            doStepIf=property_is_true("have_{0}".format(tag))),
         download_file(src=mastersrc,
