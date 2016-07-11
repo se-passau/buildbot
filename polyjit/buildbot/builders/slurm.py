@@ -2,13 +2,10 @@ import sys
 
 from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
-from polyjit.buildbot.utils import (builder, define, git, cmd, ucmd, ucompile,
-                                    upload_file, trigger, ip, mkdir,
-                                    rmdir, s_sbranch, s_force, s_trigger,
-                                    hash_download_from_master,
-                                    property_is_false, clean_unpack)
+from polyjit.buildbot.utils import (builder, define, git, cmd, trigger, ip,
+                                    mkdir, s_sbranch, s_force, s_trigger,
+                                    hash_download_from_master, clean_unpack)
 from polyjit.buildbot.repos import make_cb, codebases
-from polyjit.buildbot.master import URL
 from buildbot.plugins import util
 from buildbot.changes import filter
 
@@ -22,7 +19,7 @@ def has_munged(host):
         return host["properties"]["has_munged"]
     return False
 
-accepted_builders = slaves.get_hostlist(slaves.infosun, predicate = has_munged)
+accepted_builders = slaves.get_hostlist(slaves.infosun, predicate=has_munged)
 
 
 # yapf: disable
@@ -53,7 +50,7 @@ def configure(c):
         cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install', '--upgrade', '.',
             workdir='build/benchbuild'),
         mkdir(P("scratch")),
-        cmd("rsync", "-var", "./", P("scratch"))
+        cmd("rsync", "-var", "./", P("scratch")),
         cmd(P('benchbuild'), 'bootstrap', env={
             'PATH': '/opt/cmake/bin:/usr/sbin:/sbin:/usr/bin:/bin',
             'BB_ENV_COMPILER_PATH': ip('%(prop:llvm)s/bin'),
@@ -69,7 +66,7 @@ def configure(c):
             'BB_SRC_DIR': ip('%(prop:scratch)s/benchbuild'),
             'BB_UNIONFS_ENABLE': 'false'
         },
-        workdir=P('%(prop:scratch)s'),
+        workdir=P('%(prop:scratch)s')),
     ])
 
     c['builders'].append(builder("build-slurm-set", None, accepted_builders,
