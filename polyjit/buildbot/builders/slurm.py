@@ -16,7 +16,13 @@ codebase = make_cb(['benchbuild'])
 
 P = util.Property
 BuildFactory = util.BuildFactory
-accepted_builders = slaves.get_hostlist(slaves.infosun)
+
+def has_munged(host):
+    if "has_munged" in host["properties"]:
+        return host["properties"]["munged"]
+    return False
+
+accepted_builders = slaves.get_hostlist(slaves.infosun, predicate = has_munged)
 
 
 # yapf: disable
@@ -26,7 +32,7 @@ def configure(c):
     polyjit_dl = hash_download_from_master("public_html/polyjit.tar.gz",
                                         "polyjit.tar.gz", "polyjit")
     steps = [
-        trigger(schedulerNames=['trigger-build-llvm', 'trigger-build-jit']),
+#        trigger(schedulerNames=['trigger-build-llvm', 'trigger-build-jit']),
     ]
     steps.extend(llvm_dl)
     steps.extend(clean_unpack("llvm.tar.gz", "llvm"))

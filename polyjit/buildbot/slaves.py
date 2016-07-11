@@ -24,14 +24,25 @@ infosun = {
             "uchroot_image_path": "/buildbot/trusty-image/",
             "uchroot_binary": "/buildbot/erlent/build/uchroot"
         }
+    },
+    "debussy": {
+        "host": "debussy",
+        "password": None,
+        "properties" : {
+            "uchroot_image_path": "/scratch/pjtest/trusty-image/",
+            "uchroot_binary": "/scratch/pjtest/erlent/build/uchroot",
+            "has_munged": True
+        }
     }
 }
 
-
-def get_hostlist(slave_dict):
+def get_hostlist(slave_dict, predicate = None):
+    if not predicate:
+        predicate = lambda x : True
     hosts = []
     for k in slave_dict:
-        hosts.append(infosun[k]["host"])
+        if predicate(k):
+            hosts.append(infosun[k]["host"])
     return hosts
 
 
