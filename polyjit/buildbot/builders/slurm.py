@@ -47,8 +47,8 @@ def configure(c):
 
     steps.extend([
         ucmd('virtualenv', '-ppython3', 'env/'),
-        ucmd('env/bin/pip3', 'install', '.', workdir='build/benchbuild'),
-        ucmd('env/bin/benchbuild', 'bootstrap', env={
+        ucmd('/mnt/build/env/bin/pip3', 'install', '.', workdir='build/benchbuild'),
+        ucmd('/mnt/build/env/bin/benchbuild', 'bootstrap', env={
             'BB_ENV_COMPILER_PATH':
                 ip('%(prop:scratch)s/llvm/bin:'
                    '/mnt/build/llvm/bin:'
