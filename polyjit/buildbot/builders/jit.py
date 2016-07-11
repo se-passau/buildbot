@@ -7,7 +7,7 @@ from polyjit.buildbot.utils import (builder, define, git, cmd, ucmd, ucompile,
                                     rmdir, s_sbranch, s_force, s_trigger,
                                     property_is_false,
                                     hash_download_from_master,
-                                    hash_upload_to_master)
+                                    hash_upload_to_master, clean_unpack)
 from polyjit.buildbot.repos import make_cb, codebases
 from polyjit.buildbot.master import URL
 from buildbot.plugins import util
@@ -40,13 +40,10 @@ def configure(c):
         git('polli', 'next', codebases, workdir=P("POLLI_ROOT"),
             submodules=True),
         git('isl', 'isl-0.16.1-cpp', codebases, workdir=P("ISL_ROOT")),
-        git('isl-cpp', 'master', codebases, workdir=P("ISL_CPP_ROOT")),
-        rmdir("build/llvm",
-            doStepIf=property_is_false("have_newest_llvm")),
-        mkdir("build/llvm"),
-        cmd("tar", "xzf", "llvm.tar.gz", "-C", "llvm",
-            doStepIf=property_is_false("have_newest_llvm"),
-            description="Unpacking LLVM"),
+        git('isl-cpp', 'master', codebases, workdir=P("ISL_CPP_ROOT"))
+    ])
+    steps.extend(clean_unpack("llvm.tar.gz", "llvm"))
+    steps.extend([
         mkdir("build/build-polli"),
         ucmd('./autogen.sh',
             workdir='build/isl/',
@@ -60,6 +57,9 @@ def configure(c):
         ucmd('make', '-C', P("UCHROOT_ISL_SRC_ROOT"),
             description="[uchroot] building isl",
             descriptionDone="[uchroot] built isl"),
+        ucmd('make', '-C', P("UCHROOT_LIKWID_SRC_ROOT"),
+            description="[uchroot] building likwid",
+            descriptionDone="[uchroot] built likwid"),
         ucmd('make', '-C', P("UCHROOT_LIKWID_SRC_ROOT"), "install",
             description="[uchroot] building likwid",
             descriptionDone="[uchroot] built likwid"),
@@ -83,7 +83,7 @@ def configure(c):
                  haltOnFailure=True, name="build jit",
                  description="[uchroot] building PolyJIT",
                  descriptionDone="[uchroot] built PolyJIT"),
-        cmd("tar", "czf", "../polyjit.tar.gz", "-C", "build-polli",
+        cmd("tar", "czf", "../polyjit.tar.gz", "-C", "build-polli", ".",
             description="Packing PolyJIT",
             descriptionDone="Packed PolyJIT")
     ])

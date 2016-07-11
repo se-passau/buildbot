@@ -9,7 +9,7 @@ codebases = {
               'branches': ['devel']},
     'llvm': {'repository': 'https://github.com/PolyJIT/llvm.git',
              'branches': ['master']},
-    'clang': {'repository': 'http://llvm.org/git/clang.git',
+    'clang': {'repository': 'http://github.com/PolyJIT/clang.git',
               'branches': ['master']},
     'compiler-rt': {'repository': 'http://llvm.org/git/compiler-rt.git',
                     'branches': ['master']},

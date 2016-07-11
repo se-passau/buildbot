@@ -108,15 +108,13 @@ def ucompile(*args, **kwargs):
     }
     env.update(kwargs.pop('env', {}))
 
-    return compile(P("uchroot_binary"), "-C", "-E", "-A",
-               "-u", uid, "-g", gid,
-               '-r', P("uchroot_image_path"),
-               '-w', os.path.join("/mnt", workdir),
-               '-M', ip("%(prop:workdir)s:/mnt"),
-               workdir=workdir,
-               usePTY=True,
-               env=env,
-               *args, **kwargs)
+    return compile(P("uchroot_binary"), "-C", "-E", "-A", "-u", uid, "-g", gid,
+        '-r', P("uchroot_image_path"), '-w', os.path.join("/mnt", workdir),
+        '-M', ip("%(prop:workdir)s:/mnt"),
+        workdir=workdir,
+        usePTY=True,
+        env=env,
+        *args, **kwargs)
 
 
 def test(*args, **kwargs):
@@ -166,10 +164,8 @@ def s_trigger(name, cb, builders, **kwargs):
 
 
 def trigger(**kwargs):
-    if not "waitForFinish" in kwargs:
-        kwargs["waitForFinish"] = True
-
-    return Trigger(**kwargs)
+    waitForFinish = kwargs.pop("waitForFinish", True)
+    return Trigger(waitForFinish=waitForFinish, **kwargs)
 
 def extract_rc(propertyname):
     name = propertyname
@@ -223,6 +219,16 @@ def hash_upload_to_master(filename, slavesrc, masterdst, url):
                     descriptionDone="Uploaded {0}.md5".format(filename))
     ]
     return steps
+
+def clean_unpack(filename, tag):
+    return [
+        rmdir("build/{0}".format(tag),
+              doStepIf=property_is_false("have_newest_{0}".format(tag))),
+        mkdir("build/{0}".format(tag)),
+        cmd("tar", "xzf", filename, "-C", tag,
+            doStepIf=property_is_false("have_newest_llvm"),
+            description="Unpacking LLVM")
+    ]
 
 @util.renderer
 def benchbuild_slurm(props):
