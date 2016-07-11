@@ -19,7 +19,7 @@ BuildFactory = util.BuildFactory
 
 def has_munged(host):
     if "has_munged" in host["properties"]:
-        return host["properties"]["munged"]
+        return host["properties"]["has_munged"]
     return False
 
 accepted_builders = slaves.get_hostlist(slaves.infosun, predicate = has_munged)
