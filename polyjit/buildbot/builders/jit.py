@@ -92,7 +92,7 @@ def configure(c):
                     descriptionDone="Uploaded PolyJIT")
     ])
 
-    c['builders'].append(builder("build-slurm-set", None, accepted_builders,
+    c['builders'].append(builder("build-jit", None, accepted_builders,
         factory=BuildFactory(steps)))
 # yapf: enable
 
