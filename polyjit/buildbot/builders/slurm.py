@@ -51,7 +51,8 @@ def configure(c):
         cmd('virtualenv', '-ppython3', ip('%(prop:scratch)s/env/')),
         cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install', '--upgrade', '.',
             workdir='build/benchbuild'),
-        cmd("rsync", "-var", "./", P("scratch")),
+        cmd("rsync", "-var", "llvm", P("scratch")),
+        cmd("rsync", "-var", "polyjit", P("scratch")),
         cmd(P('benchbuild'), 'bootstrap', env={
                 'BB_ENV_COMPILER_PATH': ip('%(prop:llvm)s/bin'),
                 'BB_ENV_COMPILER_LD_LIBRARY_PATH':
