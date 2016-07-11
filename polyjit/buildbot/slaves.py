@@ -41,8 +41,8 @@ def get_hostlist(slave_dict, predicate = None):
         predicate = lambda x : True
     hosts = []
     for k in slave_dict:
-        if predicate(k):
-            hosts.append(infosun[k]["host"])
+        if predicate(slave_dict[k]):
+            hosts.append(slave_dict[k]["host"])
     return hosts
 
 
