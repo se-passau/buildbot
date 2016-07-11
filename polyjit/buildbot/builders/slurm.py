@@ -54,14 +54,13 @@ def configure(c):
         cmd("rsync", "-var", "llvm", P("scratch")),
         cmd("rsync", "-var", "polyjit", P("scratch")),
         cmd(P('benchbuild'), 'bootstrap', env={
-                'BB_ENV_COMPILER_PATH': ip('%(prop:llvm)s/bin'),
+                'BB_ENV_COMPILER_PATH': ip('["%(prop:llvm)s/bin"]'),
                 'BB_ENV_COMPILER_LD_LIBRARY_PATH':
-                    ip('%(prop:llvm)s/lib:%(prop:polyjit)s/lib'),
+                    ip('["%(prop:llvm)s/lib", "%(prop:polyjit)s/lib"]'),
                 'BB_ENV_LOOKUP_PATH':
-                    ip('%(prop:llvm)s/bin:%(prop:polyjit)s/bin:'
-                       '/scratch/pjtest/erlent/build'),
+                    ip('["%(prop:llvm)s/bin", "%(prop:polyjit)s/bin", "/scratch/pjtest/erlent/build"]'),
                 'BB_ENV_LOOKUP_LD_LIBRARY_PATH':
-                    ip('%(prop:llvm)s/lib:%(prop:polyjit)s/lib'),
+                    ip('["%(prop:llvm)s/lib", "%(prop:polyjit)s/lib"]'),
                 'BB_LLVM_DIR': ip('%(prop:scratch)s/llvm'),
                 'BB_LIKWID_PREFIX': '/usr',
                 'BB_PAPI_INCLUDE': '/usr/include',
