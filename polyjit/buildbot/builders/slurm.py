@@ -50,6 +50,7 @@ def configure(c):
         ucmd('/mnt/build/env/bin/pip3', 'install', '--upgrade', '.',
             workdir='build/benchbuild'),
         ucmd('/mnt/build/env/bin/benchbuild', 'bootstrap', env={
+            'PATH': '/opt/cmake/bin:/usr/sbin:/sbin:/usr/bin:/bin',
             'BB_ENV_COMPILER_PATH':
                 ip('%(prop:scratch)s/llvm/bin:'
                    '/mnt/build/llvm/bin:'
