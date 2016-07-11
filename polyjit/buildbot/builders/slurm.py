@@ -33,7 +33,7 @@ def configure(c):
                                         "polyjit.tar.gz", "polyjit")
     steps = [
 #        trigger(schedulerNames=['trigger-build-llvm', 'trigger-build-jit']),
-        define("scratch", "/scratch/pjtest/%(prop:buildnumber)s")
+        define("scratch", ip("/scratch/pjtest/%(prop:buildnumber)s"))
     ]
     steps.extend(llvm_dl)
     steps.extend(clean_unpack("llvm.tar.gz", "llvm"))
