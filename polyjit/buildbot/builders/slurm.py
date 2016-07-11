@@ -47,7 +47,7 @@ def configure(c):
 
     steps.extend([
         ucmd('virtualenv', '-ppython3', 'env/'),
-        ucmd('env/bin/pip3', 'install', P("BENCHBUILD_ROOT")),
+        ucmd('env/bin/pip3', 'install', '.', workdir='build/benchbuild'),
         ucmd('env/bin/benchbuild', 'bootstrap', env={
             'BB_ENV_COMPILER_PATH':
                 ip('%(prop:scratch)s/llvm/bin:'
@@ -71,7 +71,8 @@ def configure(c):
             'BB_PAPI_LIBRARY': '/usr/lib',
             'BB_SRC_DIR': '/mnt/build/benchbuild',
             'BB_UNIONFS_ENABLE': 'false'
-        }),
+        },
+        workdir='build/benchbuild'),
         mkdir(P("scratch")),
         cmd("cp", "-var", "build/*", P("scratch"))
     ])
