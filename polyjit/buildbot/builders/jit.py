@@ -85,14 +85,9 @@ def configure(c):
                  descriptionDone="[uchroot] built PolyJIT"),
         cmd("tar", "czf", "polyjit.tar.gz", "build-polli",
             description="Packing PolyJIT",
-            descriptionDone="Packed PolyJIT"),
-        upload_file(src="polyjit.tar.gz",
-                    tgt="public_html/polyjit.tar.gz",
-                    url=URL + "/polyjit.tar.gz",
-                    description="Uploading PolyJIT",
-                    descriptionDone="Uploaded PolyJIT")
+            descriptionDone="Packed PolyJIT")
     ])
-    polyjit_ul = hash_upload_to_master("polyjit.tar.gz", "polyjit.tar.gz",
+    polyjit_ul = hash_upload_to_master("polyjit.tar.gz", "../polyjit.tar.gz",
         "public_html/polyjit.tar.gz", URL)
     steps.extend(polyjit_ul)
 
