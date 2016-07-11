@@ -53,7 +53,7 @@ def configure(c):
             workdir='build/benchbuild'),
         cmd("rsync", "-var", "llvm", P("scratch")),
         cmd("rsync", "-var", "polyjit", P("scratch")),
-        cmd(P('benchbuild'), 'bootstrap', env={
+        cmd(P('benchbuild'), 'bootstrap', '-s', env={
                 'BB_ENV_COMPILER_PATH': ip('["%(prop:llvm)s/bin"]'),
                 'BB_ENV_COMPILER_LD_LIBRARY_PATH':
                     ip('["%(prop:llvm)s/lib", "%(prop:polyjit)s/lib"]'),
