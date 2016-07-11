@@ -76,7 +76,7 @@ def configure(c):
     #    },
     #    workdir='build/benchbuild'),
         mkdir(P("scratch")),
-        cmd("rsync", "-var", "build/", P("scratch"))
+        cmd("rsync", "-var", "./", P("scratch"))
     ])
 
     c['builders'].append(builder("build-slurm-set", None, accepted_builders,
