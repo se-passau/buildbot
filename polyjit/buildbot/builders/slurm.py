@@ -49,32 +49,32 @@ def configure(c):
         ucmd('virtualenv', '-ppython3', 'env/'),
         ucmd('/mnt/build/env/bin/pip3', 'install', '--upgrade', '.',
             workdir='build/benchbuild'),
-        ucmd('/mnt/build/env/bin/benchbuild', 'bootstrap', env={
-            'PATH': '/opt/cmake/bin:/usr/sbin:/sbin:/usr/bin:/bin',
-            'BB_ENV_COMPILER_PATH':
-                ip('%(prop:scratch)s/llvm/bin:'
-                   '/mnt/build/llvm/bin:'
-                   '/mnt/build/polyjit/bin'),
-            'BB_ENV_COMPILER_LD_LIBRARY_PATH':
-                ip('%(prop:scratch)s/llvm/lib:'
-                   '/mnt/build/llvm/lib:'
-                   '/mnt/build/polyjit/lib'),
-            'BB_ENV_LOOKUP_PATH':
-                ip('%(prop:scratch)s/llvm/lib:'
-                   '/mnt/build/llvm/lib:'
-                   '/mnt/build/polyjit/bin'),
-            'BB_ENV_LOOKUP_LD_LIBRARY_PATH':
-                ip('%(prop:scratch)s/polyjit/lib:'
-                   '/mnt/build/llvm/lib:'
-                   '/mnt/build/polyjit/lib'),
-            'BB_LLVM_DIR': '/mnt/build/llvm',
-            'BB_LIKWID_PREFIX': '/usr/local',
-            'BB_PAPI_INCLUDE': '/usr/include',
-            'BB_PAPI_LIBRARY': '/usr/lib',
-            'BB_SRC_DIR': '/mnt/build/benchbuild',
-            'BB_UNIONFS_ENABLE': 'false'
-        },
-        workdir='build/benchbuild'),
+    #    ucmd('/mnt/build/env/bin/benchbuild', 'bootstrap', env={
+    #        'PATH': '/opt/cmake/bin:/usr/sbin:/sbin:/usr/bin:/bin',
+    #        'BB_ENV_COMPILER_PATH':
+    #            ip('%(prop:scratch)s/llvm/bin:'
+    #               '/mnt/build/llvm/bin:    '
+    #               '/mnt/build/polyjit/bin'),
+    #        'BB_ENV_COMPILER_LD_LIBRARY_PATH':
+    #            ip('%(prop:scratch)s/llvm/lib:'
+    #               '/mnt/build/llvm/lib:'
+    #               '/mnt/build/polyjit/lib'),
+    #        'BB_ENV_LOOKUP_PATH':
+    #            ip('%(prop:scratch)s/llvm/lib:'
+    #               '/mnt/build/llvm/lib:'
+    #               '/mnt/build/polyjit/bin'),
+    #        'BB_ENV_LOOKUP_LD_LIBRARY_PATH':
+    #            ip('%(prop:scratch)s/polyjit/lib:'
+    #               '/mnt/build/llvm/lib:'
+    #               '/mnt/build/polyjit/lib'),
+    #        'BB_LLVM_DIR': '/mnt/build/llvm',
+    #        'BB_LIKWID_PREFIX': '/usr/local',
+    #        'BB_PAPI_INCLUDE': '/usr/include',
+    #        'BB_PAPI_LIBRARY': '/usr/lib',
+    #        'BB_SRC_DIR': '/mnt/build/benchbuild',
+    #        'BB_UNIONFS_ENABLE': 'false'
+    #    },
+    #    workdir='build/benchbuild'),
         mkdir(P("scratch")),
         cmd("cp", "-var", "build/*", P("scratch"))
     ])
