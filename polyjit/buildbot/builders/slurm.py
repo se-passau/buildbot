@@ -54,10 +54,23 @@ def configure(c):
         cmd("rsync", "-var", "llvm", P("scratch")),
         cmd("rsync", "-var", "polyjit", P("scratch")),
         cmd(P('benchbuild'), 'bootstrap', '-s', env={
-                'BB_ENV_COMPILER_PATH': ip('["%(prop:llvm)s/bin"]'),
+                'BB_TMP_DIR': '/scratch/pjtest/src/',
+                'BB_TMP_DIR': '/scratch/pjtest/src/',
+                'BB_GENTOO_HTTP_PROXY': 'debussy.fim.uni-passau.de',
+                'BB_GENTOO_FTP_PROXY': 'debussy.fim.uni-passau.de',
+                'BB_GENTOO_AUTOTEST_LOC': '/scratch/pjtest/gentoo-autotest',
+                'BB_DB_HOST=': 'debussy.fim.uni-passau.de',
+                'BB_DB_USER=': 'pprof-bb',
+                'BB_DB_PASS=': 'bb',
+                'BB_DB_NAME=': 'bb',
+                'BB_SLURM_PARTITION=': 'chimaira',
+                'BB_SLURM_NODE_DIR=': '/local/hdd/pjtest/',
+                'BB_SLURM_ACCOUNT=': 'cl',
+                'BB_SLURM_TIMELIMIT=': '24:00:00',
+                'BB_ENV_COMPILER_PATH': ip('["%(prop:llvm)s/bin", "%(prop:polyjit)s/bin"]'),
                 'BB_ENV_COMPILER_LD_LIBRARY_PATH':
                     ip('["%(prop:llvm)s/lib", "%(prop:polyjit)s/lib"]'),
-                'BB_ENV_BINARY_PATH': ip('["%(prop:llvm)s/bin"]'),
+                'BB_ENV_BINARY_PATH': ip('["%(prop:llvm)s/bin", "%(prop:polyjit)s/bin"]'),
                 'BB_ENV_BINARY_LD_LIBRARY_PATH':
                     ip('["%(prop:llvm)s/lib", "%(prop:polyjit)s/lib"]'),
                 'BB_ENV_LOOKUP_PATH':
