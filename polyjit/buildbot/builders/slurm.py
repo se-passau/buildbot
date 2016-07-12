@@ -57,6 +57,9 @@ def configure(c):
                 'BB_ENV_COMPILER_PATH': ip('["%(prop:llvm)s/bin"]'),
                 'BB_ENV_COMPILER_LD_LIBRARY_PATH':
                     ip('["%(prop:llvm)s/lib", "%(prop:polyjit)s/lib"]'),
+                'BB_ENV_BINARY_PATH': ip('["%(prop:llvm)s/bin"]'),
+                'BB_ENV_BINARY_LD_LIBRARY_PATH':
+                    ip('["%(prop:llvm)s/lib", "%(prop:polyjit)s/lib"]'),
                 'BB_ENV_LOOKUP_PATH':
                     ip('["%(prop:llvm)s/bin", "%(prop:polyjit)s/bin", "/scratch/pjtest/erlent/build"]'),
                 'BB_ENV_LOOKUP_LD_LIBRARY_PATH':
