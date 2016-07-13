@@ -81,7 +81,7 @@ def configure(c):
                 'BB_PAPI_INCLUDE': '/usr/include',
                 'BB_PAPI_LIBRARY': '/usr/lib',
                 'BB_SRC_DIR': ip('%(prop:scratch)s/benchbuild'),
-                'BB_SLURM_LOGS': P("scratch"),
+                'BB_SLURM_LOGS': ip('%(prop:scratch)s/slurm.log'),
                 'BB_UNIONFS_ENABLE': 'false'
             },
             workdir=P('scratch')),
