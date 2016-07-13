@@ -85,6 +85,7 @@ def configure(c):
                 'BB_UNIONFS_ENABLE': 'false'
             },
             workdir=P('scratch')),
+        mkdir(ip("%(prop:scratch)s/results")
     ])
 
     c['builders'].append(builder("build-slurm-set", None, accepted_builders,
