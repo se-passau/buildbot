@@ -55,7 +55,6 @@ def configure(c):
         cmd("rsync", "-var", "polyjit", P("scratch")),
         cmd(P('benchbuild'), 'bootstrap', '-s', env={
                 'BB_TMP_DIR': '/scratch/pjtest/src/',
-                'BB_TMP_DIR': '/scratch/pjtest/src/',
                 'BB_GENTOO_HTTP_PROXY': 'debussy.fim.uni-passau.de',
                 'BB_GENTOO_FTP_PROXY': 'debussy.fim.uni-passau.de',
                 'BB_GENTOO_AUTOTEST_LOC': '/scratch/pjtest/gentoo-autotest',
@@ -82,6 +81,7 @@ def configure(c):
                 'BB_PAPI_INCLUDE': '/usr/include',
                 'BB_PAPI_LIBRARY': '/usr/lib',
                 'BB_SRC_DIR': ip('%(prop:scratch)s/benchbuild'),
+                'BB_SLURM_LOGS': P("scratch"),
                 'BB_UNIONFS_ENABLE': 'false'
             },
             workdir=P('scratch')),
