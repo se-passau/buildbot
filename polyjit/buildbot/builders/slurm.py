@@ -56,8 +56,8 @@ def configure(c):
         cmd(P('benchbuild'), 'bootstrap', '-s', env={
                 'BB_TMP_DIR': '/scratch/pjtest/src/',
                 'BB_TEST_DIR': P("testinputs"),
-                'BB_GENTOO_HTTP_PROXY': 'debussy.fim.uni-passau.de',
-                'BB_GENTOO_FTP_PROXY': 'debussy.fim.uni-passau.de',
+                'BB_GENTOO_HTTP_PROXY': 'debussy.fim.uni-passau.de:3128',
+                'BB_GENTOO_FTP_PROXY': 'debussy.fim.uni-passau.de:3128',
                 'BB_GENTOO_AUTOTEST_LOC': '/scratch/pjtest/gentoo-autotest',
                 'BB_DB_HOST': 'debussy.fim.uni-passau.de',
                 'BB_DB_USER': 'bb',
