@@ -1,10 +1,11 @@
 from buildbot.plugins import *
 from buildbot.steps.trigger import Trigger
-from buildbot.steps import master, shell
+from buildbot.steps import master
 
 import os
 
 P = util.Property
+
 
 def builder(name, workdir, slaves, **kwargs):
     if workdir:
@@ -50,6 +51,7 @@ def git(name, branch, cb, **kwargs):
                      progress=True,
                      **kwargs)
 
+
 def compile(*args, **kwargs):
     return steps.Compile(command=args, logEnviron=False, **kwargs)
 
@@ -65,17 +67,19 @@ def download_file(src, tgt, **kwargs):
 def rmdir(target, **kwargs):
     return steps.RemoveDirectory(dir=target, **kwargs)
 
+
 def mkdir(target, **kwargs):
     return steps.MakeDirectory(dir=target, **kwargs)
+
 
 def cmd(*args, **kwargs):
     command = args
     if (len(args) == 1) and isinstance(args[0], str):
         command = str(args[0])
 
-    if not "haltOnFailure" in kwargs:
+    if "haltOnFailure" not in kwargs:
         kwargs["haltOnFailure"] = True
-    if not "logEnviron" in kwargs:
+    if "logEnviron" not in kwargs:
         kwargs["logEnviron"] = False
     return steps.ShellCommand(command=command, **kwargs)
 
@@ -98,6 +102,7 @@ def ucmd(*args, **kwargs):
                usePTY=True,
                env=env,
                *args, **kwargs)
+
 
 def ucompile(*args, **kwargs):
     uid = kwargs.pop('uid', 0)
@@ -137,7 +142,7 @@ def upload_dir(srcdir, tgtdir, **kwargs):
 
 
 def master_cmd(command, **kwargs):
-    if not "haltOnFailure" in kwargs:
+    if "haltOnFailure" not in kwargs:
         kwargs["haltOnFailure"] = True
     return steps.MasterShellCommand(command=command, **kwargs)
 
@@ -167,15 +172,18 @@ def trigger(**kwargs):
     waitForFinish = kwargs.pop("waitForFinish", True)
     return Trigger(waitForFinish=waitForFinish, **kwargs)
 
+
 def extract_rc(propertyname):
     name = propertyname
+
     def extract_rc_wrapper(rc, stdout, stderr):
-        return { name: rc == 0 }
+        return {name: rc == 0}
     return extract_rc_wrapper
 
 
 def property_is_true(propname):
     prop = propname
+
     def property_is_true_wrapper(step):
         return bool(step.getProperty(prop))
     return property_is_true_wrapper
@@ -183,6 +191,7 @@ def property_is_true(propname):
 
 def property_is_false(propname):
     prop = propname
+
     def property_is_false_wrapper(step):
         return not bool(step.getProperty(prop))
     return property_is_false_wrapper
@@ -196,13 +205,14 @@ def hash_download_from_master(mastersrc, slavedst, tag):
                       tgt="{0}.md5".format(slavedst),
                       doStepIf=property_is_true("have_{0}".format(tag))),
         cmddef(command="md5sum -c {0}.md5".format(slavedst),
-           extract_fn=extract_rc('have_newest_{0}'.format(tag)),
-           doStepIf=property_is_true("have_{0}".format(tag))),
-        download_file(src=mastersrc,
-                  tgt=slavedst,
-                  doStepIf=property_is_false("have_newest_{0}".format(tag))),
+               extract_fn=extract_rc('have_newest_{0}'.format(tag)),
+               doStepIf=property_is_true("have_{0}".format(tag))),
+        download_file(src=mastersrc, tgt=slavedst,
+                      doStepIf=property_is_false(
+                          "have_newest_{0}".format(tag))),
     ]
     return steps
+
 
 def hash_upload_to_master(filename, slavesrc, masterdst, url):
     steps = [
@@ -220,6 +230,7 @@ def hash_upload_to_master(filename, slavesrc, masterdst, url):
     ]
     return steps
 
+
 def clean_unpack(filename, tag):
     return [
         rmdir("build/{0}".format(tag),
@@ -229,6 +240,7 @@ def clean_unpack(filename, tag):
             doStepIf=property_is_false("have_newest_llvm"),
             description="Unpacking LLVM")
     ]
+
 
 @util.renderer
 def benchbuild_slurm(props):
