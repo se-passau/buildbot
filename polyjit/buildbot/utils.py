@@ -237,8 +237,8 @@ def clean_unpack(filename, tag):
               doStepIf=property_is_false("have_newest_{0}".format(tag))),
         mkdir("build/{0}".format(tag)),
         cmd("tar", "xzf", filename, "-C", tag,
-            doStepIf=property_is_false("have_newest_llvm"),
-            description="Unpacking LLVM")
+            doStepIf=property_is_false("have_newest_{0}".format(tag)),
+            description="Unpacking {0}".format(tag))
     ]
 
 
