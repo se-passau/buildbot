@@ -51,15 +51,7 @@ def configure(c):
              name="cmake",
              description="cmake O3, Assertions, PIC, Static"),
         ucompile("ninja", "install", haltOnFailure=True, name="build llvm"),
-        cmd("tar", "czf", "../llvm.tar.gz", "-C", "./_install", "."),
-
-        cmd("md5sum llvm.tar.gz > llvm.tar.gz.md5", workdir=P("workdir")),
-        upload_file(src="../llvm.tar.gz",
-                    tgt="public_html/llvm.tar.gz",
-                    url=URL + "/llvm.tar.gz"),
-        upload_file(src="../llvm.tar.gz.md5",
-                    tgt="public_html/llvm.tar.gz.md5",
-                    url=URL + "/llvm.tar.gz.md5")
+        cmd("tar", "czf", "../llvm.tar.gz", "-C", "./_install", ".")
     ]
     upload_llvm = hash_upload_to_master("llvm.tar.gz",
         "../llvm.tar.gz", "public_html/llvm.tar.gz", URL)
