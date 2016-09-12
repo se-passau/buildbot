@@ -5,7 +5,7 @@ infosun = {
         "host": "polyjit-ci",
         "password": None,
         "properties": {
-            "uchroot_image_path": "/data/polyjit/trusty-image/",
+            "uchroot_image_path": "/data/polyjit/xenial-image/",
             "uchroot_binary": "/data/polyjit/erlent/build/uchroot"
         }
     },
@@ -13,7 +13,7 @@ infosun = {
         "host": "local",
         "password": None,
         "properties": {
-            "uchroot_image_path": "/dock/buildbot/trusty-image/",
+            "uchroot_image_path": "/dock/buildbot/xenial-image/",
             "uchroot_binary": "/dock/buildbot/erlent/build/uchroot"
         }
     },
@@ -21,7 +21,7 @@ infosun = {
         "host": "ivy-vm",
         "password": None,
         "properties": {
-            "uchroot_image_path": "/buildbot/trusty-image/",
+            "uchroot_image_path": "/buildbot/xenial-image/",
             "uchroot_binary": "/buildbot/erlent/build/uchroot"
         }
     },
@@ -29,7 +29,7 @@ infosun = {
         "host": "debussy",
         "password": None,
         "properties": {
-            "uchroot_image_path": "/scratch/pjtest/trusty-image/",
+            "uchroot_image_path": "/scratch/pjtest/xenial-image/",
             "uchroot_binary": "/scratch/pjtest/erlent/build/uchroot",
             "has_munged": True,
             "testinputs": "/home/simbuerg/src/polyjit/pprof-test-data"
