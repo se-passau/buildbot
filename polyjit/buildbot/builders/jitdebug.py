@@ -100,7 +100,7 @@ def configure(c):
 
 def schedule(c):
     c['schedulers'].extend([
-        s_sbranch("build-jit-sched", codebase, ["build-jit-debug"],
+        s_sbranch("build-jit-sched-debug", codebase, ["build-jit-debug"],
                   change_filter=filter.ChangeFilter(branch_re='next|develop'),
                   treeStableTimer=2 * 60),
         s_force("force-build-jit-debug", codebase, ["build-jit-debug"]),
