@@ -16,7 +16,8 @@ infosun = {
         "properties": {
             "uchroot_image_path": "/dock/buildbot/xenial-image/",
             "uchroot_binary": "/dock/buildbot/erlent/build/uchroot"
-        }
+        },
+        "can_build_llvm_debug": True
     },
     "ivy-vm": {
         "host": "ivy-vm",
@@ -24,7 +25,8 @@ infosun = {
         "properties": {
             "uchroot_image_path": "/buildbot/xenial-image/",
             "uchroot_binary": "/buildbot/erlent/build/uchroot"
-        }
+        },
+        "can_build_llvm_debug": True
     },
     "debussy": {
         "host": "debussy",
@@ -34,7 +36,8 @@ infosun = {
             "uchroot_binary": "/scratch/pjtest/erlent/build/uchroot",
             "has_munged": True,
             "testinputs": "/home/simbuerg/src/polyjit/pprof-test-data"
-        }
+        },
+        "can_build_llvm_debug": True
     }
 }
 
