@@ -6,27 +6,27 @@ infosun = {
         "password": None,
         "properties": {
             "uchroot_image_path": "/data/polyjit/xenial-image/",
-            "uchroot_binary": "/data/polyjit/erlent/build/uchroot"
+            "uchroot_binary": "/data/polyjit/erlent/build/uchroot",
+            "can_build_llvm_debug": False
         },
-        "can_build_llvm_debug": False
     },
     "local": {
         "host": "local",
         "password": None,
         "properties": {
             "uchroot_image_path": "/dock/buildbot/xenial-image/",
-            "uchroot_binary": "/dock/buildbot/erlent/build/uchroot"
+            "uchroot_binary": "/dock/buildbot/erlent/build/uchroot",
+            "can_build_llvm_debug": True
         },
-        "can_build_llvm_debug": True
     },
     "ivy-vm": {
         "host": "ivy-vm",
         "password": None,
         "properties": {
             "uchroot_image_path": "/buildbot/xenial-image/",
-            "uchroot_binary": "/buildbot/erlent/build/uchroot"
+            "uchroot_binary": "/buildbot/erlent/build/uchroot",
+            "can_build_llvm_debug": True
         },
-        "can_build_llvm_debug": True
     },
     "debussy": {
         "host": "debussy",
