@@ -68,7 +68,7 @@ def configure(c):
             description="[uchroot] building likwid",
             descriptionDone="[uchroot] built likwid"),
         ucmd('cmake', P("UCHROOT_SRC_ROOT"),
-             '-DCMAKE_BUILD_TYPE=Debug'
+             '-DCMAKE_BUILD_TYPE=Debug',
              '-DLLVM_INSTALL_ROOT=/mnt/build/llvm',
              '-DPOLLY_INSTALL_ROOT=/mnt/build/llvm',
              '-DISL_INSTALL_ROOT=/mnt/build/isl',
