@@ -34,10 +34,10 @@ infosun = {
         "properties": {
             "uchroot_image_path": "/scratch/pjtest/xenial-image/",
             "uchroot_binary": "/scratch/pjtest/erlent/build/uchroot",
+            "testinputs": "/home/simbuerg/src/polyjit/pprof-test-data",
             "has_munged": True,
-            "testinputs": "/home/simbuerg/src/polyjit/pprof-test-data"
-        },
-        "can_build_llvm_debug": True
+            "can_build_llvm_debug": True
+        }
     }
 }
 
