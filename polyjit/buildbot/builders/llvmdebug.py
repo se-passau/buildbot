@@ -16,6 +16,13 @@ P = util.Property
 BuildFactory = util.BuildFactory
 accepted_builders = slaves.get_hostlist(slaves.infosun)
 
+def can_build_llvm(host):
+    if "can_build_llvm_debug" in host["properties"]:
+        return host["properties"]["can_build_llvm_debug"]
+    return False
+
+accepted_builders = slaves.get_hostlist(slaves.infosun,
+                                        predicate=can_build_llvm)
 
 # yapf: disable
 def configure(c):
@@ -53,9 +60,6 @@ def configure(c):
         ucompile("ninja", "install", haltOnFailure=True, name="build llvm"),
         cmd("tar", "czf", "../llvm-debug.tar.gz", "-C", "./_install", ".")
     ]
-    upload_llvm = hash_upload_to_master("llvm-debug.tar.gz",
-        "../llvm-debug.tar.gz", "public_html/llvm-debug.tar.gz", URL)
-    steps.extend(upload_llvm)
 
     c['builders'].append(builder("build-llvmdebug", None, accepted_builders,
         factory = BuildFactory(steps)))

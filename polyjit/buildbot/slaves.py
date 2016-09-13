@@ -7,7 +7,8 @@ infosun = {
         "properties": {
             "uchroot_image_path": "/data/polyjit/xenial-image/",
             "uchroot_binary": "/data/polyjit/erlent/build/uchroot"
-        }
+        },
+        "can_build_llvm_debug": False
     },
     "local": {
         "host": "local",

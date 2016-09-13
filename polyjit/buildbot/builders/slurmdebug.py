@@ -14,27 +14,33 @@ codebase = make_cb(['benchbuild'])
 P = util.Property
 BuildFactory = util.BuildFactory
 
+
 def has_munged(host):
     if "has_munged" in host["properties"]:
         return host["properties"]["has_munged"]
     return False
 
-accepted_builders = slaves.get_hostlist(slaves.infosun, predicate=has_munged)
+
+def can_build_llvm(host):
+    if "can_build_llvm_debug" in host["properties"]:
+        return host["properties"]["can_build_llvm_debug"]
+    return False
+
+
+def has_munged_and_can_build_llvm(host):
+    return has_munged(host) and can_build_llvm(host)
+
+accepted_builders = slaves.get_hostlist(slaves.infosun,
+                                        predicate=has_munged_and_can_build_llvm)
 
 
 # yapf: disable
 def configure(c):
-    llvm_dl = hash_download_from_master("public_html/llvm-debug.tar.gz",
-                                        "llvm-debug.tar.gz", "llvm")
-    polyjit_dl = hash_download_from_master("public_html/polyjit-debug.tar.gz",
-                                        "polyjit-debug.tar.gz", "polyjit")
     steps = [
 #        trigger(schedulerNames=['trigger-build-llvm', 'trigger-build-jit']),
         define("scratch", ip("/scratch/pjtest/debug-%(prop:buildnumber)s/"))
     ]
-    steps.extend(llvm_dl)
     steps.extend(clean_unpack("llvm-debug.tar.gz", "llvm"))
-    steps.extend(polyjit_dl)
     steps.extend(clean_unpack("polyjit-debug.tar.gz", "polyjit"))
     steps.extend([
         define("BENCHBUILD_ROOT", ip("%(prop:builddir)s/build/benchbuild/")),

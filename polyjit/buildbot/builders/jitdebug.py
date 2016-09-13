@@ -17,8 +17,15 @@ codebase = make_cb(['polli', 'isl', 'isl-cpp', 'likwid'])
 
 P = util.Property
 BuildFactory = util.BuildFactory
-accepted_builders = slaves.get_hostlist(slaves.infosun)
 
+
+def can_build_llvm(host):
+    if "can_build_llvm_debug" in host["properties"]:
+        return host["properties"]["can_build_llvm_debug"]
+    return False
+
+accepted_builders = slaves.get_hostlist(slaves.infosun,
+                                        predicate=can_build_llvm)
 
 # yapf: disable
 def configure(c):
@@ -32,9 +39,6 @@ def configure(c):
         define("UCHROOT_POLLI_BUILDDIR", "/mnt/build/build-polli"),
         define("UCHROOT_ISL_SRC_ROOT", "/mnt/build/isl")
     ]
-    llvm_dl = hash_download_from_master("public_html/llvm-debug.tar.gz",
-                                        "llvm-debug.tar.gz", "llvm")
-    steps.extend(llvm_dl)
     steps.extend([
         git('likwid', 'v4.1', codebases, workdir=P("LIKWID_ROOT")),
         git('polli', 'next', codebases, workdir=P("POLLI_ROOT"),
