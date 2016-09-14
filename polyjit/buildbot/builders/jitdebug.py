@@ -92,11 +92,6 @@ def configure(c):
             description="Packing PolyJIT",
             descriptionDone="Packed PolyJIT")
     ])
-    polyjit_ul = hash_upload_to_master("polyjit-debug.tar.gz",
-                                       "../polyjit-debug.tar.gz",
-                                       "public_html/polyjit-debug.tar.gz", URL)
-    steps.extend(polyjit_ul)
-
     c['builders'].append(builder("build-jit-debug", None, accepted_builders,
                          factory=BuildFactory(steps)))
 # yapf: enable
