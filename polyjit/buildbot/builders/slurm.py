@@ -86,6 +86,8 @@ def configure(c):
                 'BB_UNIONFS_ENABLE': 'false'
             },
             workdir=P('scratch')),
+        # This only works on infosun machines
+        cmd("ln", "-s", "../benchbuild-src/", "benchbuild"),
         mkdir(ip("%(prop:scratch)s/results"))])
 
     c['builders'].append(builder("build-slurm-set", None, accepted_builders,
