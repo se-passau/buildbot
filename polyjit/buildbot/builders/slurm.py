@@ -88,7 +88,7 @@ def configure(c):
             workdir=P('scratch')),
         # This only works on infosun machines
         cmd("ln", "-s", ip("%(prop:scratch)s/benchbuild-src/"),
-            ip("%(prop:scratch)s/%(prop:buildnumber)s/benchbuild")),
+            ip("%(prop:scratch)s/benchbuild")),
         mkdir(ip("%(prop:scratch)s/results"))])
 
     c['builders'].append(builder("build-slurm-set", None, accepted_builders,
