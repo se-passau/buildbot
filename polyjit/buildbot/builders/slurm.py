@@ -54,40 +54,37 @@ def configure(c):
         cmd("rsync", "-var", "llvm", P("scratch")),
         cmd("rsync", "-var", "polyjit", P("scratch")),
         cmd(P('benchbuild'), 'bootstrap', '-s', env={
-                'BB_TMP_DIR': '/scratch/pjtest/src/',
-                'BB_TEST_DIR': P("testinputs"),
+            'BB_CONFIG_FILE': '/scratch/pjtest/.benchbuild.json',
+            'BB_TMP_DIR': '/scratch/pjtest/src/',
+            'BB_TEST_DIR': P("testinputs"),
                 'BB_GENTOO_HTTP_PROXY': 'debussy.fim.uni-passau.de:3128',
                 'BB_GENTOO_FTP_PROXY': 'debussy.fim.uni-passau.de:3128',
-                'BB_GENTOO_AUTOTEST_LOC': '/scratch/pjtest/gentoo-autotest',
-                'BB_DB_HOST': 'debussy.fim.uni-passau.de',
-                'BB_DB_USER': 'bb',
-                'BB_DB_PASS': 'bb',
-                'BB_DB_NAME': 'pprof-bb',
-                'BB_SLURM_PARTITION': 'chimaira',
-                'BB_SLURM_NODE_DIR': '/local/hdd/pjtest/',
-                'BB_SLURM_ACCOUNT': 'cl',
-                'BB_SLURM_TIMELIMIT': '24:00:00',
-                'BB_ENV_COMPILER_PATH': ip('["%(prop:llvm)s/bin", "%(prop:polyjit)s/bin"]'),
-                'BB_ENV_COMPILER_LD_LIBRARY_PATH':
-                    ip('["%(prop:llvm)s/lib", "%(prop:polyjit)s/lib"]'),
-                'BB_ENV_BINARY_PATH': ip('["%(prop:llvm)s/bin", "%(prop:polyjit)s/bin"]'),
-                'BB_ENV_BINARY_LD_LIBRARY_PATH':
-                    ip('["%(prop:llvm)s/lib", "%(prop:polyjit)s/lib"]'),
-                'BB_ENV_LOOKUP_PATH':
-                    ip('["%(prop:llvm)s/bin", "%(prop:polyjit)s/bin", "/scratch/pjtest/erlent/build"]'),
-                'BB_ENV_LOOKUP_LD_LIBRARY_PATH':
-                    ip('["%(prop:llvm)s/lib", "%(prop:polyjit)s/lib"]'),
-                'BB_LLVM_DIR': ip('%(prop:scratch)s/llvm'),
-                'BB_LIKWID_PREFIX': '/usr',
-                'BB_PAPI_INCLUDE': '/usr/include',
-                'BB_PAPI_LIBRARY': '/usr/lib',
-                'BB_SRC_DIR': ip('%(prop:scratch)s/benchbuild'),
-                'BB_SLURM_LOGS': ip('%(prop:scratch)s/slurm.log'),
-                'BB_UNIONFS_ENABLE': 'false'
+            'BB_GENTOO_AUTOTEST_LOC': '/scratch/pjtest/gentoo-autotest',
+            'BB_SLURM_PARTITION': 'chimaira',
+            'BB_SLURM_NODE_DIR': '/local/hdd/pjtest/',
+            'BB_SLURM_ACCOUNT': 'cl',
+            'BB_SLURM_TIMELIMIT': '24:00:00',
+            'BB_ENV_COMPILER_PATH': ip('["%(prop:llvm)s/bin", "%(prop:polyjit)s/bin"]'),
+            'BB_ENV_COMPILER_LD_LIBRARY_PATH':
+                ip('["%(prop:llvm)s/lib", "%(prop:polyjit)s/lib"]'),
+            'BB_ENV_BINARY_PATH': ip('["%(prop:llvm)s/bin", "%(prop:polyjit)s/bin"]'),
+            'BB_ENV_BINARY_LD_LIBRARY_PATH':
+                ip('["%(prop:llvm)s/lib", "%(prop:polyjit)s/lib"]'),
+            'BB_ENV_LOOKUP_PATH':
+                ip('["%(prop:llvm)s/bin", "%(prop:polyjit)s/bin", "/scratch/pjtest/erlent/build"]'),
+            'BB_ENV_LOOKUP_LD_LIBRARY_PATH':
+                ip('["%(prop:llvm)s/lib", "%(prop:polyjit)s/lib"]'),
+            'BB_LLVM_DIR': ip('%(prop:scratch)s/llvm'),
+            'BB_LIKWID_PREFIX': '/usr',
+            'BB_PAPI_INCLUDE': '/usr/include',
+            'BB_PAPI_LIBRARY': '/usr/lib',
+            'BB_SRC_DIR': ip('%(prop:scratch)s/benchbuild'),
+            'BB_SLURM_LOGS': ip('%(prop:scratch)s/slurm.log'),
+            'BB_UNIONFS_ENABLE': 'false'
             },
             workdir=P('scratch')),
         # This only works on infosun machines
-        cmd("ln", "-s", ip("%(prop:scratch)s/benchbuild-src/"),
+        cmd("ln", "-s", ip("/scratch/pjtest/benchbuild-src/"),
             ip("%(prop:scratch)s/benchbuild")),
         mkdir(ip("%(prop:scratch)s/results"))])
 
