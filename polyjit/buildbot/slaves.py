@@ -10,6 +10,17 @@ infosun = {
             "can_build_llvm_debug": False
         },
     },
+    "debussy": {
+        "host": "debussy",
+        "password": None,
+        "properties": {
+            "uchroot_image_path": "/scratch/pjtest/xenial-image/",
+            "uchroot_binary": "/scratch/pjtest/erlent/build/uchroot",
+            "testinputs": "/scratch/pjtest/pprof-test-data",
+            "has_munged": True,
+            "can_build_llvm_debug": True
+        }
+    }
     "ligeti": {
         "host": "ligeti",
         "password": None,
