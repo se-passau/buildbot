@@ -10,31 +10,13 @@ infosun = {
             "can_build_llvm_debug": False
         },
     },
-    "local": {
-        "host": "local",
-        "password": None,
-        "properties": {
-            "uchroot_image_path": "/dock/buildbot/xenial-image/",
-            "uchroot_binary": "/dock/buildbot/erlent/build/uchroot",
-            "can_build_llvm_debug": True
-        },
-    },
-    "ivy-vm": {
-        "host": "ivy-vm",
-        "password": None,
-        "properties": {
-            "uchroot_image_path": "/buildbot/xenial-image/",
-            "uchroot_binary": "/buildbot/erlent/build/uchroot",
-            "can_build_llvm_debug": True
-        },
-    },
-    "debussy": {
-        "host": "debussy",
+    "ligeti": {
+        "host": "ligeti",
         "password": None,
         "properties": {
             "uchroot_image_path": "/scratch/pjtest/xenial-image/",
             "uchroot_binary": "/scratch/pjtest/erlent/build/uchroot",
-            "testinputs": "/home/simbuerg/src/polyjit/pprof-test-data",
+            "testinputs": "/scratch/pjtest/pprof-test-data",
             "has_munged": True,
             "can_build_llvm_debug": True
         }
