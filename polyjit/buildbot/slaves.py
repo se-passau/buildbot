@@ -20,7 +20,7 @@ infosun = {
             "has_munged": True,
             "can_build_llvm_debug": True
         }
-    }
+    },
     "ligeti": {
         "host": "ligeti",
         "password": None,
