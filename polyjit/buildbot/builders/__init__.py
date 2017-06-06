@@ -1,4 +1,4 @@
-__all__ = ["jit", "llvm", "llvmdebug", "slurm", "jitdebug", "slurmdebug"]
+__all__ = ["jit", "llvm", "slurm"]
 __ALL__ = []
 
 
