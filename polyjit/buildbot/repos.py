@@ -64,8 +64,7 @@ def make_new_cb(bases):
     for b in bases:
         cb_list.append(
             util.CodebaseParameter(
-                "",
-                name=b,
+                b,
                 branch=util.ChoiceStringParameter(
                     name="branch",
                     choices=codebases[b]['branch'],
