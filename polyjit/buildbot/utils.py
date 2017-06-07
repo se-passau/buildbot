@@ -7,12 +7,10 @@ import os
 P = util.Property
 
 
-def builder(name, workdir, slaves, **kwargs):
-    if workdir:
-        return util.BuilderConfig(name=name,
-                                  workerbuilddir=workdir,
-                                  workernames=slaves,
-                                  **kwargs)
+def builder(name, builddir, slaves, **kwargs):
+    if builddir:
+        return util.BuilderConfig(name=name, workerbuilddir=builddir,
+                                  workernames=slaves, **kwargs)
     else:
         return util.BuilderConfig(name=name, workernames=slaves, **kwargs)
 
@@ -87,7 +85,7 @@ def cmd(*args, **kwargs):
 def ucmd(*args, **kwargs):
     uid = kwargs.pop('uid', 0)
     gid = kwargs.pop('gid', 0)
-    workdir = kwargs.pop('workdir', "build")
+    workdir = kwargs.pop('builddir', "build")
     env = {
         "LC_ALL": "C",
     }
@@ -97,7 +95,7 @@ def ucmd(*args, **kwargs):
                "-u", uid, "-g", gid,
                '-r', P("uchroot_image_path"),
                '-w', os.path.join("/mnt", workdir),
-               '-M', ip("%(prop:workdir)s:/mnt"),
+               '-M', ip("%(prop:builddir)s:/mnt"),
                workdir=workdir,
                usePTY=True,
                env=env,
@@ -107,7 +105,7 @@ def ucmd(*args, **kwargs):
 def ucompile(*args, **kwargs):
     uid = kwargs.pop('uid', 0)
     gid = kwargs.pop('gid', 0)
-    workdir = kwargs.pop('workdir', "build")
+    workdir = kwargs.pop('builddir', "build")
     env = {
         "LC_ALL": "C",
     }
@@ -115,7 +113,7 @@ def ucompile(*args, **kwargs):
 
     return compile(P("uchroot_binary"), "-C", "-E", "-A", "-u", uid, "-g", gid,
         '-r', P("uchroot_image_path"), '-w', os.path.join("/mnt", workdir),
-        '-M', ip("%(prop:workdir)s:/mnt"),
+        '-M', ip("%(prop:builddir)s:/mnt"),
         workdir=workdir,
         usePTY=True,
         env=env,
@@ -216,7 +214,7 @@ def hash_download_from_master(mastersrc, slavedst, tag):
 
 def hash_upload_to_master(filename, slavesrc, masterdst, url):
     steps = [
-        cmd("md5sum {0} > {0}.md5".format(filename), workdir=P("workdir")),
+        cmd("md5sum {0} > {0}.md5".format(filename), workdir=P("builddir")),
         upload_file(src=slavesrc,
                     tgt=masterdst,
                     url="{0}/{1}".format(url, filename),
