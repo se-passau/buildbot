@@ -2,28 +2,61 @@ from buildbot.plugins import *
 from buildbot.plugins import util
 
 codebases = {
-    'benchbuild': {'repository': 'https://github.com/PolyJIT/benchbuild.git',
-                   'branch': ['master', 'develop', 'perf']},
-    'polli': {'repository': 'https://github.com/PolyJIT/polli.git',
-              'branch': ['master', 'next', 'perf']},
-    'polly': {'repository': 'git://github.com/PolyJIT/polly.git',
-              'branch': ['devel']},
-    'llvm': {'repository': 'https://github.com/PolyJIT/llvm.git',
-             'branch': ['master']},
-    'clang': {'repository': 'http://github.com/PolyJIT/clang.git',
-              'branch': ['master']},
-    'compiler-rt': {'repository': 'http://llvm.org/git/compiler-rt.git',
-                    'branch': ['master']},
-    'openmp': {'repository': 'http://llvm.org/git/openmp.git',
-               'branch': ['master']},
-    'stats': {'repository': 'https://github.com/simbuerg/pprof-stats.git',
-              'branch': ['master']},
-    'isl' : {'repository': 'https://github.com/simbuerg/isl.git',
-             'branch': ['master', 'isl-0.16.1-cpp']},
-    'isl-cpp': {'repository': 'https://github.com/simbuerg/isl-cpp.git',
-                'branch': ['master']},
-    'likwid': {'repository': 'https://github.com/RRZE-HPC/likwid.git',
-                'branch': ['v4.1']},
+    'benchbuild': {
+        'repository': 'https://github.com/PolyJIT/benchbuild.git',
+        'branch': ['master', 'develop', 'perf'],
+        'revision': None
+    },
+    'polli': {
+        'repository': 'https://github.com/PolyJIT/polli.git',
+        'branch': ['master', 'next', 'perf'],
+        'revision': None
+    },
+    'polly': {
+        'repository': 'git://github.com/PolyJIT/polly.git',
+        'branch': ['devel'],
+        'revision': None
+    },
+    'llvm': {
+        'repository': 'https://github.com/PolyJIT/llvm.git',
+        'branch': ['master'],
+        'revision': None
+    },
+    'clang': {
+        'repository': 'http://github.com/PolyJIT/clang.git',
+        'branch': ['master'],
+        'revision': None
+    },
+    'compiler-rt': {
+        'repository': 'http://llvm.org/git/compiler-rt.git',
+        'branch': ['master'],
+        'revision': None
+    },
+    'openmp': {
+        'repository': 'http://llvm.org/git/openmp.git',
+        'branch': ['master'],
+        'revision': None
+    },
+    'stats': {
+        'repository': 'https://github.com/simbuerg/pprof-stats.git',
+        'branch': ['master'],
+        'revision': None
+    },
+    'isl' : {
+        'repository': 'https://github.com/simbuerg/isl.git',
+        'branch': ['master', 'isl-0.16.1-cpp'],
+        'revision': None
+    },
+    'isl-cpp': {
+        'repository': 'https://github.com/simbuerg/isl-cpp.git',
+        'branch': ['master'],
+        'revision': None
+    },
+    'likwid': {
+        'repository': 'https://github.com/RRZE-HPC/likwid.git',
+        'branch': ['v4.1'],
+        'revision': None
+    },
 }
 
 def make_new_cb(bases):
