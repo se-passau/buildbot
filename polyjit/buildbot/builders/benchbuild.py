@@ -4,7 +4,7 @@ from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, git, cmd, rmdir, pylint,
                                     s_sbranch, s_force, s_trigger)
-from polyjit.buildbot.repos import make_cb, codebases
+from polyjit.buildbot.repos import make_cb, make_new_cb, codebases
 
 from buildbot.plugins import util
 from buildbot.changes import filter
@@ -17,6 +17,7 @@ ip_dirname = "%(prop:dirname:~empty)s"
 ip_str = ip_scratch + "/" + ip_dirname
 
 cb_benchbuild = make_cb(['benchbuild', 'stats'])
+force_codebase = make_new_cb(['benchbuild', 'stats'])
 accepted_builders = slaves.get_hostlist(slaves.infosun)
 
 
@@ -51,7 +52,7 @@ def schedule(c):
                   ["build-benchbuild"],
                   change_filter=filter.ChangeFilter(branch='develop'),
                   treeStableTimer=2 * 60),
-        s_force("force-build-benchbuild", cb_benchbuild, ["build-benchbuild"]),
+        s_force("force-build-benchbuild", force_codebase, ["build-benchbuild"]),
         s_trigger("trigger-build-benchbuild", cb_benchbuild,
                   ["build-benchbuild"])
     ])

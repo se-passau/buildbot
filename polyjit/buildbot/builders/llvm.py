@@ -5,12 +5,13 @@ from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, define, git, ucmd, ucompile, cmd,
                                     upload_file, ip, s_sbranch,
                                     s_force, s_trigger, hash_upload_to_master)
-from polyjit.buildbot.repos import make_cb, codebases
+from polyjit.buildbot.repos import make_cb, make_new_cb, codebases
 from polyjit.buildbot.master import URL
 from buildbot.plugins import util
 from buildbot.changes import filter
 
 codebase = make_cb(['llvm', 'clang', 'polly', 'openmp', 'compiler-rt'])
+force_codebase = make_new_cb(['llvm', 'clang', 'polly', 'openmp', 'compiler-rt'])
 
 P = util.Property
 BuildFactory = util.BuildFactory
@@ -65,7 +66,7 @@ def schedule(c):
         s_sbranch("build-llvm-sched", codebase, ["build-llvm"],
                   change_filter=filter.ChangeFilter(branch_re='master|next|develop'),
                   treeStableTimer=2 * 60),
-        s_force("force-build-llvm", codebase, ["build-llvm"]),
+        s_force("force-build-llvm", force_codebase, ["build-llvm"]),
         s_trigger("trigger-build-llvm", codebase, ['build-llvm'])
     ])
 # yapf: enable

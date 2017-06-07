@@ -8,12 +8,13 @@ from polyjit.buildbot.utils import (builder, define, git, cmd, ucmd, ucompile,
                                     property_is_false,
                                     hash_download_from_master,
                                     hash_upload_to_master, clean_unpack)
-from polyjit.buildbot.repos import make_cb, codebases
+from polyjit.buildbot.repos import make_cb, make_new_cb, codebases
 from polyjit.buildbot.master import URL
 from buildbot.plugins import util
 from buildbot.changes import filter
 
 codebase = make_cb(['polli', 'isl', 'isl-cpp', 'likwid'])
+force_codebase = make_new_cb(['polli', 'isl', 'isl-cpp', 'likwid'])
 
 P = util.Property
 BuildFactory = util.BuildFactory
@@ -100,7 +101,7 @@ def schedule(c):
         s_sbranch("build-jit-sched", codebase, ["build-jit"],
                   change_filter=filter.ChangeFilter(branch_re='next|develop'),
                   treeStableTimer=2 * 60),
-        s_force("force-build-jit", codebase, ["build-jit"]),
+        s_force("force-build-jit", force_codebase, ["build-jit"]),
         s_trigger("trigger-build-jit", codebase, ['build-jit'])
     ])
 

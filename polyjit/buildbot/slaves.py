@@ -1,4 +1,4 @@
-from buildbot.plugins import *
+from buildbot.plugins import worker
 
 infosun = {
     "polyjit-ci": {
@@ -50,5 +50,5 @@ def configure(c):
         props = {}
         if "properties" in slave:
             props = slave["properties"]
-        c['slaves'].append(buildslave.BuildSlave(slave["host"], slave[
+        c['workers'].append(worker.Worker(slave["host"], slave[
             "password"], properties = props))

@@ -10,11 +10,11 @@ P = util.Property
 def builder(name, workdir, slaves, **kwargs):
     if workdir:
         return util.BuilderConfig(name=name,
-                                  slavebuilddir=workdir,
-                                  slavenames=slaves,
+                                  workerbuilddir=workdir,
+                                  workernames=slaves,
                                   **kwargs)
     else:
-        return util.BuilderConfig(name=name, slavenames=slaves, **kwargs)
+        return util.BuilderConfig(name=name, workernames=slaves, **kwargs)
 
 
 def define(prop, value, **kwargs):
@@ -57,11 +57,11 @@ def compile(*args, **kwargs):
 
 
 def upload_file(src, tgt, **kwargs):
-    return steps.FileUpload(slavesrc=src, masterdest=tgt, **kwargs)
+    return steps.FileUpload(workersrc=src, masterdest=tgt, **kwargs)
 
 
 def download_file(src, tgt, **kwargs):
-    return steps.FileDownload(mastersrc=src, slavedest=tgt, **kwargs)
+    return steps.FileDownload(mastersrc=src, workerdest=tgt, **kwargs)
 
 
 def rmdir(target, **kwargs):

@@ -5,11 +5,13 @@ from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, define, git, cmd, trigger, ip,
                                     mkdir, s_sbranch, s_force, s_trigger,
                                     hash_download_from_master, clean_unpack)
-from polyjit.buildbot.repos import make_cb, codebases
+from polyjit.buildbot.repos import make_cb, make_new_cb, codebases
 from buildbot.plugins import util
 from buildbot.changes import filter
 
 codebase = make_cb(['benchbuild'])
+force_codebase = make_new_cb(['benchbuild'])
+
 
 P = util.Property
 BuildFactory = util.BuildFactory
@@ -97,7 +99,7 @@ def schedule(c):
         s_sbranch("build-slurm-set-sched", codebase, ["build-slurm-set"],
                   change_filter=filter.ChangeFilter(branch_re='next|develop'),
                   treeStableTimer=2 * 60),
-        s_force("force-build-slurm-set", codebase, ["build-slurm-set"]),
+        s_force("force-build-slurm-set", force_codebase, ["build-slurm-set"]),
         s_trigger("trigger-slurm-set", codebase, ['build-slurm-set'])
     ])
 
