@@ -13,7 +13,7 @@ codebases = {
         'revision': None
     },
     'polly': {
-        'repository': 'git://github.com/PolyJIT/polly.git',
+        'repository': 'https://github.com/PolyJIT/polly.git',
         'branch': ['devel'],
         'revision': None
     },
@@ -23,7 +23,7 @@ codebases = {
         'revision': None
     },
     'clang': {
-        'repository': 'http://github.com/PolyJIT/clang.git',
+        'repository': 'https://github.com/PolyJIT/clang.git',
         'branch': ['master'],
         'revision': None
     },
