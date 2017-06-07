@@ -85,7 +85,7 @@ def cmd(*args, **kwargs):
 def ucmd(*args, **kwargs):
     uid = kwargs.pop('uid', 0)
     gid = kwargs.pop('gid', 0)
-    workdir = kwargs.pop('builddir', "build")
+    workdir = kwargs.pop('workdir', "build")
     env = {
         "LC_ALL": "C",
     }
@@ -105,7 +105,7 @@ def ucmd(*args, **kwargs):
 def ucompile(*args, **kwargs):
     uid = kwargs.pop('uid', 0)
     gid = kwargs.pop('gid', 0)
-    workdir = kwargs.pop('builddir', "build")
+    workdir = kwargs.pop('workdir', "build")
     env = {
         "LC_ALL": "C",
     }
