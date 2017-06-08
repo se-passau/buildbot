@@ -196,10 +196,11 @@ def property_is_false(propname):
 
 
 def hash_download_from_master(mastersrc, slavedst, tag):
+    from buildbot.process.results import SUCCESS, WARNINGS
     steps = [
         cmddef(command="stat {0}".format(slavedst),
                extract_fn=extract_rc('have_{0}'.format(tag)),
-               decodeRC={0: "SUCCESS", 1: "WARNINGS"}),
+               decodeRC={0: SUCCESS, 1: SUCCESS}),
         download_file(src="{0}.md5".format(mastersrc),
                       tgt="{0}.md5".format(slavedst),
                       doStepIf=property_is_true("have_{0}".format(tag))),
