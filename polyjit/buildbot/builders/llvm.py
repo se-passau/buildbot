@@ -4,7 +4,8 @@ from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, define, git, ucmd, ucompile, cmd,
                                     upload_file, ip, s_sbranch,
-                                    s_force, s_trigger, hash_upload_to_master)
+                                    s_nightly, s_force, s_trigger,
+                                    hash_upload_to_master)
 from polyjit.buildbot.repos import make_cb, make_new_cb, codebases
 from polyjit.buildbot.master import URL
 from buildbot.plugins import util
@@ -67,7 +68,10 @@ def schedule(c):
                   change_filter=filter.ChangeFilter(branch_re='master|next|develop'),
                   treeStableTimer=2 * 60),
         s_force("force-build-llvm", force_codebase, ["build-llvm"]),
-        s_trigger("trigger-build-llvm", codebase, ['build-llvm'])
+        s_trigger("trigger-build-llvm", codebase, ['build-llvm']),
+        s_nightly("nightly-sched-build-llvm", codebase,
+                  ["build-llvm"],
+                  hour=20, minute=0)
     ])
 # yapf: enable
 

@@ -3,7 +3,7 @@ import sys
 from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, git, cmd, rmdir, pylint,
-                                    s_sbranch, s_force, s_trigger)
+                                    s_sbranch, s_force, s_trigger, s_nightly)
 from polyjit.buildbot.repos import make_cb, make_new_cb, codebases
 
 from buildbot.plugins import util
@@ -56,6 +56,9 @@ def schedule(c):
         s_force("force-build-benchbuild", force_codebase, ["build-benchbuild"]),
         s_trigger("trigger-build-benchbuild", cb_benchbuild,
                   ["build-benchbuild"])
+        s_nightly("nightly-sched-build-benchbuild", codebase,
+                  ["build-benchbuild"],
+                  hour=20, minute=0)
     ])
 
 

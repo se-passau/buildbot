@@ -3,7 +3,7 @@ import sys
 from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, define, git, cmd, compile,
-                                    s_sbranch, s_force, s_trigger, mkdir)
+                                    s_nightly, s_sbranch, s_force, s_trigger)
 from polyjit.buildbot.repos import make_cb, make_new_cb, codebases
 from buildbot.plugins import util
 from buildbot.changes import filter
@@ -51,7 +51,10 @@ def schedule(c):
         s_force("force-sched-polyjit-superbuild", force_codebase,
                 ["polyjit-superbuild"]),
         s_trigger("trigger-sched-polyjit-superbuild", codebase,
-                  ["polyjit-superbuild"])
+                  ["polyjit-superbuild"]),
+        s_nightly("nightly-sched-polyjit-superbuild", codebase,
+                  ["polyjit-superbuild"],
+                  hour=20, minute=0)
     ])
 
 

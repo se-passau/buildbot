@@ -145,6 +145,11 @@ def master_cmd(command, **kwargs):
     return steps.MasterShellCommand(command=command, **kwargs)
 
 
+def s_nightly(name, cb, builders, **kwargs):
+    return schedulers.Nightly(name=name, codebases=cb,
+                             builderNames=builders, **kwargs)
+
+
 def s_force(name, cb, builders, **kwargs):
     return schedulers.ForceScheduler(name=name,
                                      codebases=cb,
