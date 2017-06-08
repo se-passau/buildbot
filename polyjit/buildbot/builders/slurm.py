@@ -91,7 +91,7 @@ def configure(c):
         mkdir(ip("%(prop:scratch)s/results"))])
 
     c['builders'].append(builder("build-slurm-set", None, accepted_builders,
-        factory=BuildFactory(steps)))
+                         tags=['polyjit'], factory=BuildFactory(steps)))
 # yapf: enable
 
 def schedule(c):

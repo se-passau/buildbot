@@ -39,7 +39,7 @@ def configure(c):
     ]
 
     c['builders'].append(builder("polyjit-superbuild", None, accepted_builders,
-                         factory=BuildFactory(steps)))
+                         tags=['polyjit'], factory=BuildFactory(steps)))
 # yapf: enable
 
 

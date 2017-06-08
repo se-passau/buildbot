@@ -93,7 +93,7 @@ def configure(c):
     steps.extend(polyjit_ul)
 
     c['builders'].append(builder("build-jit", None, accepted_builders,
-        factory=BuildFactory(steps)))
+                         tags=['polyjit'], factory=BuildFactory(steps)))
 # yapf: enable
 
 def schedule(c):

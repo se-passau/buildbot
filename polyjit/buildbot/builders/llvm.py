@@ -59,7 +59,7 @@ def configure(c):
     steps.extend(upload_llvm)
 
     c['builders'].append(builder("build-llvm", None, accepted_builders,
-        factory = BuildFactory(steps)))
+                         tags=['polyjit'], factory=BuildFactory(steps)))
 
 def schedule(c):
     c['schedulers'].extend([
