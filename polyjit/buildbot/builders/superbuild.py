@@ -20,7 +20,7 @@ accepted_builders = slaves.get_hostlist(slaves.infosun)
 def configure(c):
     steps = [
         git('polli-sb', 'master', codebases, workdir="build/polli-sb"),
-        cmd('cmake', "build/polli-sb",
+        cmd('cmake', "./polli-sb",
             '-DCMAKE_BUILD_TYPE=Release',
             '-DBUILD_SHARED_LIBS=On',
             '-G', 'Ninja',
