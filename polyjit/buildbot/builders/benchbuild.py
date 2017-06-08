@@ -56,7 +56,7 @@ def schedule(c):
         s_force("force-build-benchbuild", force_codebase, ["build-benchbuild"]),
         s_trigger("trigger-build-benchbuild", cb_benchbuild,
                   ["build-benchbuild"]),
-        s_nightly("nightly-sched-build-benchbuild", codebase,
+        s_nightly("nightly-sched-build-benchbuild", cb_benchbuild,
                   ["build-benchbuild"],
                   hour=20, minute=0)
     ])
