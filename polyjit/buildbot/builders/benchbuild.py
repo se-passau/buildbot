@@ -26,7 +26,7 @@ def configure(c):
     c['builders'].append(builder("build-benchbuild", None, accepted_builders,
         factory=BuildFactory([
             git('benchbuild', 'develop', codebases),
-            cmd("virtualenv", "-p", "python3.4", "_venv",
+            cmd("virtualenv", "-p", "python3", "_venv",
                 name="create virtualenv",
                 description="setup benchbuild virtual environment"),
             cmd("_venv/bin/pip3", "install", ".",
