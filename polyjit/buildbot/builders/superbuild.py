@@ -22,6 +22,7 @@ def configure(c):
         git('polli-sb', 'master', codebases, workdir="build/polli-sb"),
         cmd('cmake', "./polli-sb",
             '-DCMAKE_BUILD_TYPE=Release',
+            '-DCMAKE_INSTALL_PREFIX=./',
             '-DBUILD_SHARED_LIBS=On',
             '-G', 'Ninja',
             env={
