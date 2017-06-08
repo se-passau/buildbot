@@ -55,7 +55,7 @@ def schedule(c):
                   treeStableTimer=2 * 60),
         s_force("force-build-benchbuild", force_codebase, ["build-benchbuild"]),
         s_trigger("trigger-build-benchbuild", cb_benchbuild,
-                  ["build-benchbuild"])
+                  ["build-benchbuild"]),
         s_nightly("nightly-sched-build-benchbuild", codebase,
                   ["build-benchbuild"],
                   hour=20, minute=0)
