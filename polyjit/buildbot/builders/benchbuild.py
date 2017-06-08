@@ -23,25 +23,26 @@ accepted_builders = slaves.get_hostlist(slaves.infosun)
 
 # yapf: disable
 def configure(c):
-    c['builders'].append(builder("build-benchbuild", None, accepted_builders,
-        factory=BuildFactory([
-            git('benchbuild', 'develop', codebases),
-            cmd("virtualenv", "-p", "python3", "_venv",
-                name="create virtualenv",
-                description="setup benchbuild virtual environment"),
-            cmd("_venv/bin/pip3", "install", ".",
-                name="install benchbuild",
-                description="install benchbuild into the venv",
-                env={'PYTHONPATH': 'benchbuild/bin',
-                     'HOME': '.'}),
-            pylint("_venv/bin/pylint", "./benchbuild/",
-                   warnOnFailure=True, flunkOnWarnings=False,
-                   flunkOnFailure=False, haltOnFailure=False),
-            pylint("_venv/bin/pylint", "-E", "./benchbuild/",
-                   warnOnFailure=True, flunkOnWarnings=False,
-                   flunkOnFailure=False, haltOnFailure=False),
-            rmdir("_venv")
-        ])))
+    c['builders'].append(
+        builder("build-benchbuild", None, accepted_builders,
+                tags=['polyjit'],
+                factory=BuildFactory([
+                    git('benchbuild', 'develop', codebases),
+                    cmd("virtualenv", "-p", "python3", "_venv",
+                        name="create virtualenv",
+                        description="setup benchbuild virtual environment"),
+                    cmd("_venv/bin/pip3", "install", ".",
+                        name="install benchbuild",
+                        description="install benchbuild into the venv",
+                        env={'PYTHONPATH': 'benchbuild/bin',
+                             'HOME': '.'}),
+                    pylint("_venv/bin/pylint", "./benchbuild/",
+                           warnOnFailure=True, flunkOnWarnings=False,
+                           flunkOnFailure=False, haltOnFailure=False),
+                    pylint("_venv/bin/pylint", "-E", "./benchbuild/",
+                           warnOnFailure=True, flunkOnWarnings=False,
+                           flunkOnFailure=False, haltOnFailure=False),
+                    rmdir("_venv")])))
 # yapf: enable
 
 
