@@ -198,7 +198,8 @@ def property_is_false(propname):
 def hash_download_from_master(mastersrc, slavedst, tag):
     steps = [
         cmddef(command="stat {0}".format(slavedst),
-               extract_fn=extract_rc('have_{0}'.format(tag))),
+               extract_fn=extract_rc('have_{0}'.format(tag)),
+               decodeRC={0: "SUCCESS", 1: "WARNINGS"}),
         download_file(src="{0}.md5".format(mastersrc),
                       tgt="{0}.md5".format(slavedst),
                       doStepIf=property_is_true("have_{0}".format(tag))),
