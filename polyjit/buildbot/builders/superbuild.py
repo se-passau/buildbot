@@ -21,7 +21,7 @@ def configure(c):
     steps = [
         define("UCHROOT_SRC_ROOT", "/mnt/build/polli-sb"),
         define("UCHROOT_POLLI_BUILDDIR", "/mnt/build"),
-        git('polli-sb', 'master', codebases),
+        git('polli-sb', 'master', codebases, workdir="build/polli-sb"),
         ucmd('cmake', P("UCHROOT_SRC_ROOT"),
              '-DCMAKE_BUILD_TYPE=Release',
              '-DBUILD_SHARED_LIBS=On',
