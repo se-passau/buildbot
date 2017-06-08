@@ -12,6 +12,11 @@ codebases = {
         'branch': ['master', 'next', 'perf'],
         'revision': None
     },
+    'polli-sb': {
+        'repository': 'https://github.com/PolyJIT/PolyJIT.git',
+        'branch': ['master'],
+        'revision': None
+    },
     'polly': {
         'repository': 'https://github.com/PolyJIT/polly.git',
         'branch': ['devel'],
