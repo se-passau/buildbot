@@ -35,7 +35,8 @@ def configure(c):
         ucompile("ninja", "-C", P("UCHROOT_POLLI_BUILDDIR"),
                  haltOnFailure=True, name="build jit",
                  description="[uchroot] building PolyJIT",
-                 descriptionDone="[uchroot] built PolyJIT")
+                 descriptionDone="[uchroot] built PolyJIT",
+                 timeout=4800)
     ]
 
     c['builders'].append(builder("polyjit-superbuild", None, accepted_builders,
