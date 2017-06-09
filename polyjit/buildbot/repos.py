@@ -9,7 +9,7 @@ codebases = {
     },
     'polli': {
         'repository': 'https://github.com/PolyJIT/polli.git',
-        'branch': ['next', 'master'],
+        'branch': ['master'],
         'revision': None
     },
     'polli-sb': {
