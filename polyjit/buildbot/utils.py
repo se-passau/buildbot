@@ -211,7 +211,8 @@ def hash_download_from_master(mastersrc, slavedst, tag):
                       doStepIf=property_is_true("have_{0}".format(tag))),
         cmddef(command="md5sum -c {0}.md5".format(slavedst),
                extract_fn=extract_rc('have_newest_{0}'.format(tag)),
-               doStepIf=property_is_true("have_{0}".format(tag))),
+               doStepIf=property_is_true("have_{0}".format(tag)),
+               decodeRC={0: SUCCESS, 1: WARNINGS}),
         download_file(src=mastersrc, tgt=slavedst,
                       doStepIf=property_is_false(
                           "have_newest_{0}".format(tag))),

@@ -66,8 +66,7 @@ def configure(c):
 def schedule(c):
     c['schedulers'].extend([
         s_sbranch("build-llvm-sched", codebase, ["build-llvm"],
-                  change_filter=filter.ChangeFilter(branch_re='master|next|develop'),
-                  treeStableTimer=2 * 60),
+                  treeStableTimer=2*60),
         s_force("force-build-llvm", force_codebase, ["build-llvm"]),
         s_trigger("trigger-build-llvm", codebase, ['build-llvm']),
         s_nightly("nightly-sched-build-llvm", codebase,
