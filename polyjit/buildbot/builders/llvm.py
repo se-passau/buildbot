@@ -40,6 +40,7 @@ def configure(c):
              '-DCMAKE_CXX_FLAGS_RELEASE=-O3 -DNDEBUG -DLLVM_ENABLE_STATS',
              '-DBUILD_SHARED_LIBS=Off',
              '-DPOLLY_BUILD_POLLI=Off',
+             '-DLINK_POLLY_INTO_TOOLS=Off',
              '-DLLVM_TARGETS_TO_BUILD=X86',
              '-DLLVM_BINUTILS_INCDIR=/usr/include',
              '-DLLVM_ENABLE_PIC=On',
