@@ -27,7 +27,7 @@ def configure(c):
         builder("build-benchbuild", None, accepted_builders,
                 tags=['polyjit'],
                 factory=BuildFactory([
-                    git('benchbuild', 'develop', codebases),
+                    git('benchbuild', 'master', codebases),
                     cmd("virtualenv", "-p", "python3", "_venv",
                         name="create virtualenv",
                         description="setup benchbuild virtual environment"),

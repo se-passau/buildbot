@@ -38,7 +38,7 @@ def configure(c):
     steps.extend(llvm_dl)
     steps.extend([
         git('likwid', 'v4.1', codebases, workdir=P("LIKWID_ROOT")),
-        git('polli', 'next', codebases, workdir=P("POLLI_ROOT"),
+        git('polli', 'master', codebases, workdir=P("POLLI_ROOT"),
             submodules=True),
         git('isl', 'isl-0.16.1-cpp', codebases, workdir=P("ISL_ROOT")),
         git('isl-cpp', 'master', codebases, workdir=P("ISL_CPP_ROOT"))

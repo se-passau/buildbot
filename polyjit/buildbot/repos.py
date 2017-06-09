@@ -4,12 +4,12 @@ from buildbot.plugins import util
 codebases = {
     'benchbuild': {
         'repository': 'https://github.com/PolyJIT/benchbuild.git',
-        'branch': ['master', 'develop', 'perf'],
+        'branch': ['master'],
         'revision': None
     },
     'polli': {
         'repository': 'https://github.com/PolyJIT/polli.git',
-        'branch': ['master', 'next', 'perf'],
+        'branch': ['next', 'master'],
         'revision': None
     },
     'polli-sb': {
@@ -47,9 +47,9 @@ codebases = {
         'branch': ['master'],
         'revision': None
     },
-    'isl' : {
+    'isl': {
         'repository': 'https://github.com/simbuerg/isl.git',
-        'branch': ['master', 'isl-0.16.1-cpp'],
+        'branch': ['isl-0.16.1-cpp', 'master'],
         'revision': None
     },
     'isl-cpp': {

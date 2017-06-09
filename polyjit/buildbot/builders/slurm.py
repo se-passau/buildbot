@@ -29,7 +29,7 @@ def configure(c):
     llvm_dl = hash_download_from_master("public_html/llvm.tar.gz",
                                         "llvm.tar.gz", "llvm")
     polyjit_dl = hash_download_from_master("public_html/polyjit.tar.gz",
-                                        "polyjit.tar.gz", "polyjit")
+                                           "polyjit.tar.gz", "polyjit")
     steps = [
 #        trigger(schedulerNames=['trigger-build-llvm', 'trigger-build-jit']),
         define("scratch", ip("/scratch/pjtest/%(prop:buildnumber)s/"))
@@ -40,7 +40,7 @@ def configure(c):
     steps.extend(clean_unpack("polyjit.tar.gz", "polyjit"))
     steps.extend([
         define("BENCHBUILD_ROOT", ip("%(prop:builddir)s/build/benchbuild/")),
-        git('benchbuild', 'develop', codebases, workdir=P("BENCHBUILD_ROOT")),
+        git('benchbuild', 'master', codebases, workdir=P("BENCHBUILD_ROOT")),
 
     ])
 
@@ -59,8 +59,8 @@ def configure(c):
             'BB_CONFIG_FILE': '/scratch/pjtest/.benchbuild.json',
             'BB_TMP_DIR': '/scratch/pjtest/src/',
             'BB_TEST_DIR': P("testinputs"),
-                'BB_GENTOO_HTTP_PROXY': 'debussy.fim.uni-passau.de:3128',
-                'BB_GENTOO_FTP_PROXY': 'debussy.fim.uni-passau.de:3128',
+            'BB_GENTOO_HTTP_PROXY': 'debussy.fim.uni-passau.de:3128',
+            'BB_GENTOO_FTP_PROXY': 'debussy.fim.uni-passau.de:3128',
             'BB_GENTOO_AUTOTEST_LOC': '/scratch/pjtest/gentoo-autotest',
             'BB_SLURM_PARTITION': 'chimaira',
             'BB_SLURM_NODE_DIR': '/local/hdd/pjtest/',
