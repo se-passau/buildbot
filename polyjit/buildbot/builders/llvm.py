@@ -31,7 +31,7 @@ def configure(c):
 
         git('llvm', 'master', codebases, workdir=P("LLVM_ROOT")),
         git('clang', 'master', codebases, workdir=P("CLANG_ROOT")),
-        git('polly', 'devel', codebases, workdir=P("POLLY_ROOT")),
+        git('polly', 'master', codebases, workdir=P("POLLY_ROOT")),
         git('compiler-rt', 'master', codebases, workdir=P("COMPILERRT_ROOT")),
         git('openmp', 'master', codebases, workdir=P("OPENMP_ROOT")),
         ucmd('cmake', P("UCHROOT_SRC_ROOT"),

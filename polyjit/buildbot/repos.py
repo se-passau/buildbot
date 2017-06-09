@@ -19,7 +19,7 @@ codebases = {
     },
     'polly': {
         'repository': 'https://github.com/PolyJIT/polly.git',
-        'branch': ['devel'],
+        'branch': ['master'],
         'revision': None
     },
     'llvm': {
