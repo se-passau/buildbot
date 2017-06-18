@@ -34,7 +34,7 @@ codebases = {
     },
     'compiler-rt': {
         'repository': 'http://llvm.org/git/compiler-rt.git',
-        'branch': ['master'],
+        'branch': ['master', 'revision_40'],
         'revision': None
     },
     'openmp': {
@@ -60,6 +60,21 @@ codebases = {
     'likwid': {
         'repository': 'https://github.com/RRZE-HPC/likwid.git',
         'branch': ['v4.1'],
+        'revision': None
+    },
+    'vara': {
+        'repository': 'git@github.com:vulder/VaRA.git',
+        'branch': ['vara-dev', 'vara-dev-jb-buildbot'],
+        'revision': None
+    },
+    'vara-llvm': {
+        'repository': 'git@github.com:vulder/vara-llvm.git',
+        'branch': ['vara-llvm-dev'],
+        'revision': None
+    },
+    'vara-clang': {
+        'repository': 'git@github.com:vulder/vara-clang.git',
+        'branch': ['vara-clang-dev'],
         'revision': None
     },
 }
@@ -128,6 +143,21 @@ def configure(c):
                           workdir='gitpoller-stats',
                           branches=codebases["stats"]["branch"],
                           project="polyjit",
+                          pollinterval=5 * 60),
+        changes.GitPoller(repourl=codebases["vara"]["repository"],
+                          workdir='gitpoller-vara',
+                          branches=codebases["vara"]["branch"],
+                          project="vara",
+                          pollinterval=5 * 60),
+        changes.GitPoller(repourl=codebases["vara-llvm"]["repository"],
+                          workdir='gitpoller-vara-llvm',
+                          branches=codebases["vara-llvm"]["branch"],
+                          project="vara",
+                          pollinterval=5 * 60),
+        changes.GitPoller(repourl=codebases["vara-clang"]["repository"],
+                          workdir='gitpoller-vara-clang',
+                          branches=codebases["vara-clang"]["branch"],
+                          project="vara",
                           pollinterval=5 * 60)
     ]
 # yapf: enable
