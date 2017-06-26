@@ -16,7 +16,12 @@ force_codebase = make_new_cb(['polli-sb'])
 
 P = util.Property
 BuildFactory = util.BuildFactory
-accepted_builders = slaves.get_hostlist(slaves.infosun)
+
+supported = {
+    "debussy": slaves.infosun['debussy'],
+    "ligeti": slaves.infosun['ligeti']
+}
+accepted_builders = slaves.get_hostlist(supported)
 
 
 # yapf: disable
