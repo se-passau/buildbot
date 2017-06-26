@@ -24,7 +24,6 @@ def configure(c):
     steps = [
         define("SUPERBUILD_ROOT", ip("%(prop:builddir)s/polli-sb")),
         define("UCHROOT_SUPERBUILD_ROOT", "/mnt/polli-sb"),
-        # FIXME Testing:
         define("POLYJIT_DEFAULT_BRANCH", "WIP-merge-next"),
 
         git('polli-sb', 'master', codebases, workdir=P("SUPERBUILD_ROOT"),
