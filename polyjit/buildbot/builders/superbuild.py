@@ -35,12 +35,18 @@ def configure(c):
             mode="full", method="fresh"),
         ucmd('which', "cmake",
              logEnviron=True,
+             mounts={
+                 '%(prop:cmake_prefix)s' : "/opt/cmake"
+             },
              env={
                  "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
              }),
         ucmd('cmake', "--version",
              logEnviron=True,
              usePTY=False,
+             mounts={
+                 '%(prop:cmake_prefix)s' : "/opt/cmake"
+             },
              env={
                  "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
              }),
