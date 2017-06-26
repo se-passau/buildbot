@@ -11,7 +11,29 @@ from polyjit.buildbot.master import URL
 from buildbot.plugins import util
 from buildbot.changes import filter
 
-codebase = make_cb(['vara', 'vara-llvm', 'vara-clang', 'compiler-rt'])
+#codebase = make_cb(['vara', 'vara-llvm', 'vara-clang', 'compiler-rt'])
+codebase = {
+    'compiler-rt': {
+        'repository': 'http://llvm.org/git/compiler-rt.git',
+        'branch': 'revision_40',
+        'revision': None
+    },
+    'vara': {
+        'repository': 'git@github.com:vulder/VaRA.git',
+        'branch': 'vara-dev',
+        'revision': None
+    },
+    'vara-llvm': {
+        'repository': 'git@github.com:vulder/vara-llvm.git',
+        'branch': 'vara-llvm-dev',
+        'revision': None
+    },
+    'vara-clang': {
+        'repository': 'git@github.com:vulder/vara-clang.git',
+        'branch': 'vara-clang-dev',
+        'revision': None
+    },
+}
 force_codebase = make_new_cb(['vara', 'vara-llvm', 'vara-clang', 'compiler-rt'])
 
 P = util.Property
