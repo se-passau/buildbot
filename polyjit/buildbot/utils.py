@@ -73,7 +73,7 @@ def mkdir(target, **kwargs):
 def __get_mountargs(mounts):
     mount_args = []
     for src in mounts:
-        mount_arg = ["-M", ip("{0}:{1}").format(src, mounts[src])]
+        mount_arg = ["-M", ip("{0}:{1}".format(src, mounts[src]))]
         mount_args.extend(mount_arg)
 
     return mount_args

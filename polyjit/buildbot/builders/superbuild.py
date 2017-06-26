@@ -52,7 +52,7 @@ def configure(c):
              descriptionDone="[uchroot] configured."),
         ucompile("ninja",
                  mounts={
-                     P("cmake_prefix") : "/opt/cmake"
+                     '%(prop:cmake_prefix)s' : "/opt/cmake"
                  },
                  haltOnFailure=True, name="build jit",
                  description="[uchroot] building PolyJIT",
