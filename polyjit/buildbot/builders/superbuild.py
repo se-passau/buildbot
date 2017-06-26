@@ -47,7 +47,7 @@ def configure(c):
              name="cmake",
              description="[uchroot] cmake: release build",
              descriptionDone="[uchroot] configured."),
-        ucompile("ninja", "install",
+        ucompile("ninja",
                  haltOnFailure=True, name="build jit",
                  description="[uchroot] building PolyJIT",
                  descriptionDone="[uchroot] built PolyJIT",
