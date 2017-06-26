@@ -98,6 +98,7 @@ def ucmd(*args, **kwargs):
     workdir = kwargs.pop('workdir', "build")
     mounts = kwargs.pop('mounts', [])
     mount_args = __get_mountargs(mounts)
+    logEnviron = kwargs.pop('logEnviron', False)
 
 
     env = kwargs.pop('env', {})
@@ -121,7 +122,6 @@ def ucompile(*args, **kwargs):
     use_pty = kwargs.pop('usePTY', True)
     workdir = kwargs.pop('workdir', "build")
     mounts = kwargs.pop('mounts', [])
-    logEnviron = kwargs.pop('logEnviron', False)
     mount_args = __get_mountargs(mounts)
 
     env = kwargs.pop('env', {})
@@ -136,7 +136,6 @@ def ucompile(*args, **kwargs):
         '-M', ip("%(prop:builddir)s:/mnt"),
         workdir=workdir,
         usePTY=use_pty,
-        logEnviron=logEnviron,
         env=env,
         *new_args, **kwargs)
 
