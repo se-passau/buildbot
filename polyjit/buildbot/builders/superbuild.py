@@ -2,7 +2,7 @@ import sys
 
 from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
-from polyjit.buildbot.utils import (builder, define, git,
+from polyjit.buildbot.utils import (builder, define, git, mkdir,
                                     cmd, ucmd, ucompile, ip,
                                     s_nightly, s_sbranch, s_force, s_trigger,
                                     hash_upload_to_master)
@@ -29,6 +29,7 @@ def configure(c):
 
         git('polli-sb', 'master', codebases, workdir=P("SUPERBUILD_ROOT"),
             mode="full", method="fresh"),
+        mkdir("src"),
         ucmd('cmake', P("UCHROOT_SUPERBUILD_ROOT"),
              '-DCMAKE_BUILD_TYPE=Release',
              '-DCMAKE_INSTALL_PREFIX=./_install',
@@ -37,6 +38,7 @@ def configure(c):
              ip('-DPOLYJIT_BRANCH_POLLI=%(prop:POLYJIT_DEFAULT_BRANCH)'),
              ip('-DPOLYJIT_BRANCH_POLLY=%(prop:POLYJIT_DEFAULT_BRANCH)'),
              '-G', 'Ninja',
+             workdir='src',
              env={
                  "PATH": "/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin"
              },
