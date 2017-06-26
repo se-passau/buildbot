@@ -35,7 +35,7 @@ def configure(c):
             mode="full", method="fresh"),
         ucmd('cmake', "--version",
              env={
-                 "PATH": "/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin"
+                 "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
              }),
         ucmd('cmake', P("UCHROOT_SUPERBUILD_ROOT"),
              '-DCMAKE_BUILD_TYPE=Release',
@@ -46,7 +46,7 @@ def configure(c):
              ip('-DPOLYJIT_BRANCH_POLLY=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
              '-G', 'Ninja',
              env={
-                 "PATH": "/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin"
+                 "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
              },
              mounts={
                  '%(prop:cmake_prefix)s' : "/opt/cmake"
@@ -59,7 +59,7 @@ def configure(c):
                      '%(prop:cmake_prefix)s' : "/opt/cmake"
                  },
                  env={
-                     "PATH": "/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin"
+                     "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
                  },
                  haltOnFailure=True, name="build jit",
                  description="[uchroot] building PolyJIT",
