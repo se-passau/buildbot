@@ -33,7 +33,10 @@ def configure(c):
 
         git('polli-sb', 'master', codebases, workdir=P("SUPERBUILD_ROOT"),
             mode="full", method="fresh"),
-        ucmd('cmake', "--version"),
+        ucmd('cmake', "--version",
+             env={
+                 "PATH": "/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin"
+             }),
         ucmd('cmake', P("UCHROOT_SUPERBUILD_ROOT"),
              '-DCMAKE_BUILD_TYPE=Release',
              '-DCMAKE_INSTALL_PREFIX=./_install',
