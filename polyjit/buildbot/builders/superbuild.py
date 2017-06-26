@@ -52,6 +52,7 @@ def configure(c):
                  '%(prop:cmake_prefix)s' : "/opt/cmake"
              },
              name="cmake",
+             logEnviron=True,
              description="[uchroot] cmake: release build",
              descriptionDone="[uchroot] configured."),
         ucompile("ninja",
@@ -64,6 +65,7 @@ def configure(c):
                  haltOnFailure=True, name="build jit",
                  description="[uchroot] building PolyJIT",
                  descriptionDone="[uchroot] built PolyJIT",
+                 logEnviron=True,
                  timeout=4800),
         cmd("tar", "czf", "../polyjit_sb.tar.gz", "-C", "./_install", ".")
     ]
