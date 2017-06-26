@@ -47,7 +47,7 @@ def configure(c):
              mounts={
                  '%(prop:cmake_prefix)s' : "/opt/cmake"
              },
-             usePTY=False,
+             usePTY=True,
              name="cmake",
              logEnviron=True,
              description="[uchroot] cmake: release build",
@@ -59,7 +59,7 @@ def configure(c):
              mounts={
                  '%(prop:cmake_prefix)s' : "/opt/cmake"
              },
-             usePTY=False,
+             usePTY=True,
              logEnviron=True,
              haltOnFailure=True,
              name="build jit",
