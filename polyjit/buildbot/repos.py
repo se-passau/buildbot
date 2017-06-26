@@ -34,7 +34,7 @@ codebases = {
     },
     'compiler-rt': {
         'repository': 'http://llvm.org/git/compiler-rt.git',
-        'branch': ['master', 'revision_40'],
+        'branch': ['master', 'release_40'],
         'revision': None
     },
     'openmp': {
