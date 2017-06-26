@@ -94,9 +94,11 @@ def cmd(*args, **kwargs):
 def ucmd(*args, **kwargs):
     uid = kwargs.pop('uid', 0)
     gid = kwargs.pop('gid', 0)
+    use_pty = kwargs.pop('usePTY', True)
     workdir = kwargs.pop('workdir', "build")
     mounts = kwargs.pop('mounts', [])
     mount_args = __get_mountargs(mounts)
+
 
     env = kwargs.pop('env', {})
     env.update({"LC_ALL": "C"})
@@ -108,7 +110,7 @@ def ucmd(*args, **kwargs):
                '-w', os.path.join("/mnt", workdir),
                '-M', ip("%(prop:builddir)s:/mnt"),
                workdir=workdir,
-               usePTY=True,
+               usePTY=use_pty,
                env=env,
                *new_args, **kwargs)
 
@@ -116,6 +118,7 @@ def ucmd(*args, **kwargs):
 def ucompile(*args, **kwargs):
     uid = kwargs.pop('uid', 0)
     gid = kwargs.pop('gid', 0)
+    use_pty = kwargs.pop('usePTY', True)
     workdir = kwargs.pop('workdir', "build")
     mounts = kwargs.pop('mounts', [])
     mount_args = __get_mountargs(mounts)
@@ -131,7 +134,7 @@ def ucompile(*args, **kwargs):
         os.path.join("/mnt", workdir),
         '-M', ip("%(prop:builddir)s:/mnt"),
         workdir=workdir,
-        usePTY=True,
+        usePTY=use_pty,
         env=env,
         *new_args, **kwargs)
 

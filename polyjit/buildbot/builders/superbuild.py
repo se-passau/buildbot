@@ -35,6 +35,7 @@ def configure(c):
             mode="full", method="fresh"),
         ucmd('cmake', "--version",
              logEnviron=True,
+             usePTY=False,
              env={
                  "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
              }),
@@ -52,6 +53,7 @@ def configure(c):
              mounts={
                  '%(prop:cmake_prefix)s' : "/opt/cmake"
              },
+             usePTY=False,
              name="cmake",
              logEnviron=True,
              description="[uchroot] cmake: release build",
@@ -63,6 +65,7 @@ def configure(c):
                  env={
                      "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
                  },
+                 usePTY=False,
                  haltOnFailure=True, name="build jit",
                  description="[uchroot] building PolyJIT",
                  descriptionDone="[uchroot] built PolyJIT",
