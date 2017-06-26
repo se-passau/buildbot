@@ -83,11 +83,12 @@ def cmd(*args, **kwargs):
     if (len(args) == 1) and isinstance(args[0], str):
         command = str(args[0])
 
-    if "haltOnFailure" not in kwargs:
-        kwargs["haltOnFailure"] = True
-    if "logEnviron" not in kwargs:
-        kwargs["logEnviron"] = False
-    return steps.ShellCommand(command=command, **kwargs)
+    logEnviron = kwargs.pop('logEnviron', False)
+    haltOnFailure = kwargs.pop('haltOnFailure', True)
+
+    return steps.ShellCommand(command=command,
+                              logEnviron=logEnviron,
+                              haltOnFailure=haltOnFailure, **kwargs)
 
 
 def ucmd(*args, **kwargs):
@@ -97,12 +98,10 @@ def ucmd(*args, **kwargs):
     mounts = kwargs.pop('mounts', [])
     mount_args = __get_mountargs(mounts)
 
-    env = {
-        "LC_ALL": "C",
-    }
-    env.update(kwargs.pop('env', {}))
-    new_args = tuple(mount_args) + args
+    env = kwargs.pop('env', {})
+    env.update({"LC_ALL": "C"})
 
+    new_args = tuple(mount_args) + args
     return cmd(P("uchroot_binary"), "-C", "-E", "-A",
                "-u", uid, "-g", gid,
                '-r', P("uchroot_image_path"),
