@@ -86,7 +86,7 @@ def configure(c):
 def schedule(c):
     c['schedulers'].extend([
         s_sbranch("build-vara-sched", codebase, ["build-vara"],
-                  change_filter=filter.ChangeFilter(branch_re="vara-dev|vara-dev-jb-buildbot"),
+                  change_filter=filter.ChangeFilter(branch_re="vara-dev|vara-llvm-dev|vara-clang-dev"),
                   treeStableTimer=2 * 60),
         s_force("force-build-vara", force_codebase, ["build-vara"]),
         s_trigger("trigger-build-vara", codebase, ['build-vara']),
