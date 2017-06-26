@@ -70,6 +70,13 @@ def rmdir(target, **kwargs):
 def mkdir(target, **kwargs):
     return steps.MakeDirectory(dir=target, **kwargs)
 
+def __get_mountargs(mounts):
+    mount_args = []
+    for src in mounts:
+        mount_arg = ["-M", "{0}:{1}".format(src, mounts[src])]
+        mount_args.extend(mount_arg)
+
+    return mount_args
 
 def cmd(*args, **kwargs):
     command = args
@@ -87,6 +94,9 @@ def ucmd(*args, **kwargs):
     uid = kwargs.pop('uid', 0)
     gid = kwargs.pop('gid', 0)
     workdir = kwargs.pop('workdir', "build")
+    mounts = kwargs.pop('mounts', [])
+    mount_args = __get_mountargs(mounts)
+
     env = {
         "LC_ALL": "C",
     }
@@ -97,6 +107,7 @@ def ucmd(*args, **kwargs):
                '-r', P("uchroot_image_path"),
                '-w', os.path.join("/mnt", workdir),
                '-M', ip("%(prop:builddir)s:/mnt"),
+               *mount_args,
                workdir=workdir,
                usePTY=True,
                env=env,
@@ -107,14 +118,21 @@ def ucompile(*args, **kwargs):
     uid = kwargs.pop('uid', 0)
     gid = kwargs.pop('gid', 0)
     workdir = kwargs.pop('workdir', "build")
+    mounts = kwargs.pop('mounts', [])
+    mount_args = __get_mountargs(mounts)
+
     env = {
         "LC_ALL": "C",
     }
     env.update(kwargs.pop('env', {}))
 
-    return compile(P("uchroot_binary"), "-C", "-E", "-A", "-u", uid, "-g", gid,
-        '-r', P("uchroot_image_path"), '-w', os.path.join("/mnt", workdir),
+    return compile(
+        P("uchroot_binary"),
+        "-C", "-E", "-A", "-u", uid, "-g", gid,
+        '-r', P("uchroot_image_path"), '-w',
+        os.path.join("/mnt", workdir),
         '-M', ip("%(prop:builddir)s:/mnt"),
+        *mount_args,
         workdir=workdir,
         usePTY=True,
         env=env,

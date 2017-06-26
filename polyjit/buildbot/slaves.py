@@ -17,6 +17,7 @@ infosun = {
             "uchroot_image_path": "/local/hdd/buildbot-polyjit/xenial-image/",
             "uchroot_binary": "/scratch/pjtest/erlent/build/uchroot",
             "testinputs": "/scratch/pjtest/pprof-test-data",
+            "cmake_prefix": "/scratch/pjtest/opt/cmake",
             "has_munged": True,
             "can_build_llvm_debug": True
         }
@@ -28,6 +29,7 @@ infosun = {
             "uchroot_image_path": "/local/hdd/buildbot-polyjit/xenial-image/",
             "uchroot_binary": "/scratch/pjtest/erlent/build/uchroot",
             "testinputs": "/scratch/pjtest/pprof-test-data",
+            "cmake_prefix": "/scratch/pjtest/opt/cmake",
             "has_munged": True,
             "can_build_llvm_debug": True
         }
