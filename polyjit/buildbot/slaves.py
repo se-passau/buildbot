@@ -14,7 +14,7 @@ infosun = {
         "host": "debussy",
         "password": None,
         "properties": {
-            "uchroot_image_path": "/local/hdd/pjtest/xenial-image/",
+            "uchroot_image_path": "/local/hdd/buildbot-polyjit/xenial-image/",
             "uchroot_binary": "/scratch/pjtest/erlent/build/uchroot",
             "testinputs": "/scratch/pjtest/pprof-test-data",
             "has_munged": True,
@@ -25,7 +25,7 @@ infosun = {
         "host": "ligeti",
         "password": None,
         "properties": {
-            "uchroot_image_path": "/local/hdd/pjtest/xenial-image/",
+            "uchroot_image_path": "/local/hdd/buildbot-polyjit/xenial-image/",
             "uchroot_binary": "/scratch/pjtest/erlent/build/uchroot",
             "testinputs": "/scratch/pjtest/pprof-test-data",
             "has_munged": True,
