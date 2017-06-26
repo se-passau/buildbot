@@ -45,7 +45,7 @@ def configure(c):
                  "PATH": "/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin"
              },
              mounts={
-                 P("cmake_prefix") : "/opt/cmake"
+                 ip('%(prop:cmake_prefix)s') : "/opt/cmake"
              },
              name="cmake",
              description="[uchroot] cmake: release build",
