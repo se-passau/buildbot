@@ -28,7 +28,6 @@ def configure(c):
 
         git('polli-sb', 'master', codebases, workdir=P("SUPERBUILD_ROOT"),
             mode="full", method="fresh"),
-        mkdir("src"),
         ucmd('cmake', P("UCHROOT_SUPERBUILD_ROOT"),
              '-DCMAKE_BUILD_TYPE=Release',
              '-DCMAKE_INSTALL_PREFIX=./_install',
@@ -37,7 +36,6 @@ def configure(c):
              ip('-DPOLYJIT_BRANCH_POLLI=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
              ip('-DPOLYJIT_BRANCH_POLLY=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
              '-G', 'Ninja',
-             workdir='src',
              env={
                  "PATH": "/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin"
              },
