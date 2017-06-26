@@ -76,6 +76,7 @@ def configure(c):
                  env={
                      "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
                  },
+                 logEnviron=True,
                  usePTY=False,
                  haltOnFailure=True, name="build jit",
                  description="[uchroot] building PolyJIT",
