@@ -27,7 +27,8 @@ def configure(c):
         # FIXME Testing:
         define("POLYJIT_DEFAULT_BRANCH", "WIP-merge-next"),
 
-        git('polli-sb', 'master', codebases, workdir=P("SUPERBUILD_ROOT")),
+        git('polli-sb', 'master', codebases, workdir=P("SUPERBUILD_ROOT"),
+            mode="full", method="fresh"),
         ucmd('cmake', P("UCHROOT_SUPERBUILD_ROOT"),
              '-DCMAKE_BUILD_TYPE=Release',
              '-DCMAKE_INSTALL_PREFIX=./_install',
