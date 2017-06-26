@@ -101,7 +101,7 @@ def ucmd(*args, **kwargs):
         "LC_ALL": "C",
     }
     env.update(kwargs.pop('env', {}))
-    new_args = args + mount_args
+    new_args = args + tuple(mount_args)
 
     return cmd(P("uchroot_binary"), "-C", "-E", "-A",
                "-u", uid, "-g", gid,
@@ -125,7 +125,7 @@ def ucompile(*args, **kwargs):
         "LC_ALL": "C",
     }
     env.update(kwargs.pop('env', {}))
-    new_args = args + mount_args
+    new_args = args + tuple(mount_args)
 
     return compile(
         P("uchroot_binary"),
