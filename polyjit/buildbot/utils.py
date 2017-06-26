@@ -110,6 +110,7 @@ def ucmd(*args, **kwargs):
                '-r', P("uchroot_image_path"),
                '-w', os.path.join("/mnt", workdir),
                '-M', ip("%(prop:builddir)s:/mnt"),
+               logEnviron=logEnviron,
                workdir=workdir,
                usePTY=use_pty,
                env=env,

@@ -33,24 +33,7 @@ def configure(c):
 
         git('polli-sb', 'master', codebases, workdir=P("SUPERBUILD_ROOT"),
             mode="full", method="fresh"),
-        ucmd('which', "cmake",
-             logEnviron=True,
-             mounts={
-                 '%(prop:cmake_prefix)s' : "/opt/cmake"
-             },
-             env={
-                 "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
-             }),
-        ucmd('cmake', "--version",
-             logEnviron=True,
-             usePTY=False,
-             mounts={
-                 '%(prop:cmake_prefix)s' : "/opt/cmake"
-             },
-             env={
-                 "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
-             }),
-        ucmd('cmake', P("UCHROOT_SUPERBUILD_ROOT"),
+        ucmd('/opt/cmake/bin/cmake', P("UCHROOT_SUPERBUILD_ROOT"),
              '-DCMAKE_BUILD_TYPE=Release',
              '-DCMAKE_INSTALL_PREFIX=./_install',
              ip('-DPOLYJIT_BRANCH_CLANG=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
@@ -69,7 +52,7 @@ def configure(c):
              logEnviron=True,
              description="[uchroot] cmake: release build",
              descriptionDone="[uchroot] configured."),
-        ucmd("ninja",
+        ucmd("/usr/bin/ninja",
              env={
                  "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
              },
