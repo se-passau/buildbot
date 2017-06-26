@@ -69,19 +69,19 @@ def configure(c):
              logEnviron=True,
              description="[uchroot] cmake: release build",
              descriptionDone="[uchroot] configured."),
-        ucompile("ninja",
-                 mounts={
-                     '%(prop:cmake_prefix)s' : "/opt/cmake"
-                 },
-                 env={
-                     "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
-                 },
-                 logEnviron=True,
-                 usePTY=False,
-                 haltOnFailure=True, name="build jit",
-                 description="[uchroot] building PolyJIT",
-                 descriptionDone="[uchroot] built PolyJIT",
-                 timeout=4800),
+        ucmd("ninja",
+             env={
+                 "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
+             },
+             mounts={
+                 '%(prop:cmake_prefix)s' : "/opt/cmake"
+             },
+             usePTY=False,
+             logEnviron=True,
+             haltOnFailure=True, name="build jit",
+             description="[uchroot] building PolyJIT",
+             descriptionDone="[uchroot] built PolyJIT",
+             timeout=4800),
         cmd("tar", "czf", "../polyjit_sb.tar.gz", "-C", "./_install", ".")
     ]
 
