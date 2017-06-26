@@ -15,8 +15,8 @@ from buildbot.changes import filter
 codebase = {
     'compiler-rt': {
         'repository': 'http://llvm.org/git/compiler-rt.git',
-        'branch': 'revision_40',
-        'revision': None
+        'branch': None,
+        'revision': 'revision_40'
     },
     'vara': {
         'repository': 'git@github.com:vulder/VaRA.git',
