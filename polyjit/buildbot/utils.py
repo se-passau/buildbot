@@ -101,17 +101,17 @@ def ucmd(*args, **kwargs):
         "LC_ALL": "C",
     }
     env.update(kwargs.pop('env', {}))
+    new_args = args + mount_args
 
     return cmd(P("uchroot_binary"), "-C", "-E", "-A",
                "-u", uid, "-g", gid,
                '-r', P("uchroot_image_path"),
                '-w', os.path.join("/mnt", workdir),
                '-M', ip("%(prop:builddir)s:/mnt"),
-               *mount_args,
                workdir=workdir,
                usePTY=True,
                env=env,
-               *args, **kwargs)
+               *new_args, **kwargs)
 
 
 def ucompile(*args, **kwargs):
@@ -125,6 +125,7 @@ def ucompile(*args, **kwargs):
         "LC_ALL": "C",
     }
     env.update(kwargs.pop('env', {}))
+    new_args = args + mount_args
 
     return compile(
         P("uchroot_binary"),
@@ -132,11 +133,10 @@ def ucompile(*args, **kwargs):
         '-r', P("uchroot_image_path"), '-w',
         os.path.join("/mnt", workdir),
         '-M', ip("%(prop:builddir)s:/mnt"),
-        *mount_args,
         workdir=workdir,
         usePTY=True,
         env=env,
-        *args, **kwargs)
+        *new_args, **kwargs)
 
 
 def test(*args, **kwargs):
