@@ -38,6 +38,7 @@ def ip(text):
 
 def git(name, branch, cb, **kwargs):
     repo = cb[name]['repository']
+    mode = kwargs.pop("mode", "incremental")
 
     return steps.Git(repourl=repo,
                      branch=branch,
