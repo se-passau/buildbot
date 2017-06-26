@@ -120,10 +120,8 @@ def ucompile(*args, **kwargs):
     mounts = kwargs.pop('mounts', [])
     mount_args = __get_mountargs(mounts)
 
-    env = {
-        "LC_ALL": "C",
-    }
-    env.update(kwargs.pop('env', {}))
+    env = kwargs.pop('env', {})
+    env.update({"LC_ALL": "C"})
     new_args = tuple(mount_args) + args
 
     return compile(
