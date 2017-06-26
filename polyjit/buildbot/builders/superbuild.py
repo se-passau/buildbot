@@ -33,39 +33,27 @@ def configure(c):
 
         git('polli-sb', 'master', codebases, workdir=P("SUPERBUILD_ROOT"),
             mode="full", method="fresh"),
-        ucmd('/opt/cmake/bin/cmake', P("UCHROOT_SUPERBUILD_ROOT"),
-             '-DCMAKE_BUILD_TYPE=Release',
-             '-DCMAKE_INSTALL_PREFIX=./_install',
-             ip('-DPOLYJIT_BRANCH_CLANG=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
-             ip('-DPOLYJIT_BRANCH_LLVM=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
-             ip('-DPOLYJIT_BRANCH_POLLI=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
-             ip('-DPOLYJIT_BRANCH_POLLY=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
-             '-G', 'Ninja',
-             env={
-                 "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
-             },
-             mounts={
-                 '%(prop:cmake_prefix)s' : "/opt/cmake"
-             },
-             usePTY=True,
-             name="cmake",
-             logEnviron=True,
-             description="[uchroot] cmake: release build",
-             descriptionDone="[uchroot] configured."),
-        ucmd("/usr/bin/ninja",
-             env={
-                 "PATH": ["/opt/cmake/bin", "/usr/local/bin", "/usr/bin", "/bin"]
-             },
-             mounts={
-                 '%(prop:cmake_prefix)s' : "/opt/cmake"
-             },
-             usePTY=True,
-             logEnviron=True,
-             haltOnFailure=True,
-             name="build jit",
-             description="[uchroot] building PolyJIT",
-             descriptionDone="[uchroot] built PolyJIT",
-             timeout=4800),
+        cmd(ip('%(prop:cmake_prefix)s/bin/cmake'), P("SUPERBUILD_ROOT"),
+            '-DCMAKE_BUILD_TYPE=Release',
+            '-DCMAKE_INSTALL_PREFIX=./_install',
+            ip('-DPOLYJIT_BRANCH_CLANG=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
+            ip('-DPOLYJIT_BRANCH_LLVM=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
+            ip('-DPOLYJIT_BRANCH_POLLI=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
+            ip('-DPOLYJIT_BRANCH_POLLY=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
+            '-G', 'Ninja',
+            usePTY=True,
+            name="cmake",
+            logEnviron=True,
+            description="[uchroot] cmake: release build",
+            descriptionDone="[uchroot] configured."),
+        cmd("/usr/bin/ninja",
+            usePTY=True,
+            logEnviron=True,
+            haltOnFailure=True,
+            name="build jit",
+            description="[uchroot] building PolyJIT",
+            descriptionDone="[uchroot] built PolyJIT",
+            timeout=4800),
         cmd("tar", "czf", "../polyjit_sb.tar.gz", "-C", "./_install", ".")
     ]
 
