@@ -2,31 +2,29 @@ import sys
 
 from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
-from polyjit.buildbot.utils import (builder, define, git, mkdir,
-                                    ucmd, cmd, ucompile, ip,
-                                    s_nightly, s_sbranch, s_force, s_trigger,
-                                    hash_upload_to_master)
+from polyjit.buildbot.utils import (builder, define, git, cmd, ip,
+                                    s_sbranch, s_force, s_trigger,
+                                    hash_upload_to_master,
+                                    hash_download_from_master,
+                                    clean_unpack, mkdir)
 from polyjit.buildbot.repos import make_cb, make_new_cb, codebases
 from polyjit.buildbot.master import URL
 from buildbot.plugins import util
 from buildbot.changes import filter
 
-codebase = make_cb(['polli-sb'])
-force_codebase = make_new_cb(['polli-sb'])
+CODEBASE = make_cb(['polli-sb'])
+FORCE_CODEBASE = make_new_cb(['polli-sb'])
 
 P = util.Property
-BuildFactory = util.BuildFactory
+BF = util.BuildFactory
 
-supported = {
-    "debussy": slaves.infosun['debussy'],
-    "ligeti": slaves.infosun['ligeti']
-}
-accepted_builders = slaves.get_hostlist(supported)
+ACCEPTED_BUILDERS = \
+    slaves.get_hostlist(slaves.infosun,
+                        predicate=lambda host: host["host"] in {'debussy', 'ligeti'})
 
 
-# yapf: disable
 def configure(c):
-    steps = [
+    sb_steps = [
         define("SUPERBUILD_ROOT", ip("%(prop:builddir)s/polli-sb")),
         define("UCHROOT_SUPERBUILD_ROOT", "/mnt/polli-sb"),
         define("POLYJIT_DEFAULT_BRANCH", "WIP-merge-next"),
@@ -61,27 +59,89 @@ def configure(c):
         "polyjit_sb.tar.gz",
         "../polyjit_sb.tar.gz",
         "public_html/polyjit_sb.tar.gz", URL)
-    steps.extend(upload_pj)
+    sb_steps.extend(upload_pj)
+
+    download_pj = hash_download_from_master("public_html/polyjit_sb.tar.gz",
+                                            "polyjit_sb.tar.gz", "polyjit")
+    slurm_steps = [
+        define("scratch", ip("/scratch/pjtest/sb-%(prop:buildnumber)s/"))
+    ]
+    slurm_steps.extend(download_pj)
+    slurm_steps.extend(clean_unpack("polyjit_sb.tar.gz", "llvm"))
+    slurm_steps.extend(
+        define("BENCHBUILD_ROOT", ip("%(prop:builddir)s/build/benchbuild/")),
+        git('benchbuild', 'master', codebases, workdir=P("BENCHBUILD_ROOT")),
+    )
+    slurm_steps.extend([
+        define('benchbuild', ip('%(prop:scratch)s/env/bin/benchbuild')),
+        define('llvm', ip('%(prop:scratch)s/llvm')),
+
+        mkdir(P("scratch")),
+        cmd('virtualenv', '-ppython3', ip('%(prop:scratch)s/env/')),
+        cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install', '--upgrade', '.',
+            workdir='build/benchbuild'),
+        cmd("rsync", "-var", "llvm", P("scratch")),
+        cmd(P('benchbuild'), 'bootstrap', '-s', env={
+            'BB_CONFIG_FILE': '/scratch/pjtest/.benchbuild.json',
+            'BB_TMP_DIR': '/scratch/pjtest/src/',
+            'BB_TEST_DIR': P("testinputs"),
+            'BB_GENTOO_AUTOTEST_LOC': '/scratch/pjtest/gentoo-autotest',
+            'BB_SLURM_PARTITION': 'chimaira',
+            'BB_SLURM_NODE_DIR': '/local/hdd/pjtest/',
+            'BB_SLURM_ACCOUNT': 'cl',
+            'BB_SLURM_TIMELIMIT': '24:00:00',
+            'BB_CONTAINER_MOUNTS': ip('["%(prop:llvm)s", "%(prop:polyjit)s"'),
+            'BB_CONTAINER_PREFIXES': '["/opt/benchbuild", "/", "/usr", "/usr/local"]',
+            'BB_ENV_COMPILER_PATH': ip('["%(prop:llvm)s/bin", "%(prop:polyjit)s/bin"]'),
+            'BB_ENV_COMPILER_LD_LIBRARY_PATH':
+                ip('["%(prop:llvm)s/lib"]'),
+            'BB_ENV_BINARY_PATH': ip('["%(prop:llvm)s/bin"]'),
+            'BB_ENV_BINARY_LD_LIBRARY_PATH':
+                ip('["%(prop:llvm)s/lib"]'),
+            'BB_ENV_LOOKUP_PATH':
+                ip('["%(prop:llvm)s/bin", "/scratch/pjtest/erlent/build"]'),
+            'BB_ENV_LOOKUP_LD_LIBRARY_PATH':
+                ip('["%(prop:llvm)s/lib"]'),
+            'BB_LLVM_DIR': ip('%(prop:scratch)s/llvm'),
+            'BB_LIKWID_PREFIX': '/usr',
+            'BB_PAPI_INCLUDE': '/usr/include',
+            'BB_PAPI_LIBRARY': '/usr/lib',
+            'BB_SRC_DIR': ip('%(prop:scratch)s/benchbuild'),
+            'BB_SLURM_LOGS': ip('%(prop:scratch)s/slurm.log'),
+            'BB_UNIONFS_ENABLE': 'false'
+            },
+            workdir=P('scratch')),
+        # This only works on infosun machines
+        cmd("ln", "-s", ip("/scratch/pjtest/benchbuild-src/"),
+            ip("%(prop:scratch)s/benchbuild")),
+        mkdir(ip("%(prop:scratch)s/results"))
+    ])
 
     c['builders'].append(
         builder("polyjit-superbuild", None,
-                accepted_builders,
-                tags=['polyjit'], factory=BuildFactory(steps)))
-# yapf: enable
+                ACCEPTED_BUILDERS, tags=['polyjit'], factory=BF(sb_steps)))
+    c['builders'].append(
+        builder("polyjit-superbuild-slurm", None,
+                ACCEPTED_BUILDERS, tags=['polyjit'], factory=BF(slurm_steps)))
 
 
 def schedule(c):
     c['schedulers'].extend([
-        s_sbranch("branch-sched-polyjit-superbuild", codebase,
+        s_sbranch("branch-sched-polyjit-superbuild", CODEBASE,
                   ["polyjit-superbuild"],
                   change_filter=filter.ChangeFilter(branch_re='master')),
-        s_force("force-sched-polyjit-superbuild", force_codebase,
+        s_force("force-sched-polyjit-superbuild", FORCE_CODEBASE,
                 ["polyjit-superbuild"]),
-        s_trigger("trigger-sched-polyjit-superbuild", codebase,
+        s_trigger("trigger-sched-polyjit-superbuild", CODEBASE,
                   ["polyjit-superbuild"]),
-        s_nightly("nightly-sched-polyjit-superbuild", codebase,
-                  ["polyjit-superbuild"],
-                  hour=20, minute=0)
+
+        s_sbranch("b-s:polyjit-superbuild-slurm", CODEBASE,
+                  ["polyjit-superbuild-slurm"],
+                  change_filter=filter.ChangeFilter(branch_re='master')),
+        s_force("f-s:polyjit-superbuild-slurm", FORCE_CODEBASE,
+                ["polyjit-superbuild-slurm-slurm"]),
+        s_trigger("t-s:polyjit-superbuild-slurm", CODEBASE,
+                  ["polyjit-superbuild-slurm"]),
     ])
 
 
