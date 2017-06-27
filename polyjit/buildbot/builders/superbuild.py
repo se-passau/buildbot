@@ -139,7 +139,7 @@ def schedule(c):
                   ["polyjit-superbuild-slurm"],
                   change_filter=filter.ChangeFilter(branch_re='master')),
         s_force("fs_polyjit-superbuild-slurm", FORCE_CODEBASE,
-                ["polyjit-superbuild-slurm-slurm"]),
+                ["polyjit-superbuild-slurm"]),
         s_trigger("ts_polyjit-superbuild-slurm", CODEBASE,
                   ["polyjit-superbuild-slurm"]),
     ])
