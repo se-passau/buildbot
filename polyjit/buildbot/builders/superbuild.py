@@ -68,10 +68,10 @@ def configure(c):
     ]
     slurm_steps.extend(download_pj)
     slurm_steps.extend(clean_unpack("polyjit_sb.tar.gz", "llvm"))
-    slurm_steps.extend(
+    slurm_steps.extend([
         define("BENCHBUILD_ROOT", ip("%(prop:builddir)s/build/benchbuild/")),
         git('benchbuild', 'master', codebases, workdir=P("BENCHBUILD_ROOT")),
-    )
+    ])
     slurm_steps.extend([
         define('benchbuild', ip('%(prop:scratch)s/env/bin/benchbuild')),
         define('llvm', ip('%(prop:scratch)s/llvm')),
