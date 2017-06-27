@@ -3,7 +3,7 @@ import sys
 from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, define, git, ucmd, ucompile, cmd,
-                                    upload_file, ip, s_sbranch,
+                                    upload_file, ip, s_sbranch, s_abranch,
                                     s_nightly, s_force, s_trigger,
                                     hash_upload_to_master)
 from polyjit.buildbot.repos import make_cb, make_new_cb, codebases
@@ -85,9 +85,9 @@ def configure(c):
 
 def schedule(c):
     c['schedulers'].extend([
-        s_sbranch("build-vara-sched", codebase, ["build-vara"],
+        s_abranch("build-vara-sched", codebase, ["build-vara"],
                   change_filter=filter.ChangeFilter(branch_re="vara-dev|vara-llvm-dev|vara-clang-dev"),
-                  treeStableTimer=2 * 60),
+                  treeStableTimer=5 * 60),
         s_force("force-build-vara", force_codebase, ["build-vara"]),
         s_trigger("trigger-build-vara", codebase, ['build-vara']),
         s_nightly("nightly-sched-build-vara", codebase,

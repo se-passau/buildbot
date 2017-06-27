@@ -148,16 +148,16 @@ def configure(c):
                           workdir='gitpoller-vara',
                           branches=codebases["vara"]["branch"],
                           project="vara",
-                          pollinterval=5 * 60),
+                          pollinterval=3 * 60),
         changes.GitPoller(repourl=codebases["vara-llvm"]["repository"],
                           workdir='gitpoller-vara-llvm',
                           branches=codebases["vara-llvm"]["branch"],
                           project="vara",
-                          pollinterval=5 * 60),
+                          pollinterval=3 * 60),
         changes.GitPoller(repourl=codebases["vara-clang"]["repository"],
                           workdir='gitpoller-vara-clang',
                           branches=codebases["vara-clang"]["branch"],
                           project="vara",
-                          pollinterval=5 * 60)
+                          pollinterval=3 * 60)
     ]
 # yapf: enable
