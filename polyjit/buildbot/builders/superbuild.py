@@ -12,8 +12,8 @@ from polyjit.buildbot.master import URL
 from buildbot.plugins import util
 from buildbot.changes import filter
 
-CODEBASE = make_cb(['polli-sb'])
-FORCE_CODEBASE = make_new_cb(['polli-sb'])
+CODEBASE = make_cb(['polli-sb', 'benchbuild'])
+FORCE_CODEBASE = make_new_cb(['polli-sb', 'benchbuild'])
 
 P = util.Property
 BF = util.BuildFactory
