@@ -1,4 +1,4 @@
-__all__ = ["jit", "llvm", "slurm", "superbuild", "vara", "vara-fn"]
+__all__ = ["jit", "llvm", "slurm", "superbuild", "vara", "varafn"]
 __ALL__ = []
 
 
