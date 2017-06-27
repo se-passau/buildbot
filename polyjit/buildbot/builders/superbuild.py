@@ -127,20 +127,20 @@ def configure(c):
 
 def schedule(c):
     c['schedulers'].extend([
-        s_sbranch("branch-sched-polyjit-superbuild", CODEBASE,
+        s_sbranch("bs_polyjit-superbuild", CODEBASE,
                   ["polyjit-superbuild"],
                   change_filter=filter.ChangeFilter(branch_re='master')),
-        s_force("force-sched-polyjit-superbuild", FORCE_CODEBASE,
+        s_force("fs_polyjit-superbuild", FORCE_CODEBASE,
                 ["polyjit-superbuild"]),
-        s_trigger("trigger-sched-polyjit-superbuild", CODEBASE,
+        s_trigger("ts_polyjit-superbuild", CODEBASE,
                   ["polyjit-superbuild"]),
 
-        s_sbranch("b-s:polyjit-superbuild-slurm", CODEBASE,
+        s_sbranch("bs_polyjit-superbuild-slurm", CODEBASE,
                   ["polyjit-superbuild-slurm"],
                   change_filter=filter.ChangeFilter(branch_re='master')),
-        s_force("f-s:polyjit-superbuild-slurm", FORCE_CODEBASE,
+        s_force("fs_polyjit-superbuild-slurm", FORCE_CODEBASE,
                 ["polyjit-superbuild-slurm-slurm"]),
-        s_trigger("t-s:polyjit-superbuild-slurm", CODEBASE,
+        s_trigger("ts_polyjit-superbuild-slurm", CODEBASE,
                   ["polyjit-superbuild-slurm"]),
     ])
 
