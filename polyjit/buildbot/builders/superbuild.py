@@ -3,7 +3,7 @@ import sys
 from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, define, git, cmd, ip,
-                                    s_sbranch, s_force, s_trigger,
+                                    s_abranch, s_force, s_trigger,
                                     hash_upload_to_master,
                                     hash_download_from_master,
                                     clean_unpack, mkdir)
@@ -12,8 +12,8 @@ from polyjit.buildbot.master import URL
 from buildbot.plugins import util
 from buildbot.changes import filter
 
-CODEBASE = make_cb(['polli-sb', 'benchbuild'])
-FORCE_CODEBASE = make_new_cb(['polli-sb', 'benchbuild'])
+CODEBASE = make_cb(['polli-sb', 'benchbuild', 'polli', 'llvm', 'clang', 'polly'])
+FORCE_CODEBASE = make_new_cb(['polli-sb', 'benchbuild', 'polli', 'llvm', 'clang', 'polly'])
 
 P = util.Property
 BF = util.BuildFactory
@@ -127,17 +127,15 @@ def configure(c):
 
 def schedule(c):
     c['schedulers'].extend([
-        s_sbranch("bs_polyjit-superbuild", CODEBASE,
-                  ["polyjit-superbuild"],
-                  change_filter=filter.ChangeFilter(branch_re='master')),
+        s_abranch("bs_polyjit-superbuild", CODEBASE,
+                  ["polyjit-superbuild"]),
         s_force("fs_polyjit-superbuild", FORCE_CODEBASE,
                 ["polyjit-superbuild"]),
         s_trigger("ts_polyjit-superbuild", CODEBASE,
                   ["polyjit-superbuild"]),
 
-        s_sbranch("bs_polyjit-superbuild-slurm", CODEBASE,
-                  ["polyjit-superbuild-slurm"],
-                  change_filter=filter.ChangeFilter(branch_re='master')),
+        s_abranch("bs_polyjit-superbuild-slurm", CODEBASE,
+                  ["polyjit-superbuild-slurm"]),
         s_force("fs_polyjit-superbuild-slurm", FORCE_CODEBASE,
                 ["polyjit-superbuild-slurm"]),
         s_trigger("ts_polyjit-superbuild-slurm", CODEBASE,
