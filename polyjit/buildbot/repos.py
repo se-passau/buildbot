@@ -64,17 +64,17 @@ codebases = {
     },
     'vara': {
         'repository': 'git@github.com:vulder/VaRA.git',
-        'branch': ['vara-dev', 'vara-dev-jb-buildbot'],
+        'branch': ['vara-dev', 'vara-dev-jb-buildbot', 'vara-dev-fn'],
         'revision': None
     },
     'vara-llvm': {
         'repository': 'git@github.com:vulder/vara-llvm.git',
-        'branch': ['vara-llvm-dev'],
+        'branch': ['vara-llvm-dev', 'vara-llvm-dev-fn'],
         'revision': None
     },
     'vara-clang': {
         'repository': 'git@github.com:vulder/vara-clang.git',
-        'branch': ['vara-clang-dev'],
+        'branch': ['vara-clang-dev', 'vara-clang-dev-fn'],
         'revision': None
     },
 }
