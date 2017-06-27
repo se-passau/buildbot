@@ -185,6 +185,13 @@ def s_sbranch(name, cb, builders, **kwargs):
                                             **kwargs)
 
 
+def s_abranch(name, cb, builders, **kwargs):
+    return schedulers.AnyBranchScheduler(name=name,
+                                         codebases=cb,
+                                         builderNames=builders,
+                                         **kwargs)
+
+
 def s_trigger(name, cb, builders, **kwargs):
     return schedulers.Triggerable(name=name,
                                   codebases=cb,
