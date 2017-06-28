@@ -114,7 +114,11 @@ def make_new_cb(bases):
 def make_cb(bases):
     b_dict = {}
     for b in bases:
-        b_dict[b] = codebases[b]
+        b_dict[b] = {
+            "repository": codebases[b]["repository"],
+            "branch": codebases[b]["branch"],
+            "revision": codebases[b]["revision"]
+        }
     return b_dict
 
 
