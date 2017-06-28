@@ -168,7 +168,7 @@ def master_cmd(command, **kwargs):
 
 def s_nightly(name, cb, builders, **kwargs):
     return schedulers.Nightly(name=name, codebases=cb,
-                             builderNames=builders, **kwargs)
+                              builderNames=builders, **kwargs)
 
 
 def s_force(name, cb, builders, **kwargs):

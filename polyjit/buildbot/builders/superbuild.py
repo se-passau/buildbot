@@ -127,7 +127,7 @@ def configure(c):
 
 def schedule(c):
     superbuild_sched = s_abranch("bs_polyjit-superbuild",
-                                 CODEBASE, ["polyjit-superbuild"]),
+                                 CODEBASE, ["polyjit-superbuild"])
     c['schedulers'].extend([
         superbuild_sched,
         s_force("fs_polyjit-superbuild", FORCE_CODEBASE,
@@ -135,7 +135,8 @@ def schedule(c):
         s_trigger("ts_polyjit-superbuild", CODEBASE,
                   ["polyjit-superbuild"]),
 
-        s_dependent("ds_polyjit-superbuild-slurm", superbuild_sched,
+        s_dependent("ds_polyjit-superbuild-slurm",
+                    superbuild_sched,
                     ["polyjit-superbuild-slurm"]),
         s_force("fs_polyjit-superbuild-slurm", FORCE_CODEBASE,
                 ["polyjit-superbuild-slurm"])
