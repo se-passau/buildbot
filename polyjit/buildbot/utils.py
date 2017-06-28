@@ -184,6 +184,10 @@ def s_sbranch(name, cb, builders, **kwargs):
                                             builderNames=builders,
                                             **kwargs)
 
+def s_dependent(name, upstream, builders, **kwargs):
+    return schedulers.Dependent(name=name, upstream=upstream,
+                                builderNames=builders, **kwargs)
+
 
 def s_abranch(name, cb, builders, **kwargs):
     return schedulers.AnyBranchScheduler(name=name,

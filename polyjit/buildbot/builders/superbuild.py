@@ -3,7 +3,7 @@ import sys
 from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, define, git, cmd, ip,
-                                    s_abranch, s_force, s_trigger,
+                                    s_abranch, s_dependent, s_force, s_trigger,
                                     hash_upload_to_master,
                                     hash_download_from_master,
                                     clean_unpack, mkdir)
@@ -126,20 +126,19 @@ def configure(c):
 
 
 def schedule(c):
+    superbuild_sched = s_abranch("bs_polyjit-superbuild",
+                                 CODEBASE, ["polyjit-superbuild"]),
     c['schedulers'].extend([
-        s_abranch("bs_polyjit-superbuild", CODEBASE,
-                  ["polyjit-superbuild"]),
+        superbuild_sched,
         s_force("fs_polyjit-superbuild", FORCE_CODEBASE,
                 ["polyjit-superbuild"]),
         s_trigger("ts_polyjit-superbuild", CODEBASE,
                   ["polyjit-superbuild"]),
 
-        s_abranch("bs_polyjit-superbuild-slurm", CODEBASE,
-                  ["polyjit-superbuild-slurm"]),
+        s_dependent("ds_polyjit-superbuild-slurm", superbuild_sched,
+                    ["polyjit-superbuild-slurm"]),
         s_force("fs_polyjit-superbuild-slurm", FORCE_CODEBASE,
-                ["polyjit-superbuild-slurm"]),
-        s_trigger("ts_polyjit-superbuild-slurm", CODEBASE,
-                  ["polyjit-superbuild-slurm"]),
+                ["polyjit-superbuild-slurm"])
     ])
 
 
