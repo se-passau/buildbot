@@ -76,17 +76,20 @@ codebases = {
     },
     'vara': {
         'repository': 'git@github.com:vulder/VaRA.git',
-        'branch': ['vara-dev', 'vara-dev-jb-buildbot', 'vara-dev-fn'],
+        'branches': ['vara-dev', 'vara-dev-jb-buildbot', 'vara-dev-fn'],
+        'branch': "vara-dev",
         'revision': None
     },
     'vara-llvm': {
         'repository': 'git@github.com:vulder/vara-llvm.git',
-        'branch': ['vara-llvm-dev', 'vara-llvm-dev-fn'],
+        'branches': ['vara-llvm-dev', 'vara-llvm-dev-fn'],
+        'branch': "vara-dev",
         'revision': None
     },
     'vara-clang': {
         'repository': 'git@github.com:vulder/vara-clang.git',
-        'branch': ['vara-clang-dev', 'vara-clang-dev-fn'],
+        'branches': ['vara-clang-dev', 'vara-clang-dev-fn'],
+        'branch': "vara-dev",
         'revision': None
     },
 }
@@ -98,13 +101,9 @@ def make_new_cb(bases):
             util.CodebaseParameter(
                 b,
                 branch=util.ChoiceStringParameter(
-                    name="branches",
-                    choices=codebases[b]['branches'] \
-                            if hasattr(codebases[b], 'branches') \
-                            else codebases[b]['branch'],
-                    default=codebases[b]['branches'][0] \
-                            if hasattr(codebases[b], 'branches') \
-                            else codebases[b]['branch'][0],
+                    name="Branch",
+                    choices=codebases[b]['branches'],
+                    default=codebases[b]['branches'][0]
                 ),
                 revision=util.FixedParameter(name='revision',
                                              default=''),
@@ -166,17 +165,17 @@ def configure(c):
                           pollinterval=5 * 60),
         changes.GitPoller(repourl=codebases["vara"]["repository"],
                           workdir='gitpoller-vara',
-                          branches=codebases["vara"]["branch"],
+                          branches=codebases["vara"]["branches"],
                           project="vara",
                           pollinterval=3 * 60),
         changes.GitPoller(repourl=codebases["vara-llvm"]["repository"],
                           workdir='gitpoller-vara-llvm',
-                          branches=codebases["vara-llvm"]["branch"],
+                          branches=codebases["vara-llvm"]["branches"],
                           project="vara",
                           pollinterval=3 * 60),
         changes.GitPoller(repourl=codebases["vara-clang"]["repository"],
                           workdir='gitpoller-vara-clang',
-                          branches=codebases["vara-clang"]["branch"],
+                          branches=codebases["vara-clang"]["branches"],
                           project="vara",
                           pollinterval=3 * 60)
     ]
