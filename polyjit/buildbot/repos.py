@@ -99,8 +99,12 @@ def make_new_cb(bases):
                 b,
                 branch=util.ChoiceStringParameter(
                     name="branches",
-                    choices=codebases[b]['branches'],
-                    default=codebases[b]['branches'][0]
+                    choices=codebases[b]['branches'] \
+                            if hasattr(codebases[b], 'branches') \
+                            else codebases[b]['branch'],
+                    default=codebases[b]['branches'][0] \
+                            if hasattr(codebases[b], 'branches') \
+                            else codebases[b]['branch'][0],
                 ),
                 revision=util.FixedParameter(name='revision',
                                              default=''),
