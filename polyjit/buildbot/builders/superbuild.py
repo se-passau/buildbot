@@ -27,7 +27,7 @@ def configure(c):
     sb_steps = [
         define("SUPERBUILD_ROOT", ip("%(prop:builddir)s/polli-sb")),
         define("UCHROOT_SUPERBUILD_ROOT", "/mnt/polli-sb"),
-        define("POLYJIT_DEFAULT_BRANCH", "WIP-merge-next"),
+        define("POLYJIT_DEFAULT_BRANCH", "master"),
 
         git('polli-sb', 'master', codebases, workdir=P("SUPERBUILD_ROOT"),
             mode="full", method="fresh"),
