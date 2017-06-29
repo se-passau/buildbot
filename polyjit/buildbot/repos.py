@@ -98,9 +98,9 @@ def make_new_cb(bases):
             util.CodebaseParameter(
                 b,
                 branch=util.ChoiceStringParameter(
-                    name="branch",
-                    choices=codebases[b]['branch'],
-                    default=codebases[b]['branch'][0]
+                    name="branches",
+                    choices=codebases[b]['branches'],
+                    default=codebases[b]['branches'][0]
                 ),
                 revision=util.FixedParameter(name='revision',
                                              default=''),
