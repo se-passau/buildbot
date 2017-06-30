@@ -16,23 +16,24 @@ from buildbot.changes import filter
 project_name     = 'vara'
 trigger_branches = 'vara-dev|vara-llvm-dev|vara-clang-dev'
 uchroot_src_root = '/mnt/vara-llvm'
+checkout_base_dir = '%(prop:builddir)s/vara-llvm'
 
 repos = {
     'vara-llvm': {
         'default_branch': 'vara-llvm-dev',
-        'checkout_dir': '%(prop:builddir)s/vara-llvm',
+        'checkout_dir': checkout_base_dir,
     },
     'vara-clang': {
         'default_branch': 'vara-clang-dev',
-        'checkout_dir': '%(prop:builddir)s/vara-llvm/tools/clang',
+        'checkout_dir': checkout_base_dir + '/tools/clang',
     },
     'vara': {
         'default_branch': 'vara-dev',
-        'checkout_dir': '%(prop:builddir)s/vara-llvm/tools/VaRA',
+        'checkout_dir': checkout_base_dir + '/tools/VaRA',
     },
     'compiler-rt': {
         'default_branch': 'release_40',
-        'checkout_dir': '%(prop:builddir)s/vara-llvm/projects/compiler-rt',
+        'checkout_dir': checkout_base_dir + '/projects/compiler-rt',
     },
 }
 

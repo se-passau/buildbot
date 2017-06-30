@@ -13,26 +13,27 @@ from buildbot.changes import filter
 
 ################################################################################
 
-project_name     = 'vara-fn'
-trigger_branches = 'vara-dev-fn|vara-llvm-dev-fn|vara-clang-dev-fn'
-uchroot_src_root = '/mnt/vara-llvm-fn'
+project_name      = 'vara-fn'
+trigger_branches  = 'vara-dev-fn|vara-llvm-dev-fn|vara-clang-dev-fn'
+uchroot_src_root  = '/mnt/vara-llvm-fn'
+checkout_base_dir = '%(prop:builddir)s/vara-llvm-fn'
 
 repos = {
     'vara-llvm': {
         'default_branch': 'vara-llvm-dev-fn',
-        'checkout_dir': '%(prop:builddir)s/vara-llvm-fn',
+        'checkout_dir': checkout_base_dir,
     },
     'vara-clang': {
         'default_branch': 'vara-clang-dev-fn',
-        'checkout_dir': '%(prop:builddir)s/vara-llvm/tools/clang',
+        'checkout_dir': checkout_base_dir + '/tools/clang',
     },
     'vara': {
         'default_branch': 'vara-dev-fn',
-        'checkout_dir': '%(prop:builddir)s/vara-llvm/tools/VaRA',
+        'checkout_dir': checkout_base_dir + '/tools/VaRA',
     },
     'compiler-rt': {
         'default_branch': 'release_40',
-        'checkout_dir': '%(prop:builddir)s/vara-llvm/projects/compiler-rt',
+        'checkout_dir': checkout_base_dir + '/projects/compiler-rt',
     },
 }
 
