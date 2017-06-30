@@ -20,7 +20,7 @@ uchroot_src_root = '/mnt/vara-llvm-fn'
 repos = {
     'vara-llvm': {
         'default_branch': 'vara-llvm-dev-fn',
-        'checkout_dir': '%(prop:builddir)s/vara-llvm',
+        'checkout_dir': '%(prop:builddir)s/vara-llvm-fn',
     },
     'vara-clang': {
         'default_branch': 'vara-clang-dev-fn',
