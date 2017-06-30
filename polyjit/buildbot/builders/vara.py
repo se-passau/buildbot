@@ -14,7 +14,7 @@ from buildbot.changes import filter
 ################################################################################
 
 project_name     = 'vara'
-trigger_branches = 'vara-dev|vara-llvm-dev|vara-clang-dev'
+trigger_branches = 'vara-dev|vara-llvm-dev|vara-clang-dev|vara-dev-jb-buildbot'
 uchroot_src_root = '/mnt/vara-llvm'
 
 repos = {
