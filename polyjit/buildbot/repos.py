@@ -76,7 +76,7 @@ codebases = {
     },
     'vara': {
         'repository': 'git@github.com:vulder/VaRA.git',
-        'branches': ['vara-dev', 'vara-dev-jb-buildbot', 'vara-dev-fn'],
+        'branches': ['vara-dev', 'vara-dev-fn'],
         'revision': None
     },
     'vara-llvm': {
