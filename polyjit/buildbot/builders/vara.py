@@ -75,7 +75,7 @@ def configure(c):
              '-DLLVM_ENABLE_TERMINFO=Off',
              '-G', 'Ninja',
              env={
-                 'PATH": "/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin'
+                 'PATH': '/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin'
              },
              name='cmake',
              description='cmake O3, Assertions, PIC, Shared'),
