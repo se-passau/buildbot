@@ -77,19 +77,16 @@ codebases = {
     'vara': {
         'repository': 'git@github.com:vulder/VaRA.git',
         'branches': ['vara-dev', 'vara-dev-jb-buildbot', 'vara-dev-fn'],
-        'branch': "vara-dev",
         'revision': None
     },
     'vara-llvm': {
         'repository': 'git@github.com:vulder/vara-llvm.git',
         'branches': ['vara-llvm-dev', 'vara-llvm-dev-fn'],
-        'branch': "vara-dev",
         'revision': None
     },
     'vara-clang': {
         'repository': 'git@github.com:vulder/vara-clang.git',
         'branches': ['vara-clang-dev', 'vara-clang-dev-fn'],
-        'branch': "vara-dev",
         'revision': None
     },
 }
@@ -123,6 +120,38 @@ def make_cb(bases):
             "revision": codebases[b]["revision"]
         }
     return b_dict
+
+
+def make_git_cb(bases):
+    b_dict = {}
+    for b in bases:
+        b_dict[b] = {
+            'repository' : codebases[b]['repository'],
+            'branch' : bases[b]['default_branch'],
+            'revision' : codebases[b]['revision']
+        }
+    return b_dict;
+
+
+def make_force_cb(bases):
+    cb_list = []
+    for b in bases:
+        cb_list.append(
+            util.CodebaseParameter(
+                b,
+                branch=util.ChoiceStringParameter(
+                    name="branch",
+                    choices=codebases[b]['branches'],
+                    default=bases[b]['default_branch']
+                ),
+                revision=util.FixedParameter(name='revision',
+                                             default=''),
+                repository=util.FixedParameter(name='repository',
+                                               default=codebases[b]['repository']),
+                project=util.FixedParameter(name='project', default=b)
+            )
+        )
+    return cb_list
 
 
 # yapf: disable
