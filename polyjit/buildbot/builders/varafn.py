@@ -6,42 +6,46 @@ from polyjit.buildbot.utils import (builder, define, git, ucmd, ucompile, cmd,
                                     upload_file, ip, s_sbranch, s_abranch,
                                     s_nightly, s_force, s_trigger,
                                     hash_upload_to_master)
-from polyjit.buildbot.repos import make_cb, make_new_cb, codebases
+from polyjit.buildbot.repos import make_cb, make_new_cb, make_git_cb, make_force_cb, codebases
 from polyjit.buildbot.master import URL
 from buildbot.plugins import util
 from buildbot.changes import filter
 
-#codebase = make_cb(['vara', 'vara-llvm', 'vara-clang', 'compiler-rt'])
-codebase = {
-    'compiler-rt': {
-        'repository': 'http://llvm.org/git/compiler-rt.git',
-        'branch': 'release_40',
-        'revision': None
-    },
-    'vara': {
-        'repository': 'git@github.com:vulder/VaRA.git',
-        'branch': 'vara-dev-fn',
-        'revision': None
-    },
+################################################################################
+
+project_name     = 'vara-fn'
+trigger_branches = 'vara-dev-fn|vara-llvm-dev-fn|vara-clang-dev-fn'
+uchroot_src_root = '/mnt/vara-llvm-fn'
+
+repos = {
     'vara-llvm': {
-        'repository': 'git@github.com:vulder/vara-llvm.git',
-        'branch': 'vara-llvm-dev-fn',
-        'revision': None
+        'default_branch': 'vara-llvm-dev-fn',
+        'checkout_dir': '%(prop:builddir)s/vara-llvm',
     },
     'vara-clang': {
-        'repository': 'git@github.com:vulder/vara-clang.git',
-        'branch': 'vara-clang-dev-fn',
-        'revision': None
+        'default_branch': 'vara-clang-dev-fn',
+        'checkout_dir': '%(prop:builddir)s/vara-llvm/tools/clang',
+    },
+    'vara': {
+        'default_branch': 'vara-dev-fn',
+        'checkout_dir': '%(prop:builddir)s/vara-llvm/tools/VaRA',
+    },
+    'compiler-rt': {
+        'default_branch': 'release_40',
+        'checkout_dir': '%(prop:builddir)s/vara-llvm/projects/compiler-rt',
     },
 }
-force_codebase = make_new_cb(['vara', 'vara-llvm', 'vara-clang', 'compiler-rt'])
+
+################################################################################
+
+codebase = make_git_cb(repos)
+force_codebase = make_force_cb(repos)
 
 P = util.Property
-BuildFactory = util.BuildFactory
 
 def can_build_llvm_debug(host):
-    if "can_build_llvm_debug" in host["properties"]:
-        return host["properties"]["can_build_llvm_debug"]
+    if 'can_build_llvm_debug' in host['properties']:
+        return host['properties']['can_build_llvm_debug']
     return False
 
 accepted_builders = slaves.get_hostlist(slaves.infosun, predicate=can_build_llvm_debug)
@@ -49,18 +53,17 @@ accepted_builders = slaves.get_hostlist(slaves.infosun, predicate=can_build_llvm
 
 # yapf: disable
 def configure(c):
-    steps = [
-        define("VARA_LLVM_ROOT", ip("%(prop:builddir)s/vara-fn-llvm")),
-        define("UCHROOT_SRC_ROOT", "/mnt/vara-fn-llvm"),
-        define("VARA_CLANG_ROOT", ip("%(prop:VARA_LLVM_ROOT)s/tools/clang")),
-        define("VARA_ROOT", ip("%(prop:VARA_LLVM_ROOT)s/tools/VaRA")),
-        define("COMPILERRT_ROOT", ip("%(prop:VARA_LLVM_ROOT)s/projects/compiler-rt")),
+    steps = []
 
-        git('vara-llvm', 'vara-llvm-dev-fn', codebases, workdir=P("VARA_LLVM_ROOT")),
-        git('vara-clang', 'vara-clang-dev-fn', codebases, workdir=P("VARA_CLANG_ROOT")),
-        git('vara', 'vara-dev-fn', codebases, workdir=P("VARA_ROOT")),
-        git('compiler-rt', 'release_40', codebases, workdir=P("COMPILERRT_ROOT")),
-        ucmd('cmake', P("UCHROOT_SRC_ROOT"),
+    for repo in repos:
+        steps.append(define(str(repo).upper() +'_ROOT', ip(repos[repo]['checkout_dir'])))
+
+    for repo in repos:
+        steps.append(git(repo, repos[repo]['default_branch'], codebases, workdir=P(str(repo).upper()+'_ROOT')))
+
+    steps += [
+        define('UCHROOT_SRC_ROOT', uchroot_src_root),
+        ucmd('cmake', P('UCHROOT_SRC_ROOT'),
              '-DCMAKE_BUILD_TYPE=Debug',
              '-DCMAKE_C_FLAGS=-g -fno-omit-frame-pointer',
              '-DCMAKE_CXX_FLAGS=-g -fno-omit-frame-pointer',
@@ -72,24 +75,27 @@ def configure(c):
              '-DLLVM_ENABLE_TERMINFO=Off',
              '-G', 'Ninja',
              env={
-                 "PATH": "/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin"
+                 'PATH': '/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin'
              },
-             name="cmake",
-             description="cmake O3, Assertions, PIC, Shared"),
-        ucompile("ninja", haltOnFailure=True, name="build VaRA-fn"),
-        ucompile("ninja", "check-vara-clang-RA", haltOnFailure=True, name="run VaRA-clang Region annotation regression tests"),
+             name='cmake',
+             description='cmake O3, Assertions, PIC, Shared'),
+        ucompile('ninja', haltOnFailure=True, name='build VaRA'),
+        ucompile('ninja', 'check-vara-clang-RA', haltOnFailure=True, name='run VaRA-clang Region annotation regression tests'),
     ]
 
-    c['builders'].append(builder("build-vara-fn", None, accepted_builders,
-                         tags=['vara'], factory=BuildFactory(steps)))
+    c['builders'].append(builder('build-' + project_name, None, accepted_builders,
+                         tags=['vara'], factory=util.BuildFactory(steps)))
 
 def schedule(c):
     c['schedulers'].extend([
-        s_abranch("build-vara-fn-sched", codebase, ["build-vara-fn"],
-                  change_filter=filter.ChangeFilter(branch_re="vara-dev-fn|vara-llvm-dev-fn|vara-clang-dev-fn"),
+        s_abranch('build-' + project_name + '-sched', codebase, ['build-' + project_name],
+                  change_filter=filter.ChangeFilter(branch_re=trigger_branches),
                   treeStableTimer=5 * 60),
-        s_force("force-build-vara-fn", force_codebase, ["build-vara-fn"]),
-        s_trigger("trigger-build-vara-fn", codebase, ['build-vara-fn']),
+        s_force('force-build-' + project_name, force_codebase, ['build-' + project_name]),
+        s_trigger('trigger-build-' + project_name, codebase, ['build-' + project_name]),
+        s_nightly('nightly-sched-build-' + project_name, codebase,
+                  ['build-vara'],
+                  hour=22, minute=0)
     ])
 # yapf: enable
 
