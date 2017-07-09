@@ -29,7 +29,7 @@ def configure(c):
         define("UCHROOT_SUPERBUILD_ROOT", "/mnt/polli-sb"),
         define("POLYJIT_DEFAULT_BRANCH", "master"),
 
-        cmd('rm', '-r', P("SUPERBUILD_ROOT")),
+        cmd('rm', '-r', P("builddir")),
         git('polli-sb', 'master', codebases, workdir=P("SUPERBUILD_ROOT"),
             mode="full", method="fresh"),
         cmd(ip('%(prop:cmake_prefix)s/bin/cmake'), P("SUPERBUILD_ROOT"),
