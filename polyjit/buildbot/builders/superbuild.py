@@ -87,10 +87,10 @@ def configure(c):
             'BB_TEST_DIR': P("testinputs"),
             'BB_GENTOO_AUTOTEST_LOC': '/scratch/pjtest/gentoo-autotest',
             'BB_SLURM_PARTITION': 'chimaira',
-            'BB_SLURM_NODE_DIR': '/local/hdd/pjtest/',
+            'BB_SLURM_NODE_DIR': '/local/hdd/buildbot-polyjit/',
             'BB_SLURM_ACCOUNT': 'cl',
-            'BB_SLURM_TIMELIMIT': '24:00:00',
-            'BB_CONTAINER_MOUNTS': ip('["%(prop:llvm)s", "%(prop:polyjit)s"'),
+            'BB_SLURM_TIMELIMIT': '03:00:00',
+            'BB_CONTAINER_MOUNTS': ip('["%(prop:llvm)s", "%(prop:polyjit)s"]'),
             'BB_CONTAINER_PREFIXES': '["/opt/benchbuild", "/", "/usr", "/usr/local"]',
             'BB_ENV_COMPILER_PATH': ip('["%(prop:llvm)s/bin", "%(prop:polyjit)s/bin"]'),
             'BB_ENV_COMPILER_LD_LIBRARY_PATH':
