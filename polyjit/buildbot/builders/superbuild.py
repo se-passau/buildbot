@@ -125,8 +125,7 @@ def configure(c):
             'BB_PAPI_INCLUDE': '/usr/include',
             'BB_PAPI_LIBRARY': '/usr/lib',
             'BB_SRC_DIR': ip('%(prop:scratch)s/benchbuild'),
-            'BB_SLURM_LOGS': ip('%(prop:scratch)s/slurm.log'),
-            'BB_UNIONFS_ENABLE': 'false'
+            'BB_SLURM_LOGS': ip('%(prop:scratch)s/slurm.log')
             },
             workdir=P('scratch')),
         # This only works on infosun machines
