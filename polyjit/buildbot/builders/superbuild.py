@@ -35,6 +35,7 @@ def configure(c):
         cmd(ip('%(prop:cmake_prefix)s/bin/cmake'), P("SUPERBUILD_ROOT"),
             '-DCMAKE_BUILD_TYPE=Release',
             '-DCMAKE_INSTALL_PREFIX=./_install',
+            '-DCMAKE_CXX_FLAGS_RELEASE="-O3 -DNDEBUG -DLLVM_ENABLE_STATS"',
             '-DBUILD_SHARED_LIBS=Off',
             ip('-DPOLYJIT_BRANCH_CLANG=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
             ip('-DPOLYJIT_BRANCH_LLVM=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
