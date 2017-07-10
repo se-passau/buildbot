@@ -109,7 +109,7 @@ def configure(c):
             'BB_SLURM_NODE_DIR': '/local/hdd/buildbot-polyjit/',
             'BB_SLURM_ACCOUNT': 'cl',
             'BB_SLURM_TIMELIMIT': '03:00:00',
-            'BB_CONTAINER_MOUNTS': ip('["%(prop:llvm)s", "%(prop:polyjit)s"]'),
+            'BB_CONTAINER_MOUNTS': ip('["%(prop:llvm)s", "%(prop:benchbuild)s"]'),
             'BB_CONTAINER_PREFIXES': '["/opt/benchbuild", "/", "/usr", "/usr/local"]',
             'BB_ENV_COMPILER_PATH': ip('["%(prop:llvm)s/bin", "%(prop:polyjit)s/bin"]'),
             'BB_ENV_COMPILER_LD_LIBRARY_PATH':
