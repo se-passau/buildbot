@@ -137,15 +137,20 @@ def configure(c):
 
     c['builders'].append(
         builder("polyjit-superbuild", None,
-                ACCEPTED_BUILDERS, tags=['polyjit'], factory=BF(sb_steps)))
+                ACCEPTED_BUILDERS, tags=['polyjit'],
+                collapseRequests=True,
+                factory=BF(sb_steps)))
     c['builders'].append(
         builder("polyjit-superbuild-slurm", None,
-                ACCEPTED_BUILDERS, tags=['polyjit'], factory=BF(slurm_steps)))
+                ACCEPTED_BUILDERS, tags=['polyjit'],
+                collapseRequests=True,
+                factory=BF(slurm_steps)))
 
 
 def schedule(c):
     superbuild_sched = s_abranch("bs_polyjit-superbuild",
-                                 CODEBASE, ["polyjit-superbuild"])
+                                 CODEBASE, ["polyjit-superbuild"],
+                                 treeStableTimer=10 * 60)
     c['schedulers'].extend([
         superbuild_sched,
         s_force("fs_polyjit-superbuild", FORCE_CODEBASE,
