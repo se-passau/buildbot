@@ -29,7 +29,6 @@ def configure(c):
         define("UCHROOT_SUPERBUILD_ROOT", "/mnt/polli-sb"),
         define("POLYJIT_DEFAULT_BRANCH", "master"),
 
-        cmd('rm', '-r', ip("%(prop:builddir)s/build")),
         git('polli-sb', 'master', codebases, workdir=P("SUPERBUILD_ROOT"),
             mode="full", method="fresh"),
         cmd(ip('%(prop:cmake_prefix)s/bin/cmake'), P("SUPERBUILD_ROOT"),
@@ -94,6 +93,7 @@ def configure(c):
     slurm_steps.extend([
         define('benchbuild', ip('%(prop:scratch)s/env/bin/benchbuild')),
         define('llvm', ip('%(prop:scratch)s/llvm')),
+        define('bb_src', ip('%(prop:scratch)s/benchbuild')),
 
         mkdir(P("scratch")),
         cmd('virtualenv', '-ppython3', ip('%(prop:scratch)s/env/')),
@@ -109,9 +109,9 @@ def configure(c):
             'BB_SLURM_NODE_DIR': '/local/hdd/buildbot-polyjit/',
             'BB_SLURM_ACCOUNT': 'cl',
             'BB_SLURM_TIMELIMIT': '03:00:00',
-            'BB_CONTAINER_MOUNTS': ip('["%(prop:llvm)s", "%(prop:benchbuild)s"]'),
+            'BB_CONTAINER_MOUNTS': ip('["%(prop:llvm)s", "%(prop:bb_src)s"]'),
             'BB_CONTAINER_PREFIXES': '["/opt/benchbuild", "/", "/usr", "/usr/local"]',
-            'BB_ENV_COMPILER_PATH': ip('["%(prop:llvm)s/bin", "%(prop:polyjit)s/bin"]'),
+            'BB_ENV_COMPILER_PATH': ip('["%(prop:llvm)s/bin"]'),
             'BB_ENV_COMPILER_LD_LIBRARY_PATH':
                 ip('["%(prop:llvm)s/lib"]'),
             'BB_ENV_BINARY_PATH': ip('["%(prop:llvm)s/bin"]'),
@@ -125,13 +125,13 @@ def configure(c):
             'BB_LIKWID_PREFIX': '/usr',
             'BB_PAPI_INCLUDE': '/usr/include',
             'BB_PAPI_LIBRARY': '/usr/lib',
-            'BB_SRC_DIR': ip('%(prop:scratch)s/benchbuild'),
+            'BB_SRC_DIR': ip('%(prop:bb_src)s'),
             'BB_SLURM_LOGS': ip('%(prop:scratch)s/slurm.log')
             },
             workdir=P('scratch')),
         # This only works on infosun machines
         cmd("ln", "-s", ip("/scratch/pjtest/benchbuild-src/"),
-            ip("%(prop:scratch)s/benchbuild")),
+            ip("%(prop:bb_src)s")),
         mkdir(ip("%(prop:scratch)s/results"))
     ])
 
