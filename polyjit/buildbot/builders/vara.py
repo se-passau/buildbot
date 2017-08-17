@@ -20,23 +20,22 @@ uchroot_src_root = '/mnt/vara-llvm'
 checkout_base_dir = '%(prop:builddir)s/vara-llvm'
 
 repos = OrderedDict()
-repos = {
-    'vara-llvm': {
-        'default_branch': 'vara-llvm-dev',
-        'checkout_dir': checkout_base_dir,
-    },
-    'vara-clang': {
-        'default_branch': 'vara-clang-dev',
-        'checkout_dir': checkout_base_dir + '/tools/clang',
-    },
-    'vara': {
-        'default_branch': 'vara-dev',
-        'checkout_dir': checkout_base_dir + '/tools/VaRA',
-    },
-    'compiler-rt': {
-        'default_branch': 'release_40',
-        'checkout_dir': checkout_base_dir + '/projects/compiler-rt',
-    },
+
+repos['vara-llvm'] = {
+    'default_branch': 'vara-llvm-dev',
+    'checkout_dir': checkout_base_dir,
+}
+repos['vara-clang'] = {
+    'default_branch': 'vara-clang-dev',
+    'checkout_dir': checkout_base_dir + '/tools/clang',
+}
+repos['vara'] = {
+    'default_branch': 'vara-dev',
+    'checkout_dir': checkout_base_dir + '/tools/VaRA',
+}
+repos['compiler-rt'] = {
+    'default_branch': 'release_40',
+    'checkout_dir': checkout_base_dir + '/projects/compiler-rt',
 }
 
 ################################################################################
