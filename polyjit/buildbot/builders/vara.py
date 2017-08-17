@@ -1,4 +1,5 @@
 import sys
+from collections import OrderedDict
 
 from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
@@ -18,6 +19,7 @@ trigger_branches = 'vara-dev|vara-llvm-dev|vara-clang-dev'
 uchroot_src_root = '/mnt/vara-llvm'
 checkout_base_dir = '%(prop:builddir)s/vara-llvm'
 
+repos = OrderedDict()
 repos = {
     'vara-llvm': {
         'default_branch': 'vara-llvm-dev',
