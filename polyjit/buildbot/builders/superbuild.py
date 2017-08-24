@@ -95,10 +95,12 @@ def configure(c):
         define('llvm', ip('%(prop:scratch)s/llvm')),
         define('bb_src', ip('%(prop:scratch)s/benchbuild')),
 
+        cmd('virtualenv', '-ppython3', './_build'),
+        cmd('./_build/bin/pip3', 'install', 'tox'),
+        cmd('./_build/bin/tox', '-e', 'package', workdir=P("BENCHBUILD_ROOT")),
         mkdir(P("scratch")),
-        cmd('virtualenv', '-ppython3', ip('%(prop:scratch)s/env/')),
-        cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install', '--upgrade', '.',
-            workdir='build/benchbuild'),
+        cmd('cp', '-a', ip('%(prop:BENCHBUILD_ROOT)s/dist/benchbuild.pex'),
+            P('scratch')),
         cmd("rsync", "-var", "llvm", P("scratch")),
         cmd(P('benchbuild'), 'bootstrap', '-s', env={
             'BB_CONFIG_FILE': '/scratch/pjtest/.benchbuild.json',
