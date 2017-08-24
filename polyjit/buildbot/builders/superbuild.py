@@ -97,7 +97,8 @@ def configure(c):
 
         cmd('virtualenv', '-ppython3', '.'),
         cmd('./bin/pip3', 'install', 'tox'),
-        cmd(ip('%(prop:builddir)s/bin/tox'), '-e', 'package', workdir=P("BENCHBUILD_ROOT")),
+        cmd('./bin/tox', '-e', 'package',
+                         '-c', P("BENCHBUILD_ROOT")),
         mkdir(P("scratch")),
         cmd('cp', '-a', ip('%(prop:BENCHBUILD_ROOT)s/dist/benchbuild.pex'),
             P('scratch')),
