@@ -95,10 +95,9 @@ def configure(c):
         define('llvm', ip('%(prop:scratch)s/llvm')),
         define('bb_src', ip('%(prop:scratch)s/benchbuild')),
 
-        cmd('virtualenv', '-ppython3', './_build'),
-        cmd(ip('%(prop:builddir)s./_build/bin/pip3'), 'install', 'tox'),
-        cmd(ip('%(prop:builddir)s./_build/bin/tox'), '-e', 'package',
-            workdir=P("BENCHBUILD_ROOT")),
+        cmd('virtualenv', '-ppython3', '.'),
+        cmd('./bin/pip3', 'install', 'tox'),
+        cmd('./bin/tox', '-e', 'package', workdir=P("BENCHBUILD_ROOT")),
         mkdir(P("scratch")),
         cmd('cp', '-a', ip('%(prop:BENCHBUILD_ROOT)s/dist/benchbuild.pex'),
             P('scratch')),
