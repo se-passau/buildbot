@@ -86,7 +86,7 @@ def configure(c):
              name='cmake',
              description='cmake O3, Assertions, PIC, Shared'),
         ucompile('ninja', haltOnFailure=True, name='build VaRA'),
-        ucompile('ninja', 'check-vara', haltOnFailure=True, name='run VaRA regression tests'),
+        ucompile('ninja', 'check-vara', haltOnFailure=False, name='run VaRA regression tests'),
         ucmd('python3', 'tidy-vara.py', haltOnFailure=False, workdir='tools/VaRA/test', name='run Clang-Tidy'),
     ]
 
