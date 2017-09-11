@@ -52,7 +52,7 @@ codebases = {
     },
     'clang-tools-extra': {
         'repository': 'https://git.llvm.org/git/clang-tools-extra.git/',
-        'branches': ['master'],
+        'branches': ['master', 'release_50'],
         'branch': 'master',
         'revision': None
     },
