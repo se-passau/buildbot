@@ -4,5 +4,4 @@ from polyjit.buildbot.builders import slurm
 from polyjit.buildbot.builders import llvm
 from polyjit.buildbot.builders import superbuild
 from polyjit.buildbot.builders import vara
-from polyjit.buildbot.builders import varafn
-from polyjit.buildbot.builders import varajb
+from polyjit.buildbot.builders import vara-features

@@ -40,7 +40,7 @@ codebases = {
     },
     'compiler-rt': {
         'repository': 'http://llvm.org/git/compiler-rt.git',
-        'branches': ['master', 'release_40'],
+        'branches': ['master', 'release_40', 'release_50'],
         'branch': 'master',
         'revision': None
     },
@@ -76,17 +76,17 @@ codebases = {
     },
     'vara': {
         'repository': 'git@github.com:vulder/VaRA.git',
-        'branches': ['vara-dev', 'vara-dev-fn', 'vara-dev-jb'],
+        'branches': True,
         'revision': None
     },
     'vara-llvm': {
         'repository': 'git@github.com:vulder/vara-llvm.git',
-        'branches': ['vara-llvm-dev', 'vara-llvm-dev-fn', 'vara-llvm-dev-jb'],
+        'branches': True,
         'revision': None
     },
     'vara-clang': {
         'repository': 'git@github.com:vulder/vara-clang.git',
-        'branches': ['vara-clang-dev', 'vara-clang-dev-fn', 'vara-clang-dev-jb'],
+        'branches': True,
         'revision': None
     },
 }

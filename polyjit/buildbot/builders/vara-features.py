@@ -14,10 +14,10 @@ from buildbot.changes import filter
 
 ################################################################################
 
-project_name     = 'vara'
-trigger_branches = 'vara-dev|vara-llvm-50-dev|vara-clang-50-dev'
-uchroot_src_root = '/mnt/vara-llvm'
-checkout_base_dir = '%(prop:builddir)s/vara-llvm'
+project_name     = 'vara-features'
+trigger_branches = 'f-*'
+uchroot_src_root = '/mnt/vara-llvm-features'
+checkout_base_dir = '%(prop:builddir)s/vara-llvm-features'
 
 repos = OrderedDict()
 
@@ -36,6 +36,10 @@ repos['vara'] = {
 repos['compiler-rt'] = {
     'default_branch': 'release_50',
     'checkout_dir': checkout_base_dir + '/projects/compiler-rt',
+}
+repos['clang-tools-extra'] = {
+    'default_branch': 'master',
+    'checkout_dir': checkout_base_dir + '/tools/clang/tools/extra',
 }
 
 ################################################################################
@@ -83,6 +87,7 @@ def configure(c):
              description='cmake O3, Assertions, PIC, Shared'),
         ucompile('ninja', haltOnFailure=True, name='build VaRA'),
         ucompile('ninja', 'check-vara', haltOnFailure=True, name='run VaRA regression tests'),
+        ucmd('python3', 'tidy-vara.py', haltOnFailure=False, workdir='tools/VaRA/test', name='run Clang-Tidy'),
     ]
 
     c['builders'].append(builder('build-' + project_name, None, accepted_builders,
