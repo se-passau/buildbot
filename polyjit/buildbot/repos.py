@@ -82,17 +82,17 @@ codebases = {
     },
     'vara': {
         'repository': 'git@github.com:vulder/VaRA.git',
-        'branches': True,
+        'branches': ['vara-dev'],
         'revision': None
     },
     'vara-llvm': {
         'repository': 'git@github.com:vulder/vara-llvm.git',
-        'branches': True,
+        'branches': ['vara-llvm-50-dev'],
         'revision': None
     },
     'vara-clang': {
         'repository': 'git@github.com:vulder/vara-clang.git',
-        'branches': True,
+        'branches': ['vara-clang-50-dev'],
         'revision': None
     },
 }
