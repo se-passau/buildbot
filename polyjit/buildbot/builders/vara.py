@@ -37,6 +37,10 @@ repos['compiler-rt'] = {
     'default_branch': 'release_50',
     'checkout_dir': checkout_base_dir + '/projects/compiler-rt',
 }
+repos['clang-tools-extra'] = {
+    'default_branch': 'master',
+    'checkout_dir': checkout_base_dir + '/tools/clang/tools/extra',
+}
 
 ################################################################################
 

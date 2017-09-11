@@ -50,6 +50,12 @@ codebases = {
         'branch': 'master',
         'revision': None
     },
+    'clang-tools-extra': {
+        'repository': 'https://git.llvm.org/git/clang-tools-extra.git/',
+        'branches': ['master'],
+        'branch': 'master',
+        'revision': None
+    },
     'stats': {
         'repository': 'https://github.com/simbuerg/pprof-stats.git',
         'branches': ['master'],
