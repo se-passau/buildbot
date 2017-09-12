@@ -40,7 +40,7 @@ codebases = {
     },
     'compiler-rt': {
         'repository': 'http://llvm.org/git/compiler-rt.git',
-        'branches': ['master', 'release_40', 'release_50'],
+        'branches': ['master', 'release_50'],
         'branch': 'master',
         'revision': None
     },
@@ -200,17 +200,17 @@ def configure(c):
                           pollinterval=5 * 60),
         changes.GitPoller(repourl=codebases["vara"]["repository"],
                           workdir='gitpoller-vara',
-                          branches=codebases["vara"]["branches"],
+                          branches=lambda x: True,
                           project="vara",
                           pollinterval=3 * 60),
         changes.GitPoller(repourl=codebases["vara-llvm"]["repository"],
                           workdir='gitpoller-vara-llvm',
-                          branches=codebases["vara-llvm"]["branches"],
+                          branches=lambda x: True,
                           project="vara",
                           pollinterval=3 * 60),
         changes.GitPoller(repourl=codebases["vara-clang"]["repository"],
                           workdir='gitpoller-vara-clang',
-                          branches=codebases["vara-clang"]["branches"],
+                          branches=lambda x: True,
                           project="vara",
                           pollinterval=3 * 60)
     ]

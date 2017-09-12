@@ -49,13 +49,7 @@ force_codebase = make_force_cb(repos)
 
 P = util.Property
 
-def can_build_llvm_debug(host):
-    if 'can_build_llvm_debug' in host['properties']:
-        return host['properties']['can_build_llvm_debug']
-    return False
-
-accepted_builders = slaves.get_hostlist(slaves.infosun, predicate=can_build_llvm_debug)
-
+accepted_builders = slaves.get_hostlist(slaves.infosun, predicate=lambda host: host["host"] in {'debussy', 'ligeti'})
 
 # yapf: disable
 def configure(c):
@@ -87,7 +81,7 @@ def configure(c):
              description='cmake O3, Assertions, PIC, Shared'),
         ucompile('ninja', haltOnFailure=True, name='build VaRA'),
         ucompile('ninja', 'check-vara', haltOnFailure=True, name='run VaRA regression tests'),
-        ucmd('python3', 'tidy-vara.py', '-p', '/mnt/build', haltOnFailure=False, workdir='vara-llvm/tools/VaRA/test/', name='run Clang-Tidy', env={'PATH': ["/mnt/build/bin", "${PATH}"]}),
+        ucmd('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build', haltOnFailure=False, workdir='vara-llvm/tools/VaRA/test/', name='run Clang-Tidy', env={'PATH': ["/mnt/build/bin", "${PATH}"]}),
     ]
 
     c['builders'].append(builder('build-' + project_name, None, accepted_builders,
@@ -100,9 +94,10 @@ def schedule(c):
                   treeStableTimer=5 * 60),
         s_force('force-build-' + project_name, force_codebase, ['build-' + project_name]),
         s_trigger('trigger-build-' + project_name, codebase, ['build-' + project_name]),
-        s_nightly('nightly-sched-build-' + project_name, codebase,
-                  ['build-vara'],
-                  hour=22, minute=0)
+        # TODO: Fix nightly scheduler (currently not working)
+        #s_nightly('nightly-sched-build-' + project_name, codebase,
+        #          ['build-' + project_name],
+        #          hour=22, minute=0)
     ])
 # yapf: enable
 
