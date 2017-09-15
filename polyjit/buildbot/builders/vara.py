@@ -81,7 +81,7 @@ def configure(c):
              description='cmake O3, Assertions, PIC, Shared'),
         ucompile('ninja', haltOnFailure=True, name='build VaRA'),
         ucompile('ninja', 'check-vara', haltOnFailure=True, name='run VaRA regression tests'),
-        ucmd('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build', haltOnFailure=False, workdir='vara-llvm/tools/VaRA/test/', name='run Clang-Tidy', env={'PATH': ["/mnt/build/bin", "${PATH}"]}),
+        ucompile('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build', haltOnFailure=False, workdir='vara-llvm/tools/VaRA/test/', name='run Clang-Tidy', env={'PATH': ["/mnt/build/bin", "${PATH}"]}),
     ]
 
     c['builders'].append(builder('build-' + project_name, None, accepted_builders,
