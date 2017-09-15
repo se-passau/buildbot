@@ -9,10 +9,13 @@ from polyjit.buildbot.utils import (builder, define, git, ucmd, ucompile, cmd,
                                     hash_upload_to_master)
 from polyjit.buildbot.repos import make_cb, make_new_cb, make_git_cb, make_force_cb, codebases
 from polyjit.buildbot.master import URL
-from buildbot.plugins import util, steps
+from buildbot.plugins import util, steps, schedulers
 from buildbot.changes import filter
 from buildbot.process import buildstep, logobserver
 from twisted.internet import defer
+
+from buildbot.interfaces import IRenderable
+from zope.interface import implementer
 
 ################################################################################
 
@@ -57,13 +60,79 @@ def trigger_branch_match(branch):
     pattern = re.compile(trigger_branch_regex)
     return pattern.match(branch)
 
-@util.renderer
-def builderNames(props):
-    builders = set()
-    builders.add('build-vara-features')
-    return list(builders)
+class GenerateMakeCleanCommand(buildstep.ShellMixin, steps.BuildStep):
 
-class GenerateStagesCommand(buildstep.ShellMixin, steps.BuildStep):
+    def __init__(self, **kwargs):
+        kwargs = self.setupShellMixin(kwargs)
+        steps.BuildStep.__init__(self, **kwargs)
+        self.observer = logobserver.BufferLogObserver()
+        self.addLogObserver('stdio', self.observer)
+
+    @defer.inlineCallbacks
+    def run(self):
+        cmd = yield self.makeRemoteShellCommand()
+        yield self.runCommand(cmd)
+
+        force_build_clean = None
+        if self.hasProperty('options'):
+            options = self.getProperty('options')
+            force_build_clean = options['force_build_clean']
+
+        if force_build_clean:
+            self.build.addStepsAfterCurrentStep([
+                define('FORCE_BUILD_CLEAN', 'true'),
+                ucompile('ninja', 'clean', haltOnFailure=True, warnOnWarnings=True, name='clean build dir')
+            ])
+        else:
+            self.build.addStepsAfterCurrentStep([define('FORCE_BUILD_CLEAN', 'false')])
+
+        defer.returnValue(cmd.results())
+
+class GenerateGitCloneCommand(buildstep.ShellMixin, steps.BuildStep):
+
+    def __init__(self, **kwargs):
+        kwargs = self.setupShellMixin(kwargs)
+        steps.BuildStep.__init__(self, **kwargs)
+        self.observer = logobserver.BufferLogObserver()
+        self.addLogObserver('stdio', self.observer)
+
+    @defer.inlineCallbacks
+    def run(self):
+        cmd = yield self.makeRemoteShellCommand()
+        yield self.runCommand(cmd)
+
+        force_complete_rebuild = None
+        if self.hasProperty('options'):
+            options = self.getProperty('options')
+            force_complete_rebuild = options['force_complete_rebuild']
+
+        buildsteps = []
+
+        for repo in repos:
+            buildsteps.append(define(str(repo).upper() +'_ROOT', ip(repos[repo]['checkout_dir'])))
+
+        if force_complete_rebuild:
+            buildsteps.append(define('FORCE_COMPLETE_REBUILD', 'true'))
+            buildsteps.append(steps.ShellCommand(name='Delete old build directory',
+                              command=['rm', '-rf', 'build'], workdir=ip(checkout_base_dir + '/../')))
+
+            for repo in repos:
+                url = codebases[repo]['repository']
+                branch = repos[repo]['default_branch']
+                buildsteps.append(steps.Git(repourl=url, branch=branch, codebase=repo,
+                                  name="checkout: {0}".format(url), description="checkout: {0}@{1}".format(url, branch),
+                                  timeout=1200, progress=True, workdir=P(str(repo).upper()+'_ROOT'),
+                                  mode='full', method='clobber'))
+        else:
+            self.build.addStepsAfterCurrentStep([define('FORCE_COMPLETE_REBUILD', 'false')])
+            for repo in repos:
+                buildsteps.append(git(repo, repos[repo]['default_branch'], codebases, workdir=P(str(repo).upper()+'_ROOT')))
+
+        self.build.addStepsAfterCurrentStep(buildsteps)
+
+        defer.returnValue(cmd.results())
+
+class GenerateGitCheckoutCommand(buildstep.ShellMixin, steps.BuildStep):
 
     def __init__(self, **kwargs):
         kwargs = self.setupShellMixin(kwargs)
@@ -84,13 +153,25 @@ class GenerateStagesCommand(buildstep.ShellMixin, steps.BuildStep):
 
         result = cmd.results()
         if result == util.SUCCESS:
-            feature_br = self.get_feature_branch(self.observer.getStdout())
+            checkout_feature_br = self.get_feature_branch(self.observer.getStdout())
 
-            if feature_br:
+            if checkout_feature_br:
                 self.build.addStepsAfterCurrentStep([
-                    define('FEATURE', feature_br),
-                    steps.ShellCommand(name='Checking out feature branch \"' + str(feature_br) + '\"',
-                        command=['./tools/VaRA/utils/buildbot/bb-checkout-branches.sh', feature_br],
+                    define('FEATURE', checkout_feature_br),
+                    steps.ShellCommand(name='Checking out feature branch \"' + str(checkout_feature_br) + '\"',
+                        command=['./tools/VaRA/utils/buildbot/bb-checkout-branches.sh', checkout_feature_br],
+                        workdir=ip(checkout_base_dir)),
+                ])
+            else:
+                force_feature = None
+                if self.hasProperty('options'):
+                    options = self.getProperty('options')
+                    force_feature = options['force_feature']
+
+                self.build.addStepsAfterCurrentStep([
+                    define('FEATURE', force_feature),
+                    steps.ShellCommand(name=ip('Checking out feature branch \"%(prop:FEATURE)s\"'),
+                        command=['./tools/VaRA/utils/buildbot/bb-checkout-branches.sh', force_feature],
                         workdir=ip(checkout_base_dir)),
                 ])
 
@@ -101,13 +182,11 @@ class GenerateStagesCommand(buildstep.ShellMixin, steps.BuildStep):
 def configure(c):
     f = util.BuildFactory()
 
-    for repo in repos:
-        f.addStep(define(str(repo).upper() +'_ROOT', ip(repos[repo]['checkout_dir'])))
+    # TODO Check if this can be done without a dummy command
+    #f.addStep(GenerateGitCloneCommand())
+    f.addStep(GenerateGitCloneCommand(name="Dummy_1", command=['true'], haltOnFailure=True, hideStepIf=True))
 
-    for repo in repos:
-        f.addStep(git(repo, repos[repo]['default_branch'], codebases, workdir=P(str(repo).upper()+'_ROOT')))
-
-    f.addStep(GenerateStagesCommand(
+    f.addStep(GenerateGitCheckoutCommand(
         name="Get branch names",
         command=['./tools/VaRA/utils/buildbot/bb-get-branches.sh'], workdir=ip(checkout_base_dir),
         haltOnFailure=True, hideStepIf=True))
@@ -131,22 +210,46 @@ def configure(c):
                    name='cmake',
                    description='cmake O3, Assertions, PIC, Shared'))
 
+    f.addStep(GenerateMakeCleanCommand(name="Dummy_2", command=['true'], haltOnFailure=True, hideStepIf=True))
+
     f.addStep(ucompile('ninja', haltOnFailure=True, warnOnWarnings=True, name='build VaRA'))
 
     f.addStep(ucompile('ninja', 'check-vara', haltOnFailure=True, warnOnWarnings=True, name='run VaRA regression tests'))
 
-    f.addStep(ucompile('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build', haltOnFailure=False, warnOnWarnings=True, workdir='vara-llvm-features/tools/VaRA/test/', name='run Clang-Tidy', env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
+    f.addStep(ucompile('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build',
+        workdir='vara-llvm-features/tools/VaRA/test/',
+        name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
 
     c['builders'].append(builder('build-' + project_name, None, accepted_builders, tags=['vara'], factory=f))
 
 def schedule(c):
+
+    force_sched = s_force(
+        name="force-build-" + project_name,
+        cb=force_codebase,
+        builders=["build-" + project_name],
+        properties=[
+            util.NestedParameter(name="options", label="Build Options", layout="vertical", fields=[
+                util.StringParameter(name="force_feature",
+                            label="feature-branch to build:",
+                            default="", size=80),
+                util.BooleanParameter(name="force_build_clean",
+                            label="force a make clean",
+                                    default=False),
+                util.BooleanParameter(name="force_complete_rebuild",
+                            label="force complete rebuild and fresh git clone",
+                                    default=False),
+            ])
+        ]
+    )
+
     c['schedulers'].extend([
-        s_abranch('build-' + project_name + '-sched', codebase, builderNames,
+        s_abranch('build-' + project_name + '-sched', codebase, ['build-' + project_name],
                   change_filter=util.ChangeFilter(branch_fn=trigger_branch_match),
-                  treeStableTimer=5 * 60),
-        # TODO: Fix force build: Add ability to choose arbitraty feature branches;
-        # Currently, this is not possible, because the branch list cannot be changed dynamically
-        #s_force('force-build-' + project_name, force_codebase, ['build-' + project_name]),
+                  treeStableTimer=10),
+                  #treeStableTimer=5 * 60),
+                  # TODO reset timer and gitpoller interval
+        force_sched,
         s_trigger('trigger-build-' + project_name, codebase, ['build-' + project_name]),
         # TODO: Fix nightly scheduler (currently not working)
         #s_nightly('nightly-sched-build-' + project_name, codebase,
