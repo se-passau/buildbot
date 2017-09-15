@@ -131,11 +131,11 @@ def configure(c):
                    name='cmake',
                    description='cmake O3, Assertions, PIC, Shared'))
 
-    f.addStep(ucompile('ninja', haltOnFailure=True, name='build VaRA'))
+    f.addStep(ucompile('ninja', haltOnFailure=True, warnOnWarnings=True, name='build VaRA'))
 
-    f.addStep(ucompile('ninja', 'check-vara', haltOnFailure=True, name='run VaRA regression tests'))
+    f.addStep(ucompile('ninja', 'check-vara', haltOnFailure=True, warnOnWarnings=True, name='run VaRA regression tests'))
 
-    f.addStep(ucmd('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build', haltOnFailure=False, workdir='vara-llvm-features/tools/VaRA/test/', name='run Clang-Tidy', env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
+    f.addStep(ucompile('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build', haltOnFailure=False, warnOnWarnings=True, workdir='vara-llvm-features/tools/VaRA/test/', name='run Clang-Tidy', env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
 
     c['builders'].append(builder('build-' + project_name, None, accepted_builders, tags=['vara'], factory=f))
 
