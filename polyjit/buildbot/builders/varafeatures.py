@@ -244,9 +244,7 @@ def schedule(c):
     c['schedulers'].extend([
         s_abranch('build-' + project_name + '-sched', codebase, ['build-' + project_name],
                   change_filter=util.ChangeFilter(branch_fn=trigger_branch_match),
-                  treeStableTimer=10),
-                  #treeStableTimer=5 * 60),
-                  # TODO reset timer and gitpoller interval
+                  treeStableTimer=5 * 60),
         force_sched,
         s_trigger('trigger-build-' + project_name, codebase, ['build-' + project_name]),
         # TODO: Fix nightly scheduler (currently not working)
