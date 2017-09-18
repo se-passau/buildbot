@@ -91,7 +91,7 @@ def configure(c):
         git('benchbuild', 'master', codebases, workdir=P("BENCHBUILD_ROOT")),
     ])
     slurm_steps.extend([
-        define('benchbuild', ip('%(prop:scratch)s/env/bin/benchbuild')),
+        define('benchbuild', ip('%(prop:scratch)s/benchbuild.pex')),
         define('llvm', ip('%(prop:scratch)s/llvm')),
         define('bb_src', ip('%(prop:scratch)s/benchbuild')),
 
