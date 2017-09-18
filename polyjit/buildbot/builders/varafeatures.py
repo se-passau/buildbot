@@ -192,7 +192,6 @@ def configure(c):
         haltOnFailure=True, hideStepIf=True))
 
     f.addStep(define('UCHROOT_SRC_ROOT', uchroot_src_root))
-
     f.addStep(ucmd('cmake', P('UCHROOT_SRC_ROOT'),
                    '-DCMAKE_BUILD_TYPE=Debug',
                    '-DCMAKE_C_FLAGS=-g -fno-omit-frame-pointer',
@@ -223,7 +222,6 @@ def configure(c):
     c['builders'].append(builder('build-' + project_name, None, accepted_builders, tags=['vara'], factory=f))
 
 def schedule(c):
-
     force_sched = s_force(
         name="force-build-" + project_name,
         cb=force_codebase,
