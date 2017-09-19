@@ -44,7 +44,7 @@ def git(name, branch, cb, **kwargs):
                      branch=branch,
                      name="checkout: {0}".format(repo),
                      description="checkout: {0}@{1}".format(repo, branch),
-                     mode="incremental",
+                     mode=mode,
                      timeout=1200,
                      codebase=name,
                      progress=True,
