@@ -18,6 +18,12 @@ from buildbot.interfaces import IRenderable
 from zope.interface import implementer
 
 ################################################################################
+# Notes:
+#
+# Get the values for 'upstream_merge_base' with the following commands:
+#   - git merge-base origin/vara-llvm-50-dev upstream/release_50
+#   - git merge-base origin/vara-clang-50-dev upstream/release_50
+################################################################################
 
 project_name     = 'vara'
 trigger_branches = 'vara-dev|vara-llvm-50-dev|vara-clang-50-dev'
@@ -29,14 +35,21 @@ repos = OrderedDict()
 repos['vara-llvm'] = {
     'default_branch': 'vara-llvm-50-dev',
     'checkout_dir': checkout_base_dir,
+    'checkout_subdir': '',
+    'upstream_remote_url': 'https://git.llvm.org/git/llvm.git/',
+    'upstream_merge_base': '3359933e710d5dae2815cf2fd3d776dfb3ffe1fa',
 }
 repos['vara-clang'] = {
     'default_branch': 'vara-clang-50-dev',
     'checkout_dir': checkout_base_dir + '/tools/clang',
+    'checkout_subdir': '/tools/clang',
+    'upstream_remote_url': 'https://git.llvm.org/git/clang.git/',
+    'upstream_merge_base': '0bc78694a319f80a28ca30e4d9d69c292ee12dee',
 }
 repos['vara'] = {
     'default_branch': 'vara-dev',
     'checkout_dir': checkout_base_dir + '/tools/VaRA',
+    'checkout_subdir': '/tools/VaRA',
 }
 repos['compiler-rt'] = {
     'default_branch': 'release_50',

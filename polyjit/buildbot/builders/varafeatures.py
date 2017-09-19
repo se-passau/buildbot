@@ -29,14 +29,17 @@ repos = OrderedDict()
 repos['vara-llvm'] = {
     'default_branch': 'vara-llvm-50-dev',
     'checkout_dir': checkout_base_dir,
+    'checkout_subdir': '',
 }
 repos['vara-clang'] = {
     'default_branch': 'vara-clang-50-dev',
     'checkout_dir': checkout_base_dir + '/tools/clang',
+    'checkout_subdir': '/tools/clang',
 }
 repos['vara'] = {
     'default_branch': 'vara-dev',
     'checkout_dir': checkout_base_dir + '/tools/VaRA',
+    'checkout_subdir': '/tools/VaRA',
 }
 repos['compiler-rt'] = {
     'default_branch': 'release_50',
@@ -177,6 +180,43 @@ class GenerateGitCheckoutCommand(buildstep.ShellMixin, steps.BuildStep):
 
         defer.returnValue(result)
 
+class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
+
+    def __init__(self, **kwargs):
+        kwargs = self.setupShellMixin(kwargs)
+        steps.BuildStep.__init__(self, **kwargs)
+        self.observer = logobserver.BufferLogObserver()
+        self.addLogObserver('stdio', self.observer)
+
+    @defer.inlineCallbacks
+    def run(self):
+        cmd = yield self.makeRemoteShellCommand()
+        yield self.runCommand(cmd)
+
+        result = cmd.results()
+        if result == util.SUCCESS:
+            mergecheck_repo = self.getProperty('mergecheck_repo')
+            current_branch = self.observer.getStdout().strip()
+            # upstream_remote_url = repos[mergecheck_repo]['upstream_remote_url'] # needed in vara.py
+            default_branch = repos[mergecheck_repo]['default_branch']
+            repo_dir = uchroot_src_root + repos[mergecheck_repo]['checkout_subdir']
+
+            if default_branch == current_branch.replace('refs/heads/', ''):
+                # This repository has no feature branch, so nothing has to be merged.
+                defer.returnValue(result)
+
+            # TODO: use ucompile and add warningregex
+            self.build.addStepsAfterCurrentStep([
+                ucmd('/opt/mergecheck/bin/mergecheck', 'rebase',
+                    '--repo', repo_dir,
+                    '--upstream', 'refs/remotes/origin/' + default_branch,
+                    '--branch', current_branch,
+                    '-v', '--print-conflicts',
+                    name='Mergecheck \"' + mergecheck_repo + '\"', haltOnFailure=False, warnOnWarnings=True),
+            ])
+
+            defer.returnValue(result)
+
 
 # yapf: disable
 def configure(c):
@@ -211,13 +251,19 @@ def configure(c):
 
     f.addStep(GenerateMakeCleanCommand(name="Dummy_2", command=['true'], haltOnFailure=True, hideStepIf=True))
 
-    f.addStep(ucompile('ninja', haltOnFailure=True, warnOnWarnings=True, name='build VaRA'))
+    #f.addStep(ucompile('ninja', haltOnFailure=True, warnOnWarnings=True, name='build VaRA'))
 
-    f.addStep(ucompile('ninja', 'check-vara', haltOnFailure=True, warnOnWarnings=True, name='run VaRA regression tests'))
+    #f.addStep(ucompile('ninja', 'check-vara', haltOnFailure=True, warnOnWarnings=True, name='run VaRA regression tests'))
 
-    f.addStep(ucompile('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build',
-        workdir='vara-llvm-features/tools/VaRA/test/',
-        name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
+    #f.addStep(ucompile('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build',
+    #    workdir='vara-llvm-features/tools/VaRA/test/',
+    #    name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
+
+    # Mergecheck
+    for repo in ['vara-llvm', 'vara-clang', 'vara']:
+        f.addStep(define('mergecheck_repo', repo))
+        f.addStep(GenerateMergecheckCommand(name="Dummy_3", command=['git', 'symbolic-ref', 'HEAD'],
+            workdir=ip(repos[repo]['checkout_dir']), haltOnFailure=True, hideStepIf=True))
 
     c['builders'].append(builder('build-' + project_name, None, accepted_builders, tags=['vara'], factory=f))
 
@@ -247,10 +293,6 @@ def schedule(c):
                   treeStableTimer=5 * 60),
         force_sched,
         s_trigger('trigger-build-' + project_name, codebase, ['build-' + project_name]),
-        # TODO: Fix nightly scheduler (currently not working)
-        #s_nightly('nightly-sched-build-' + project_name, codebase,
-        #          ['build-' + project_name],
-        #          hour=22, minute=0)
     ])
 # yapf: enable
 
