@@ -116,12 +116,9 @@ def configure(c):
             'BB_SLURM_TIMELIMIT': '03:00:00',
             'BB_CONTAINER_MOUNTS': ip('["%(prop:llvm)s", "%(prop:bb_src)s"]'),
             'BB_CONTAINER_PREFIXES': '["/opt/benchbuild", "/", "/usr", "/usr/local"]',
-            'BB_ENV_COMPILER_PATH': ip('["%(prop:llvm)s/bin"]'),
-            'BB_ENV_COMPILER_LD_LIBRARY_PATH':
-                ip('["%(prop:llvm)s/lib"]'),
-            'BB_ENV_PATH': ip('["%(prop:llvm)s/bin"]'),
+            'BB_ENV_PATH': ip('["%(prop:llvm)s/bin", "/scratch/erlent/build"]'),
             'BB_ENV_LD_LIBRARY_PATH':
-                ip('["%(prop:llvm)s/lib"]'),
+                ip('["%(prop:llvm)s/lib", "/scratch/erlent/build"]'),
             'BB_LLVM_DIR': ip('%(prop:scratch)s/llvm'),
             'BB_LIKWID_PREFIX': '/usr',
             'BB_PAPI_INCLUDE': '/usr/include',
