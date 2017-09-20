@@ -91,23 +91,13 @@ def configure(c):
         git('benchbuild', 'master', codebases, workdir=P("BENCHBUILD_ROOT")),
     ])
     slurm_steps.extend([
-        define('benchbuild', ip('%(prop:scratch)s/benchbuild.pex')),
+        define('benchbuild', ip('%(prop:scratch)s/env/bin/benchbuild')),
         define('llvm', ip('%(prop:scratch)s/llvm')),
         define('bb_src', ip('%(prop:scratch)s/benchbuild')),
 
         cmd('virtualenv', '-ppython3', ip('%(prop:scratch)s/env')),
         cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install',
-            "-r", ip('%(prop:BENCHBUILD_ROOT)s/requirements.txt')),
-        cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install',
             P("BENCHBUILD_ROOT")),
-        cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install',
-            "tox"),
-        cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install',
-            "pex"),
-        cmd(ip('%(prop:scratch)s/env/bin/tox'),
-            '-e', 'build', '-c', P("BENCHBUILD_ROOT")),
-        cmd(ip('%(prop:scratch)s/env/bin/tox'),
-            '-e', 'package_nocache', '-c', P("BENCHBUILD_ROOT")),
         mkdir(P("scratch")),
         cmd('cp', '-a', ip('%(prop:BENCHBUILD_ROOT)s/dist/benchbuild.pex'),
             P('scratch')),
@@ -132,7 +122,8 @@ def configure(c):
             'BB_PAPI_INCLUDE': '/usr/include',
             'BB_PAPI_LIBRARY': '/usr/lib',
             'BB_SRC_DIR': ip('%(prop:bb_src)s'),
-            'BB_SLURM_LOGS': ip('%(prop:scratch)s/slurm.log')
+            'BB_SLURM_LOGS': ip('%(prop:scratch)s/slurm.log'),
+            'BB_UNIONFS_ENABLE': 'false'
             },
             workdir=P('scratch')),
         # This only works on infosun machines
