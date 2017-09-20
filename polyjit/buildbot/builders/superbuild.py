@@ -98,7 +98,6 @@ def configure(c):
         cmd('virtualenv', '-ppython3', ip('%(prop:scratch)s/env')),
         cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install',
             "-r", ip('%(prop:BENCHBUILD_ROOT)s/requirements.txt')),
-        cmd('virtualenv', '-ppython3', '.'),
         cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install',
             "tox"),
         cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install',
