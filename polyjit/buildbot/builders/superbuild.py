@@ -99,8 +99,6 @@ def configure(c):
         cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install',
             P("BENCHBUILD_ROOT")),
         mkdir(P("scratch")),
-        cmd('cp', '-a', ip('%(prop:BENCHBUILD_ROOT)s/dist/benchbuild.pex'),
-            P('scratch')),
         cmd("rsync", "-var", "llvm", P("scratch")),
         cmd(P('benchbuild'), 'bootstrap', '-s', env={
             'BB_CONFIG_FILE': '/scratch/pjtest/.benchbuild.json',
