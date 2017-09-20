@@ -95,6 +95,9 @@ def configure(c):
         define('llvm', ip('%(prop:scratch)s/llvm')),
         define('bb_src', ip('%(prop:scratch)s/benchbuild')),
 
+        cmd('virtualenv', '-ppython3', ip('%(prop:scratch)s/env')),
+        cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install',
+            "-r", ip('%(prop:BENCHBUILD_ROOT)s/requirements.txt')),
         cmd('virtualenv', '-ppython3', '.'),
         cmd('./bin/pip3', 'install', 'tox'),
         cmd('./bin/tox', '-e', 'build',
@@ -110,10 +113,10 @@ def configure(c):
             'BB_TMP_DIR': '/scratch/pjtest/src/',
             'BB_TEST_DIR': P("testinputs"),
             'BB_GENTOO_AUTOTEST_LOC': '/scratch/pjtest/gentoo-autotest',
-            'BB_SLURM_PARTITION': 'chimaira',
+            'BB_SLURM_PARTITION': 'anywhere',
             'BB_SLURM_NODE_DIR': '/local/hdd/buildbot-polyjit/',
-            'BB_SLURM_ACCOUNT': 'cl',
-            'BB_SLURM_TIMELIMIT': '03:00:00',
+            'BB_SLURM_ACCOUNT': 'anywhere',
+            'BB_SLURM_TIMELIMIT': '24:00:00',
             'BB_CONTAINER_MOUNTS': ip('["%(prop:llvm)s", "%(prop:bb_src)s"]'),
             'BB_CONTAINER_PREFIXES': '["/opt/benchbuild", "/", "/usr", "/usr/local"]',
             'BB_ENV_PATH':
