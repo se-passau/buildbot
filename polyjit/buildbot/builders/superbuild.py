@@ -102,7 +102,7 @@ def configure(c):
         cmd('./bin/pip3', 'install', 'tox'),
         cmd('./bin/tox', '-e', 'build',
                          '-c', P("BENCHBUILD_ROOT")),
-        cmd('./bin/tox', '-e', 'package_nocache',
+        cmd('./bin/tox', '-e', 'package_buildbot',
                          '-c', P("BENCHBUILD_ROOT")),
         mkdir(P("scratch")),
         cmd('cp', '-a', ip('%(prop:BENCHBUILD_ROOT)s/dist/benchbuild.pex'),
