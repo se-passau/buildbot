@@ -99,6 +99,8 @@ def configure(c):
         cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install',
             "-r", ip('%(prop:BENCHBUILD_ROOT)s/requirements.txt')),
         cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install',
+            P("BENCHBUILD_ROOT")),
+        cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install',
             "tox"),
         cmd(ip('%(prop:scratch)s/env/bin/pip3'), 'install',
             "pex"),
