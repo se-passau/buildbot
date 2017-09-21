@@ -251,13 +251,13 @@ def configure(c):
 
     f.addStep(GenerateMakeCleanCommand(name="Dummy_2", command=['true'], haltOnFailure=True, hideStepIf=True))
 
-    #f.addStep(ucompile('ninja', haltOnFailure=True, warnOnWarnings=True, name='build VaRA'))
+    f.addStep(ucompile('ninja', haltOnFailure=True, warnOnWarnings=True, name='build VaRA'))
 
-    #f.addStep(ucompile('ninja', 'check-vara', haltOnFailure=True, warnOnWarnings=True, name='run VaRA regression tests'))
+    f.addStep(ucompile('ninja', 'check-vara', haltOnFailure=True, warnOnWarnings=True, name='run VaRA regression tests'))
 
-    #f.addStep(ucompile('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build',
-    #    workdir='vara-llvm-features/tools/VaRA/test/',
-    #    name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
+    f.addStep(ucompile('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build',
+        workdir='vara-llvm-features/tools/VaRA/test/',
+        name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
 
     # Mergecheck
     for repo in ['vara-llvm', 'vara-clang', 'vara']:
