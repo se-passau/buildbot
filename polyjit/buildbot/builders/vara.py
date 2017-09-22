@@ -174,7 +174,7 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
                     '--repo', repo_dir,
                     '--remote-url', upstream_remote_url,
                     '--remote-name', 'upstream',
-                    '--onto', 'refs/remotes/upstream/master'
+                    '--onto', 'refs/remotes/upstream/master',
                     '--upstream', upstream_merge_base,
                     '--branch', current_branch,
                     '-v', '--print-conflicts',
