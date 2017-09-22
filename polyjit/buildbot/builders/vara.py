@@ -223,7 +223,7 @@ def configure(c):
         name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
 
     # Mergecheck
-    for repo in repos:
+    for repo in ['vara-llvm', 'vara-clang', 'vara']:
         f.addStep(define('mergecheck_repo', repo))
         f.addStep(GenerateMergecheckCommand(name="Dummy_3", command=['git', 'symbolic-ref', 'HEAD'],
             workdir=ip(repos[repo]['checkout_dir']), haltOnFailure=True, hideStepIf=True))
