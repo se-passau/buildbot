@@ -178,8 +178,8 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
                     '--upstream', upstream_merge_base,
                     '--branch', current_branch,
                     '-v', '--print-conflicts',
-                    name='Mergecheck \"' + mergecheck_repo + '\"', haltOnFailure=False, warnOnWarnings=True
-                    warningPattern='^CONFLICT.*'),
+                    name='Mergecheck \"' + mergecheck_repo + '\"',
+                    haltOnFailure=False, warnOnWarnings=True, warningPattern='^CONFLICT.*'),
             ])
 
             defer.returnValue(result)
