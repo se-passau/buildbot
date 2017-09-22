@@ -98,7 +98,6 @@ class GenerateMakeCleanCommand(buildstep.ShellMixin, steps.BuildStep):
 
         defer.returnValue(cmd.results())
 
-# TODO check
 class GenerateGitCloneCommand(buildstep.ShellMixin, steps.BuildStep):
 
     def __init__(self, **kwargs):
@@ -143,6 +142,49 @@ class GenerateGitCloneCommand(buildstep.ShellMixin, steps.BuildStep):
 
         defer.returnValue(cmd.results())
 
+
+class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
+
+    def __init__(self, **kwargs):
+        kwargs = self.setupShellMixin(kwargs)
+        steps.BuildStep.__init__(self, **kwargs)
+        self.observer = logobserver.BufferLogObserver()
+        self.addLogObserver('stdio', self.observer)
+
+    @defer.inlineCallbacks
+    def run(self):
+        cmd = yield self.makeRemoteShellCommand()
+        yield self.runCommand(cmd)
+
+        result = cmd.results()
+        if result == util.SUCCESS:
+            mergecheck_repo = self.getProperty('mergecheck_repo')
+            current_branch = self.observer.getStdout().strip()
+            upstream_remote_url = repos[mergecheck_repo]['upstream_remote_url']
+            default_branch = repos[mergecheck_repo]['default_branch']
+            repo_dir = uchroot_src_root + repos[mergecheck_repo]['checkout_subdir']
+            upstream_merge_base = repos[mergecheck_repo]['upstream_merge_base']
+
+            if 'upstream_merge_base' not in repos[mergecheck_repo]:
+                # This repository has no remote to compare against , so no mergecheck has to be done.
+                defer.returnValue(result)
+
+            self.build.addStepsAfterCurrentStep([
+                ucompile('/opt/mergecheck/bin/mergecheck', 'rebase',
+                    '--repo', repo_dir,
+                    '--remote-url', upstream_remote_url,
+                    '--remote-name', 'upstream',
+                    '--onto', 'refs/remotes/upstream/master'
+                    '--upstream', upstream_merge_base,
+                    '--branch', current_branch,
+                    '-v', '--print-conflicts',
+                    name='Mergecheck \"' + mergecheck_repo + '\"', haltOnFailure=False, warnOnWarnings=True
+                    warningPattern='^CONFLICT.*'),
+            ])
+
+            defer.returnValue(result)
+
+
 # yapf: disable
 def configure(c):
     f = util.BuildFactory()
@@ -179,6 +221,12 @@ def configure(c):
     f.addStep(ucompile('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build',
         workdir='vara-llvm/tools/VaRA/test/',
         name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
+
+    # Mergecheck
+    for repo in repos:
+        f.addStep(define('mergecheck_repo', repo))
+        f.addStep(GenerateMergecheckCommand(name="Dummy_3", command=['git', 'symbolic-ref', 'HEAD'],
+            workdir=ip(repos[repo]['checkout_dir']), haltOnFailure=True, hideStepIf=True))
 
     c['builders'].append(builder('build-' + project_name, None, accepted_builders, tags=['vara'], factory=f))
 

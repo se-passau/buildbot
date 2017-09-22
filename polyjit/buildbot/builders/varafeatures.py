@@ -205,14 +205,14 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
                 # This repository has no feature branch, so nothing has to be merged.
                 defer.returnValue(result)
 
-            # TODO: use ucompile and add warningregex
             self.build.addStepsAfterCurrentStep([
-                ucmd('/opt/mergecheck/bin/mergecheck', 'rebase',
+                ucompile('/opt/mergecheck/bin/mergecheck', 'rebase',
                     '--repo', repo_dir,
                     '--upstream', 'refs/remotes/origin/' + default_branch,
                     '--branch', current_branch,
                     '-v', '--print-conflicts',
-                    name='Mergecheck \"' + mergecheck_repo + '\"', haltOnFailure=False, warnOnWarnings=True),
+                    name='Mergecheck \"' + mergecheck_repo + '\"', haltOnFailure=False, warnOnWarnings=True
+                    warningPattern='^CONFLICT.*'),
             ])
 
             defer.returnValue(result)
@@ -255,12 +255,13 @@ def configure(c):
 
     f.addStep(ucompile('ninja', 'check-vara', haltOnFailure=True, warnOnWarnings=True, name='run VaRA regression tests'))
 
+    # TODO fix hardcoded path
     f.addStep(ucompile('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build',
         workdir='vara-llvm-features/tools/VaRA/test/',
         name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
 
     # Mergecheck
-    for repo in ['vara-llvm', 'vara-clang', 'vara']:
+    for repo in repos:
         f.addStep(define('mergecheck_repo', repo))
         f.addStep(GenerateMergecheckCommand(name="Dummy_3", command=['git', 'symbolic-ref', 'HEAD'],
             workdir=ip(repos[repo]['checkout_dir']), haltOnFailure=True, hideStepIf=True))
