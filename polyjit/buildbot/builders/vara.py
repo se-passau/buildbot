@@ -160,24 +160,38 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
         if result == util.SUCCESS:
             mergecheck_repo = self.getProperty('mergecheck_repo')
             current_branch = self.observer.getStdout().strip()
-            upstream_remote_url = repos[mergecheck_repo]['upstream_remote_url']
             default_branch = repos[mergecheck_repo]['default_branch']
-            repo_dir = uchroot_src_root + repos[mergecheck_repo]['checkout_subdir']
-            upstream_merge_base = repos[mergecheck_repo]['upstream_merge_base']
+            repo_subdir = repos[mergecheck_repo]['checkout_subdir']
+            upstream_merge_base = ''
+            upstream_remote_url = ''
 
-            if 'upstream_merge_base' not in repos[mergecheck_repo]:
+            if 'upstream_merge_base' not in repos[mergecheck_repo] or 'upstream_remote_url' not in repos[mergecheck_repo]:
                 # This repository has no remote to compare against , so no mergecheck has to be done.
                 defer.returnValue(result)
+            else:
+                upstream_merge_base = repos[mergecheck_repo]['upstream_merge_base']
+                upstream_remote_url = repos[mergecheck_repo]['upstream_remote_url']
 
             self.build.addStepsAfterCurrentStep([
-                ucompile('/opt/mergecheck/bin/mergecheck', 'rebase',
-                    '--repo', repo_dir,
-                    '--remote-url', upstream_remote_url,
-                    '--remote-name', 'upstream',
-                    '--onto', 'refs/remotes/upstream/master',
-                    '--upstream', upstream_merge_base,
-                    '--branch', current_branch,
-                    '-v', '--print-conflicts',
+                steps.ShellCommand(
+                    command=['git', 'remote', 'add', 'upstream', upstream_remote_url],
+                    workdir=ip(checkout_base_dir + repo_subdir),
+                    name='git add remote upstream',
+                    haltOnFailure=False, warnOnWarnings=False, warnOnFailure=False, hideStepIf=True),
+                steps.ShellCommand(
+                    command=['git', 'fetch', 'upstream'],
+                    workdir=ip(checkout_base_dir + repo_subdir),
+                    name='git fetch upstream',
+                    haltOnFailure=False, warnOnWarnings=True, hideStepIf=True),
+                steps.Compile(
+                    command=['/scratch/pjtest/mergecheck/bin/mergecheck', 'rebase',
+                        '--repo', './' + repo_subdir,
+                        '--onto', 'refs/remotes/upstream/master',
+                        '--upstream', upstream_merge_base,
+                        '--branch', current_branch,
+                        '-v', '--print-conflicts',
+                    ],
+                    workdir=ip(checkout_base_dir),
                     name='Mergecheck \"' + mergecheck_repo + '\"',
                     haltOnFailure=False, warnOnWarnings=True, warningPattern='^CONFLICT.*'),
             ])
