@@ -113,9 +113,9 @@ def configure(c):
             'BB_CONTAINER_MOUNTS': ip('["%(prop:llvm)s", "%(prop:bb_src)s"]'),
             'BB_CONTAINER_PREFIXES': '["/opt/benchbuild", "/", "/usr", "/usr/local"]',
             'BB_ENV_PATH':
-                ip('["%(prop:llvm)s/bin", "/scratch/pjtest/erlent/build"]'),
+                ip('["/scratch/pjtest/opt/papi-5.5.1/install/bin", "%(prop:llvm)s/bin", "/scratch/pjtest/erlent/build"]'),
             'BB_ENV_LD_LIBRARY_PATH':
-                ip('["%(prop:llvm)s/lib", "/scratch/pjtest/erlent/build"]'),
+                ip('["/scratch/pjtest/opt/papi-5.5.1/install/lib", "%(prop:llvm)s/lib", "/scratch/pjtest/erlent/build"]'),
             'BB_LLVM_DIR': ip('%(prop:scratch)s/llvm'),
             'BB_LIKWID_PREFIX': '/usr',
             'BB_PAPI_INCLUDE': '/usr/include',
