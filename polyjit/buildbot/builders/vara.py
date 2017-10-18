@@ -173,19 +173,11 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
                 upstream_remote_url = repos[mergecheck_repo]['upstream_remote_url']
 
             self.build.addStepsAfterCurrentStep([
-                steps.ShellCommand(
-                    command=['git', 'remote', 'add', 'upstream', upstream_remote_url],
-                    workdir=ip(checkout_base_dir + repo_subdir),
-                    name='git add remote upstream',
-                    haltOnFailure=False, warnOnWarnings=False, warnOnFailure=False, hideStepIf=True),
-                steps.ShellCommand(
-                    command=['git', 'fetch', 'upstream'],
-                    workdir=ip(checkout_base_dir + repo_subdir),
-                    name='git fetch upstream',
-                    haltOnFailure=False, warnOnWarnings=True, hideStepIf=True),
                 steps.Compile(
-                    command=['/scratch/pjtest/mergecheck/bin/mergecheck', 'rebase',
+                    command=['/scratch/pjtest/mergecheck/build/bin/mergecheck', 'rebase',
                         '--repo', './' + repo_subdir,
+                        '--remote-url', upstream_remote_url,
+                        '--remote-name', 'upstream',
                         '--onto', 'refs/remotes/upstream/master',
                         '--upstream', upstream_merge_base,
                         '--branch', current_branch,
