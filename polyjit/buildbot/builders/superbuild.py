@@ -36,6 +36,7 @@ def configure(c):
             '-DCMAKE_INSTALL_PREFIX=./_install',
             '-DCMAKE_CXX_FLAGS_RELEASE=-O3 -DNDEBUG -DLLVM_ENABLE_STATS',
             '-DBUILD_SHARED_LIBS=Off',
+            '-DPOLYJIT_PAPI_PREFIX=/scratch/pjtest/opt/papi-5.5.1/install',
             ip('-DPOLYJIT_BRANCH_CLANG=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
             ip('-DPOLYJIT_BRANCH_LLVM=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
             ip('-DPOLYJIT_BRANCH_POLLI=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
@@ -112,9 +113,9 @@ def configure(c):
             'BB_CONTAINER_MOUNTS': ip('["%(prop:llvm)s", "%(prop:bb_src)s"]'),
             'BB_CONTAINER_PREFIXES': '["/opt/benchbuild", "/", "/usr", "/usr/local"]',
             'BB_ENV_PATH':
-                ip('["%(prop:llvm)s/bin", "/scratch/pjtest/erlent/build"]'),
+                ip('["/scratch/pjtest/opt/papi-5.5.1/install/bin", "%(prop:llvm)s/bin", "/scratch/pjtest/erlent/build"]'),
             'BB_ENV_LD_LIBRARY_PATH':
-                ip('["%(prop:llvm)s/lib", "/scratch/pjtest/erlent/build"]'),
+                ip('["/scratch/pjtest/opt/papi-5.5.1/install/lib", "%(prop:llvm)s/lib", "/scratch/pjtest/erlent/build"]'),
             'BB_LLVM_DIR': ip('%(prop:scratch)s/llvm'),
             'BB_LIKWID_PREFIX': '/usr',
             'BB_PAPI_INCLUDE': '/usr/include',
