@@ -209,9 +209,9 @@ def schedule(c):
         s_trigger("ts_polyjit-superbuild", CODEBASE,
                   ["polyjit-superbuild"]),
 
-        s_force("fs_polyjit-superbuild", FORCE_CODEBASE,
+        s_force("fs_polyjit-superbuild-debug", FORCE_CODEBASE,
                 ["polyjit-superbuild-debug"]),
-        s_trigger("ts_polyjit-superbuild", CODEBASE,
+        s_trigger("ts_polyjit-superbuild-debug", CODEBASE,
                   ["polyjit-superbuild-debug"]),
 
         s_dependent("ds_polyjit-superbuild-slurm",
