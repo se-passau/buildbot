@@ -22,6 +22,54 @@ ACCEPTED_BUILDERS = \
     slaves.get_hostlist(slaves.infosun,
                         predicate=lambda host: host["host"] in {'debussy', 'ligeti'})
 
+def get_sb_debug_steps(c):
+    return [
+        define("SUPERBUILD_ROOT", ip("%(prop:builddir)s/polli-sb")),
+        define("UCHROOT_SUPERBUILD_ROOT", "/mnt/polli-sb"),
+        define("POLYJIT_DEFAULT_BRANCH", "master"),
+
+        git('polli-sb', 'master', codebases, workdir=P("SUPERBUILD_ROOT"),
+            mode="full", method="fresh"),
+        cmd(ip('%(prop:cmake_prefix)s/bin/cmake'), P("SUPERBUILD_ROOT"),
+            '-DCMAKE_BUILD_TYPE=Debug',
+            '-DCMAKE_INSTALL_PREFIX=./_install',
+            '-DBUILD_SHARED_LIBS=Off',
+            '-DPOLYJIT_PAPI_PREFIX=/scratch/pjtest/opt/papi-5.5.1/install',
+            ip('-DPOLYJIT_BRANCH_CLANG=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
+            ip('-DPOLYJIT_BRANCH_LLVM=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
+            ip('-DPOLYJIT_BRANCH_POLLI=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
+            ip('-DPOLYJIT_BRANCH_POLLY=%(prop:POLYJIT_DEFAULT_BRANCH)s'),
+            '-G', 'Ninja',
+            usePTY=True,
+            name="cmake",
+            logEnviron=True,
+            description="[uchroot] cmake: release build",
+            descriptionDone="[uchroot] configured."),
+        cmd("/usr/bin/ninja", "llvm-configure",
+            usePTY=True,
+            logEnviron=True,
+            haltOnFailure=True,
+            name="configure LLVM",
+            description="configuring LLVM",
+            descriptionDone="configured LLVM",
+            timeout=4800),
+        cmd("/usr/bin/ninja", "polli-configure",
+            usePTY=True,
+            logEnviron=True,
+            haltOnFailure=True,
+            name="configure PolyJIT",
+            description="configuring PolyJIT",
+            descriptionDone="configured PolyJIT",
+            timeout=4800),
+        cmd("/usr/bin/ninja",
+            usePTY=True,
+            logEnviron=True,
+            haltOnFailure=True,
+            name="build jit",
+            description="[uchroot] building PolyJIT",
+            descriptionDone="[uchroot] built PolyJIT",
+            timeout=4800),
+    ]
 
 def configure(c):
     sb_steps = [
@@ -132,6 +180,11 @@ def configure(c):
     ])
 
     c['builders'].append(
+        builder("polyjit-superbuild-debug", None,
+                ACCEPTED_BUILDERS, tags=['polyjit'],
+                collapseRequests=True,
+                factory=BF(get_sb_debug_steps(c))))
+    c['builders'].append(
         builder("polyjit-superbuild", None,
                 ACCEPTED_BUILDERS, tags=['polyjit'],
                 collapseRequests=True,
@@ -145,7 +198,9 @@ def configure(c):
 
 def schedule(c):
     superbuild_sched = s_abranch("bs_polyjit-superbuild",
-                                 CODEBASE, ["polyjit-superbuild"],
+                                 CODEBASE, [
+                                     "polyjit-superbuild",
+                                     "polyjit-superbuild-debug"],
                                  treeStableTimer=10 * 60)
     c['schedulers'].extend([
         superbuild_sched,
@@ -153,6 +208,11 @@ def schedule(c):
                 ["polyjit-superbuild"]),
         s_trigger("ts_polyjit-superbuild", CODEBASE,
                   ["polyjit-superbuild"]),
+
+        s_force("fs_polyjit-superbuild", FORCE_CODEBASE,
+                ["polyjit-superbuild-debug"]),
+        s_trigger("ts_polyjit-superbuild", CODEBASE,
+                  ["polyjit-superbuild-debug"]),
 
         s_dependent("ds_polyjit-superbuild-slurm",
                     superbuild_sched,
