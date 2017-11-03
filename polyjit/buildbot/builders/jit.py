@@ -109,4 +109,4 @@ def schedule(c):
     ])
 
 
-register(sys.modules[__name__])
+# register(sys.modules[__name__])

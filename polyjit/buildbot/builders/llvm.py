@@ -76,4 +76,4 @@ def schedule(c):
 # yapf: enable
 
 
-register(sys.modules[__name__])
+# register(sys.modules[__name__])
