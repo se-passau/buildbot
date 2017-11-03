@@ -14,6 +14,10 @@ infosun = {
         "host": "debussy",
         "password": None,
         "properties": {
+            "llvm_prefix": "/local/hdd/buildbot-polyjit/llvm-install/",
+            "llvm_libs": "/local/hdd/buildbot-polyjit/llvm-install/lib",
+            "cc": "/local/hdd/buildbot-polyjit/llvm-install/bin/clang",
+            "cxx": "/local/hdd/buildbot-polyjit/llvm-install/bin/clang++",
             "uchroot_image_path": "/local/hdd/buildbot-polyjit/xenial-image/",
             "uchroot_binary": "/scratch/pjtest/erlent/build/uchroot",
             "testinputs": "/scratch/pjtest/pprof-test-data",
@@ -26,6 +30,10 @@ infosun = {
         "host": "ligeti",
         "password": None,
         "properties": {
+            "llvm_prefix": "/local/hdd/buildbot-polyjit/llvm-install/",
+            "llvm_libs": "/local/hdd/buildbot-polyjit/llvm-install/lib",
+            "cc": "/local/hdd/buildbot-polyjit/llvm-install/bin/clang",
+            "cxx": "/local/hdd/buildbot-polyjit/llvm-install/bin/clang++",
             "uchroot_image_path": "/local/hdd/buildbot-polyjit/xenial-image/",
             "uchroot_binary": "/scratch/pjtest/erlent/build/uchroot",
             "testinputs": "/scratch/pjtest/pprof-test-data",
