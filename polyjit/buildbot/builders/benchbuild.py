@@ -16,8 +16,8 @@ ip_scratch = "%(prop:scratch:~/scratch/pjtest)s"
 ip_dirname = "%(prop:dirname:~empty)s"
 ip_str = ip_scratch + "/" + ip_dirname
 
-cb_benchbuild = make_cb(['benchbuild', 'stats'])
-force_codebase = make_new_cb(['benchbuild', 'stats'])
+cb_benchbuild = make_cb(['benchbuild'])
+force_codebase = make_new_cb(['benchbuild'])
 accepted_builders = slaves.get_hostlist(slaves.infosun)
 
 
