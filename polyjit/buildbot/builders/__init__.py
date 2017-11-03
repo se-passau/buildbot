@@ -1,4 +1,4 @@
-__all__ = ["llvm", "slurm", "superbuild", "vara", "varafeatures"]
+__all__ = ["superbuild", "vara", "varafeatures"]
 __ALL__ = []
 
 
