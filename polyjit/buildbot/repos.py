@@ -44,40 +44,10 @@ codebases = {
         'branch': 'master',
         'revision': None
     },
-    'openmp': {
-        'repository': 'http://llvm.org/git/openmp.git',
-        'branches': ['master'],
-        'branch': 'master',
-        'revision': None
-    },
     'clang-tools-extra': {
         'repository': 'https://git.llvm.org/git/clang-tools-extra.git/',
         'branches': ['master', 'release_50'],
         'branch': 'master',
-        'revision': None
-    },
-    'stats': {
-        'repository': 'https://github.com/simbuerg/pprof-stats.git',
-        'branches': ['master'],
-        'branch': 'master',
-        'revision': None
-    },
-    'isl': {
-        'repository': 'https://github.com/simbuerg/isl.git',
-        'branches': ['master, isl-0.16.1-cpp'],
-        'branch': 'master',
-        'revision': None
-    },
-    'isl-cpp': {
-        'repository': 'https://github.com/simbuerg/isl-cpp.git',
-        'branches': ['master'],
-        'branch': 'master',
-        'revision': None
-    },
-    'likwid': {
-        'repository': 'https://github.com/RRZE-HPC/likwid.git',
-        'branches': ['v4.1'],
-        'branch': 'v4.1',
         'revision': None
     },
     'vara': {
