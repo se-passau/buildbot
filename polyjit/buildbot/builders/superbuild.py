@@ -171,11 +171,21 @@ def configure(c):
             'BB_SLURM_ACCOUNT': 'anywhere',
             'BB_SLURM_TIMELIMIT': '24:00:00',
             'BB_CONTAINER_MOUNTS': ip('["%(prop:llvm)s", "%(prop:bb_src)s"]'),
-            'BB_CONTAINER_PREFIXES': '["/opt/benchbuild", "/", "/usr", "/usr/local"]',
+            'BB_CONTAINER_PREFIXES':
+                '["/opt/benchbuild", '
+                '"/", '
+                '"/usr", '
+                '"/usr/local"]',
             'BB_ENV_PATH':
-                ip('["/scratch/pjtest/opt/papi-5.5.1/install/bin", "%(prop:llvm)s/bin", "/scratch/pjtest/erlent/build"]'),
+                ip('["/scratch/pjtest/opt/papi-5.5.1/install/bin", '
+                   '"%(prop:llvm)s/bin", '
+                   '"%(prop:llvm_prefix)s/bin, '
+                   '"/scratch/pjtest/erlent/build"]'),
             'BB_ENV_LD_LIBRARY_PATH':
-                ip('["/scratch/pjtest/opt/papi-5.5.1/install/lib", "%(prop:llvm)s/lib", "/scratch/pjtest/erlent/build"]'),
+                ip('["/scratch/pjtest/opt/papi-5.5.1/install/lib", '
+                   '"%(prop:llvm)s/lib", '
+                   '"%(prop:llvm_libs)s, '
+                   '"/scratch/pjtest/erlent/build"]'),
             'BB_LLVM_DIR': ip('%(prop:scratch)s/llvm'),
             'BB_LIKWID_PREFIX': '/usr',
             'BB_PAPI_INCLUDE': '/usr/include',
