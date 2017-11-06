@@ -199,7 +199,7 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
             current_branch = self.observer.getStdout().strip()
             # upstream_remote_url = repos[mergecheck_repo]['upstream_remote_url'] # needed in vara.py
             default_branch = repos[mergecheck_repo]['default_branch']
-            repo_subdir = uchroot_src_root + repos[mergecheck_repo]['checkout_subdir']
+            repo_dir = uchroot_src_root + repos[mergecheck_repo]['checkout_subdir']
 
             if default_branch == current_branch.replace('refs/heads/', ''):
                 # This repository has no feature branch, so nothing has to be merged.
@@ -208,7 +208,7 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
             self.build.addStepsAfterCurrentStep([
                 steps.Compile(
                     command=['/scratch/pjtest/mergecheck/build/bin/mergecheck', 'rebase',
-                        '--repo', './' + repo_subdir,
+                        '--repo', repo_dir,
                         '--upstream', 'refs/remotes/origin/' + default_branch,
                         '--branch', current_branch,
                         '-v', '--print-conflicts',
