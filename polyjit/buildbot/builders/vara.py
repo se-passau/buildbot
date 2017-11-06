@@ -175,7 +175,7 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
             self.build.addStepsAfterCurrentStep([
                 steps.Compile(
                     command=['/scratch/pjtest/mergecheck/build/bin/mergecheck', 'rebase',
-                        '--repo', './' + repo_subdir,
+                        '--repo', '.' + repo_subdir,
                         '--remote-url', upstream_remote_url,
                         '--remote-name', 'upstream',
                         '--onto', 'refs/remotes/upstream/master',
