@@ -179,12 +179,12 @@ def configure(c):
             'BB_ENV_PATH':
                 ip('["/scratch/pjtest/opt/papi-5.5.1/install/bin", '
                    '"%(prop:llvm)s/bin", '
-                   '"%(prop:llvm_prefix)s/bin, '
+                   '"%(prop:llvm_prefix)s/bin", '
                    '"/scratch/pjtest/erlent/build"]'),
             'BB_ENV_LD_LIBRARY_PATH':
                 ip('["/scratch/pjtest/opt/papi-5.5.1/install/lib", '
                    '"%(prop:llvm)s/lib", '
-                   '"%(prop:llvm_libs)s, '
+                   '"%(prop:llvm_libs)s", '
                    '"/scratch/pjtest/erlent/build"]'),
             'BB_LLVM_DIR': ip('%(prop:scratch)s/llvm'),
             'BB_LIKWID_PREFIX': '/usr',
