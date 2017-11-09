@@ -161,7 +161,7 @@ def configure(c):
             P("BENCHBUILD_ROOT")),
         mkdir(P("scratch")),
         cmd("rsync", "-var", "llvm", P("scratch")),
-        cmd(P('benchbuild'), 'bootstrap', '-s', env={
+        cmd(P('benchbuild'), 'bootstrap', '-s', logEnviron=True, env={
             'BB_CONFIG_FILE': '/scratch/pjtest/.benchbuild.json',
             'BB_TMP_DIR': '/scratch/pjtest/src/',
             'BB_TEST_DIR': P("testinputs"),
