@@ -89,6 +89,7 @@ def configure(c):
         cmd(ip('%(prop:cmake_prefix)s/bin/cmake'), P("SUPERBUILD_ROOT"),
             ip('-DCMAKE_CXX_COMPILER=%(prop:cxx)s'),
             ip('-DCMAKE_C_COMPILER=%(prop:cc)s'),
+            '-DBUILD_TESTING=Off',
             '-DCMAKE_BUILD_TYPE=Release',
             '-DCMAKE_INSTALL_PREFIX=./_install',
             '-DCMAKE_CXX_FLAGS_RELEASE=-O3 -DNDEBUG -DLLVM_ENABLE_STATS',
