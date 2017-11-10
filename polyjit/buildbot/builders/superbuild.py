@@ -77,6 +77,7 @@ def get_sb_debug_steps(c):
             timeout=4800),
     ]
 
+
 def configure(c):
     sb_steps = [
         define("SUPERBUILD_ROOT", ip("%(prop:builddir)s/polli-sb")),
@@ -134,24 +135,20 @@ def configure(c):
         cmd("tar", "czf", "../polyjit_sb.tar.gz", "-C", "./_install", ".")
     ]
 
-    upload_pj = hash_upload_to_master(
+    sb_steps.extend(hash_upload_to_master(
         "polyjit_sb.tar.gz",
         "../polyjit_sb.tar.gz",
-        "public_html/polyjit_sb.tar.gz", URL)
-    sb_steps.extend(upload_pj)
+        "public_html/polyjit_sb.tar.gz", URL))
 
-    download_pj = hash_download_from_master("public_html/polyjit_sb.tar.gz",
-                                            "polyjit_sb.tar.gz", "polyjit")
     slurm_steps = [
         define("scratch", ip("/scratch/pjtest/sb-%(prop:buildnumber)s/"))
     ]
-    slurm_steps.extend(download_pj)
+    slurm_steps.extend(hash_download_from_master(
+        "public_html/polyjit_sb.tar.gz", "polyjit_sb.tar.gz", "polyjit"))
     slurm_steps.extend(clean_unpack("polyjit_sb.tar.gz", "llvm"))
     slurm_steps.extend([
         define("BENCHBUILD_ROOT", ip("%(prop:builddir)s/build/benchbuild/")),
         git('benchbuild', 'master', codebases, workdir=P("BENCHBUILD_ROOT")),
-    ])
-    slurm_steps.extend([
         define('benchbuild', ip('%(prop:scratch)s/env/bin/benchbuild')),
         define('llvm', ip('%(prop:scratch)s/llvm')),
         define('bb_src', ip('%(prop:scratch)s/benchbuild')),
