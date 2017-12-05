@@ -220,7 +220,7 @@ def schedule(c):
                                  CODEBASE, [
                                      "polyjit-superbuild",
                                      "polyjit-superbuild-debug"],
-                                 treeStableTimer=10 * 60)
+                                 treeStableTimer=2 * 60)
     c['schedulers'].extend([
         superbuild_sched,
         s_force("fs_polyjit-superbuild", FORCE_CODEBASE,
