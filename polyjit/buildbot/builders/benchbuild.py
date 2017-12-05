@@ -51,6 +51,7 @@ def schedule(c):
         s_sbranch("build-benchbuild-sched",
                   cb_benchbuild,
                   ["build-benchbuild"],
+                  change_filter=filter.ChangeFilter(branch='master'),
                   treeStableTimer=2 * 60),
         s_force("force-build-benchbuild", force_codebase, ["build-benchbuild"]),
         s_trigger("trigger-build-benchbuild", cb_benchbuild,
