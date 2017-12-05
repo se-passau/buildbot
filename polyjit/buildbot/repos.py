@@ -3,37 +3,37 @@ from buildbot.plugins import util
 
 codebases = {
     'benchbuild': {
-        'repository': 'https://github.com/PolyJIT/benchbuild.git',
+        'repository': 'https://github.com/PolyJIT/benchbuild',
         'branches': ['master'],
         'branch': 'master',
         'revision': None
     },
     'polli': {
-        'repository': 'https://github.com/PolyJIT/polli.git',
+        'repository': 'https://github.com/PolyJIT/polli',
         'branches': ['master'],
         'branch': 'master',
         'revision': None
     },
     'polli-sb': {
-        'repository': 'https://github.com/PolyJIT/PolyJIT.git',
+        'repository': 'https://github.com/PolyJIT/PolyJIT',
         'branches': ['master'],
         'branch': 'master',
         'revision': None
     },
     'polly': {
-        'repository': 'https://github.com/PolyJIT/polly.git',
+        'repository': 'https://github.com/PolyJIT/polly',
         'branches': ['master'],
         'branch': 'master',
         'revision': None
     },
     'llvm': {
-        'repository': 'https://github.com/PolyJIT/llvm.git',
+        'repository': 'https://github.com/PolyJIT/llvm',
         'branches': ['master'],
         'branch': 'master',
         'revision': None
     },
     'clang': {
-        'repository': 'https://github.com/PolyJIT/clang.git',
+        'repository': 'https://github.com/PolyJIT/clang',
         'branches': ['master'],
         'branch': 'master',
         'revision': None
