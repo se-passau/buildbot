@@ -51,17 +51,20 @@ codebases = {
         'revision': None
     },
     'vara': {
-        'repository': 'git@github.com:vulder/VaRA.git',
+        'repository': 'https://github.com/se-passau/VaRA',
+        'repository_clone_url': 'git@github.com:vulder/VaRA',
         'branches': ['vara-dev'],
         'revision': None
     },
     'vara-llvm': {
-        'repository': 'git@github.com:vulder/vara-llvm.git',
+        'repository': 'https://github.com/se-passau/vara-llvm',
+        'repository_clone_url': 'git@github.com:vulder/vara-llvm',
         'branches': ['vara-llvm-50-dev'],
         'revision': None
     },
     'vara-clang': {
-        'repository': 'git@github.com:vulder/vara-clang.git',
+        'repository': 'https://github.com/se-passau/vara-clang',
+        'repository_clone_url': 'git@github.com:vulder/vara-clang',
         'branches': ['vara-clang-50-dev'],
         'revision': None
     },
@@ -132,21 +135,6 @@ def make_force_cb(bases):
 
 # yapf: disable
 def configure(c):
-    c['change_source'] = [
-        changes.GitPoller(repourl=codebases["vara"]["repository"],
-                          workdir='gitpoller-vara',
-                          branches=lambda x: True,
-                          project="vara",
-                          pollinterval=3 * 60),
-        changes.GitPoller(repourl=codebases["vara-llvm"]["repository"],
-                          workdir='gitpoller-vara-llvm',
-                          branches=lambda x: True,
-                          project="vara",
-                          pollinterval=3 * 60),
-        changes.GitPoller(repourl=codebases["vara-clang"]["repository"],
-                          workdir='gitpoller-vara-clang',
-                          branches=lambda x: True,
-                          project="vara",
-                          pollinterval=3 * 60)
-    ]
+    return
+
 # yapf: enable

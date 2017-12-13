@@ -20,7 +20,7 @@ from zope.interface import implementer
 ################################################################################
 
 project_name     = 'vara-features'
-trigger_branch_regex = "^(f-\S+)$"
+trigger_branch_regex = "^(f-\S+|refs\/pull\/\d+\/merge)$"
 uchroot_src_root = '/mnt/vara-llvm-features'
 checkout_base_dir = '%(prop:builddir)s/vara-llvm-features'
 
@@ -62,6 +62,39 @@ accepted_builders = slaves.get_hostlist(slaves.infosun, predicate=lambda host: h
 def trigger_branch_match(branch):
     pattern = re.compile(trigger_branch_regex)
     return pattern.match(branch)
+
+@util.renderer
+@defer.inlineCallbacks
+def get_vara_results(props):
+    all_logs=[]
+    master = props.master
+    steps = yield props.master.data.get(('builders', props.getProperty('buildername'), 'builds', props.getProperty('buildnumber'), 'steps'))
+    pr_comment_steps = {
+        # 'step_name': True, if full cmd output is required
+        'cmake': False,
+        'build VaRA': False,
+        'run VaRA regression tests': True,
+        'run Clang-Tidy': True,
+    }
+    for step in steps:
+        if step['name'] in pr_comment_steps:
+            all_logs.append(step['name'])
+
+            logs = yield master.data.get(("steps", step['stepid'], 'logs'))
+            for l in logs:
+                all_logs.append('Step : {0} Result : {1}'.format(step['name'], util.Results[step['results']]))
+                # full cmd output
+                if pr_comment_steps[step['name']]:
+                    all_logs.append('```')
+                    l['stepname'] = step['name']
+                    l['content'] = yield master.data.get(("logs", l['logid'], 'contents'))
+                    step_logs = l['content']['content'].split('\n')
+                    for i, sl in enumerate(step_logs):
+                        all_logs.append(sl[1:])
+                    all_logs.append('```')
+
+    defer.returnValue('\n'.join(all_logs))
+
 
 class GenerateMakeCleanCommand(buildstep.ShellMixin, steps.BuildStep):
 
@@ -120,7 +153,10 @@ class GenerateGitCloneCommand(buildstep.ShellMixin, steps.BuildStep):
                               command=['rm', '-rf', 'build'], workdir=ip(checkout_base_dir + '/../')))
 
             for repo in repos:
-                url = codebases[repo]['repository']
+                if 'repository_clone_url' in codebases[repo].keys():
+                    url = codebases[repo]['repository_clone_url']
+                else:
+                    url = codebases[repo]['repository']
                 branch = repos[repo]['default_branch']
                 buildsteps.append(steps.Git(repourl=url, branch=branch, codebase=repo,
                                   name="checkout: {0}".format(url), description="checkout: {0}@{1}".format(url, branch),
@@ -129,7 +165,14 @@ class GenerateGitCloneCommand(buildstep.ShellMixin, steps.BuildStep):
         else:
             self.build.addStepsAfterCurrentStep([define('FORCE_COMPLETE_REBUILD', 'false')])
             for repo in repos:
-                buildsteps.append(git(repo, repos[repo]['default_branch'], codebases, workdir=P(str(repo).upper()+'_ROOT')))
+                if 'repository_clone_url' in codebases[repo].keys():
+                    url = codebases[repo]['repository_clone_url']
+                else:
+                    url = codebases[repo]['repository']
+                branch = repos[repo]['default_branch']
+                buildsteps.append(steps.Git(repourl=url, branch=branch, codebase=repo,
+                                  name="checkout: {0}".format(url), description="checkout: {0}@{1}".format(url, branch),
+                                  workdir=P(str(repo).upper()+'_ROOT')))
 
         self.build.addStepsAfterCurrentStep(buildsteps)
 
@@ -161,6 +204,7 @@ class GenerateGitCheckoutCommand(buildstep.ShellMixin, steps.BuildStep):
             if checkout_feature_br:
                 self.build.addStepsAfterCurrentStep([
                     define('FEATURE', checkout_feature_br),
+                    define('branch', checkout_feature_br),
                     steps.ShellCommand(name='Checking out feature branch \"' + str(checkout_feature_br) + '\"',
                         command=['./tools/VaRA/utils/buildbot/bb-checkout-branches.sh', checkout_feature_br],
                         workdir=ip(checkout_base_dir)),
@@ -173,6 +217,7 @@ class GenerateGitCheckoutCommand(buildstep.ShellMixin, steps.BuildStep):
 
                 self.build.addStepsAfterCurrentStep([
                     define('FEATURE', force_feature),
+                    define('branch', ''),
                     steps.ShellCommand(name=ip('Checking out feature branch \"%(prop:FEATURE)s\"'),
                         command=['./tools/VaRA/utils/buildbot/bb-checkout-branches.sh', force_feature],
                         workdir=ip(checkout_base_dir)),
@@ -215,7 +260,7 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
                     ],
                     workdir=ip(checkout_base_dir),
                     name='Mergecheck \"' + mergecheck_repo + '\"',
-                    haltOnFailure=False, warnOnWarnings=False, flunkOnFailure=False, warningPattern='^CONFLICT.*'),
+                    warnOnWarnings=False, warningPattern='^CONFLICT.*'),
             ])
 
             defer.returnValue(result)
@@ -225,8 +270,6 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
 def configure(c):
     f = util.BuildFactory()
 
-    # TODO Check if this can be done without a dummy command
-    #f.addStep(GenerateGitCloneCommand())
     f.addStep(GenerateGitCloneCommand(name="Dummy_1", command=['true'], haltOnFailure=True, hideStepIf=True))
 
     f.addStep(GenerateGitCheckoutCommand(

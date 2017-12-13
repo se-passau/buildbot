@@ -127,8 +127,12 @@ class GenerateGitCloneCommand(buildstep.ShellMixin, steps.BuildStep):
                               command=['rm', '-rf', 'build'], workdir=ip(checkout_base_dir + '/../')))
 
             for repo in repos:
-                url = codebases[repo]['repository']
+                if 'repository_clone_url' in codebases[repo].keys():
+                    url = codebases[repo]['repository_clone_url']
+                else:
+                    url = codebases[repo]['repository']
                 branch = repos[repo]['default_branch']
+
                 buildsteps.append(steps.Git(repourl=url, branch=branch, codebase=repo,
                                   name="checkout: {0}".format(url), description="checkout: {0}@{1}".format(url, branch),
                                   timeout=1200, progress=True, workdir=P(str(repo).upper()+'_ROOT'),
@@ -136,7 +140,15 @@ class GenerateGitCloneCommand(buildstep.ShellMixin, steps.BuildStep):
         else:
             self.build.addStepsAfterCurrentStep([define('FORCE_COMPLETE_REBUILD', 'false')])
             for repo in repos:
-                buildsteps.append(git(repo, repos[repo]['default_branch'], codebases, workdir=P(str(repo).upper()+'_ROOT')))
+                if 'repository_clone_url' in codebases[repo].keys():
+                    url = codebases[repo]['repository_clone_url']
+                else:
+                    url = codebases[repo]['repository']
+                branch = repos[repo]['default_branch']
+
+                buildsteps.append(steps.Git(repourl=url, branch=branch, codebase=repo,
+                                  name="checkout: {0}".format(url), description="checkout: {0}@{1}".format(url, branch),
+                                  workdir=P(str(repo).upper()+'_ROOT')))
 
         self.build.addStepsAfterCurrentStep(buildsteps)
 
@@ -185,7 +197,7 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
                     ],
                     workdir=ip(checkout_base_dir),
                     name='Mergecheck \"' + mergecheck_repo + '\"',
-                    haltOnFailure=False, warnOnWarnings=False, flunkOnFailure=False, warningPattern='^CONFLICT.*'),
+                    warnOnWarnings=False, warningPattern='^CONFLICT.*'),
             ])
 
             defer.returnValue(result)
