@@ -27,12 +27,12 @@ checkout_base_dir = '%(prop:builddir)s/vara-llvm-features'
 repos = OrderedDict()
 
 repos['vara-llvm'] = {
-    'default_branch': 'vara-llvm-50-dev',
+    'default_branch': 'vara-60-dev',
     'checkout_dir': checkout_base_dir,
     'checkout_subdir': '',
 }
 repos['vara-clang'] = {
-    'default_branch': 'vara-clang-50-dev',
+    'default_branch': 'vara-60-dev',
     'checkout_dir': checkout_base_dir + '/tools/clang',
     'checkout_subdir': '/tools/clang',
 }
@@ -42,11 +42,11 @@ repos['vara'] = {
     'checkout_subdir': '/tools/VaRA',
 }
 repos['compiler-rt'] = {
-    'default_branch': 'release_50',
+    'default_branch': 'release_60',
     'checkout_dir': checkout_base_dir + '/projects/compiler-rt',
 }
 repos['clang-tools-extra'] = {
-    'default_branch': 'release_50',
+    'default_branch': 'release_60',
     'checkout_dir': checkout_base_dir + '/tools/clang/tools/extra',
 }
 

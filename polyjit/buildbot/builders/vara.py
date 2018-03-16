@@ -26,25 +26,25 @@ from zope.interface import implementer
 ################################################################################
 
 project_name     = 'vara'
-trigger_branches = 'vara-dev|vara-llvm-50-dev|vara-clang-50-dev'
+trigger_branches = 'vara-dev|vara-60-dev'
 uchroot_src_root = '/mnt/vara-llvm'
 checkout_base_dir = '%(prop:builddir)s/vara-llvm'
 
 repos = OrderedDict()
 
 repos['vara-llvm'] = {
-    'default_branch': 'vara-llvm-50-dev',
+    'default_branch': 'vara-60-dev',
     'checkout_dir': checkout_base_dir,
     'checkout_subdir': '',
     'upstream_remote_url': 'https://git.llvm.org/git/llvm.git/',
-    'upstream_merge_base': '3359933e710d5dae2815cf2fd3d776dfb3ffe1fa',
+    'upstream_merge_base': 'ef854ab36638ba5b565f7734d22cbe3a510ae8b6',
 }
 repos['vara-clang'] = {
-    'default_branch': 'vara-clang-50-dev',
+    'default_branch': 'vara-60-dev',
     'checkout_dir': checkout_base_dir + '/tools/clang',
     'checkout_subdir': '/tools/clang',
     'upstream_remote_url': 'https://git.llvm.org/git/clang.git/',
-    'upstream_merge_base': '0bc78694a319f80a28ca30e4d9d69c292ee12dee',
+    'upstream_merge_base': 'd20f95dfb11ea73212982a1d321eb81933d42d6a',
 }
 repos['vara'] = {
     'default_branch': 'vara-dev',
@@ -52,11 +52,11 @@ repos['vara'] = {
     'checkout_subdir': '/tools/VaRA',
 }
 repos['compiler-rt'] = {
-    'default_branch': 'release_50',
+    'default_branch': 'release_60',
     'checkout_dir': checkout_base_dir + '/projects/compiler-rt',
 }
 repos['clang-tools-extra'] = {
-    'default_branch': 'release_50',
+    'default_branch': 'release_60',
     'checkout_dir': checkout_base_dir + '/tools/clang/tools/extra',
 }
 
