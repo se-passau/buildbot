@@ -36,7 +36,7 @@ repos['vara-llvm'] = {
     'checkout_dir': checkout_base_dir,
     'checkout_subdir': '',
     'upstream_remote_url': 'https://git.llvm.org/git/llvm.git/',
-    'upstream_merge_base': 'ef854ab36638ba5b565f7734d22cbe3a510ae8b6',
+    'upstream_merge_base': '089d4c0c490687db6c75f1d074e99c4d42936a50',
 }
 repos['vara-clang'] = {
     'default_branch': 'vara-60-dev',
