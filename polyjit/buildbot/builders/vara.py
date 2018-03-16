@@ -20,9 +20,8 @@ from zope.interface import implementer
 ################################################################################
 # Notes:
 #
-# Get the values for 'upstream_merge_base' with the following commands:
-#   - git merge-base origin/vara-llvm-50-dev upstream/release_50
-#   - git merge-base origin/vara-clang-50-dev upstream/release_50
+# Get the values for 'upstream_merge_base' with the following command:
+#   - git merge-base origin/vara-60-dev upstream/release_60
 ################################################################################
 
 project_name     = 'vara'
@@ -44,7 +43,7 @@ repos['vara-clang'] = {
     'checkout_dir': checkout_base_dir + '/tools/clang',
     'checkout_subdir': '/tools/clang',
     'upstream_remote_url': 'https://git.llvm.org/git/clang.git/',
-    'upstream_merge_base': 'd20f95dfb11ea73212982a1d321eb81933d42d6a',
+    'upstream_merge_base': 'ff0c0d8ab3e316bb6e2741fedb3b545e198eab7a',
 }
 repos['vara'] = {
     'default_branch': 'vara-dev',
