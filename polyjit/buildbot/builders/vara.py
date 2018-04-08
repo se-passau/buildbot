@@ -232,7 +232,7 @@ def configure(c):
 
     f.addStep(ucompile('ninja', haltOnFailure=True, warnOnWarnings=True, name='build VaRA'))
 
-    f.addStep(ucompile('ninja', 'check-vara', haltOnFailure=True, warnOnWarnings=True, name='run VaRA regression tests'))
+    f.addStep(ucompile('ninja', 'check-vara', haltOnFailure=False, warnOnWarnings=True, name='run VaRA regression tests'))
 
     # TODO fix hardcoded path
     f.addStep(ucompile('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build',
