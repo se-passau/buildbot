@@ -302,7 +302,7 @@ def configure(c):
     f.addStep(ucompile('ninja', 'check-vara', haltOnFailure=False, warnOnWarnings=True, name='run VaRA regression tests'))
 
     # TODO fix hardcoded path
-    f.addStep(ucompile('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build',
+    f.addStep(ucompile('python3', 'tidy-vara.py', '-p', '/mnt/build', '-j', '8', '--gcc',
         workdir='vara-llvm-features/tools/VaRA/test/',
         name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}, timeout=3600))
 
