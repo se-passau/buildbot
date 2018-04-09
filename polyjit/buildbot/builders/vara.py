@@ -237,7 +237,7 @@ def configure(c):
     # TODO fix hardcoded path
     f.addStep(ucompile('python3', 'tidy-vara-gcc.py', '-p', '/mnt/build',
         workdir='vara-llvm/tools/VaRA/test/',
-        name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
+        name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}, timeout=3600))
 
     # Mergecheck
     for repo in ['vara-llvm', 'vara-clang', 'vara']:
