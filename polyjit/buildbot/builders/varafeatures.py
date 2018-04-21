@@ -70,7 +70,7 @@ def get_vara_results(props):
     master = props.master
     steps = yield props.master.data.get(('builders', props.getProperty('buildername'), 'builds', props.getProperty('buildnumber'), 'steps'))
     pr_comment_steps = {
-        # 'step_name': True, if detailled cmd output is required
+        # 'step_name': True, if detailled cmd output is required (in case of failure)
         'cmake': False,
         'build VaRA': False,
         'run VaRA regression tests': True,
@@ -85,15 +85,15 @@ def get_vara_results(props):
                     all_logs.append('### :heavy_check_mark: Step : {0} Result : {1}'.format(step['name'], util.Results[step['results']]))
                 else:
                     all_logs.append('### :boom: Step : {0} Result : {1}'.format(step['name'], util.Results[step['results']]))
-                # full cmd output
-                if pr_comment_steps[step['name']]:
-                    all_logs.append('```')
-                    log['stepname'] = step['name']
-                    log['content'] = yield master.data.get(("logs", log['logid'], 'contents'))
-                    step_logs = log['content']['content'].split('\n')
-                    for i, sl in enumerate(step_logs):
-                        all_logs.append(sl[1:])
-                    all_logs.append('```')
+                    # full cmd output
+                    if pr_comment_steps[step['name']]:
+                        all_logs.append('```')
+                        log['stepname'] = step['name']
+                        log['content'] = yield master.data.get(("logs", log['logid'], 'contents'))
+                        step_logs = log['content']['content'].split('\n')
+                        for i, sl in enumerate(step_logs):
+                            all_logs.append(sl[1:])
+                        all_logs.append('```')
 
     defer.returnValue('\n'.join(all_logs))
 
