@@ -32,7 +32,7 @@ class CustomGitHubHandler(GitHubEventHandler):
 
         branch = "refs/pull/{}/merge".format(payload['number'])
 
-        if payload['action'] not in ("opened", "synchronize"):
+        if payload['action'] not in ("opened", "reopened", "synchronize"):
             logging.info("PR %r %r, ignoring",
                          payload['number'], payload['action'])
             return None
