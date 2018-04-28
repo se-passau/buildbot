@@ -72,7 +72,7 @@ def get_vara_results(props):
     pr_comment_steps = {
         # 'step_name': True, if detailled cmd output is required (in case of failure)
         'cmake': False,
-        'build VaRA': False,
+        'build VaRA': True,
         'run VaRA regression tests': True,
         'run Clang-Tidy': True,
     }
