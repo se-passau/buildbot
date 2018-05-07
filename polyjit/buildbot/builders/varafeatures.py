@@ -305,14 +305,8 @@ def configure(c):
 
     f.addStep(ucompile('ninja', 'check-vara', haltOnFailure=False, warnOnWarnings=True, name='run VaRA regression tests'))
 
-    # TODO fix hardcoded path
-    f.addStep(ucompile('python3', 'tidy-vara.py', '-p', '/mnt/build', '-j', '8', '--gcc',
-        workdir='vara-llvm-features/tools/VaRA/test/',
-        name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}, timeout=3600))
-
-    # ClangFormat
+    # use mergecheck tool to make sure the 'upstream' remote is present
     for repo in ['vara-llvm', 'vara-clang']:
-        # use mergecheck tool to make sure the 'upstream' remote is present
         f.addStep(steps.Compile(
             command=['/scratch/pjtest/mergecheck/build/bin/mergecheck', 'rebase',
                      '--repo', '.' + repos[repo]['checkout_subdir'],
@@ -324,6 +318,12 @@ def configure(c):
             workdir=ip(checkout_base_dir),
             name='Add upstream remote to repository.', hideStepIf=True))
 
+    # TODO fix hardcoded path
+    f.addStep(ucompile('python3', 'tidy-vara.py', '-p', '/mnt/build', '-j', '8', '--gcc',
+        workdir='vara-llvm-features/tools/VaRA/test/',
+        name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}, timeout=3600))
+
+    # ClangFormat
     f.addStep(ucompile('bash', 'bb-clang-format.sh', '--all',
                        workdir='vara-llvm/tools/VaRA/utils/buildbot',
                        name='run ClangFormat', haltOnFailure=False, warnOnWarnings=True,
