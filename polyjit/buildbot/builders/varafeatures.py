@@ -73,10 +73,11 @@ def get_vara_results(props):
     steps = yield props.master.data.get(('builders', props.getProperty('buildername'), 'builds', props.getProperty('buildnumber'), 'steps'))
     pr_comment_steps = {
         # 'step_name': True, if detailled cmd output is required (in case of failure)
-        'cmake': False,
+        'cmake': True,
         'build VaRA': True,
         'run VaRA regression tests': True,
         'run Clang-Tidy': True,
+        'run ClangFormat': True,
     }
     for step in steps:
         if step['name'] in pr_comment_steps:
