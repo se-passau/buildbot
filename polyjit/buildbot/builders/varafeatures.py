@@ -19,10 +19,10 @@ from zope.interface import implementer
 
 ################################################################################
 
-project_name     = 'vara-features'
+project_name         = 'vara-features'
 trigger_branch_regex = "^(f-\S+|refs\/pull\/\d+\/merge)$"
-uchroot_src_root = '/mnt/vara-llvm-features'
-checkout_base_dir = '%(prop:builddir)s/vara-llvm-features'
+uchroot_src_root     = '/mnt/vara-llvm-features'
+checkout_base_dir    = '%(prop:builddir)s/vara-llvm-features'
 
 repos = OrderedDict()
 
@@ -30,11 +30,13 @@ repos['vara-llvm'] = {
     'default_branch': 'vara-60-dev',
     'checkout_dir': checkout_base_dir,
     'checkout_subdir': '',
+    'upstream_remote_url': 'https://git.llvm.org/git/llvm.git/',
 }
 repos['vara-clang'] = {
     'default_branch': 'vara-60-dev',
     'checkout_dir': checkout_base_dir + '/tools/clang',
     'checkout_subdir': '/tools/clang',
+    'upstream_remote_url': 'https://git.llvm.org/git/clang.git/',
 }
 repos['vara'] = {
     'default_branch': 'vara-dev',
@@ -244,7 +246,6 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
         if result == util.SUCCESS:
             mergecheck_repo = self.getProperty('mergecheck_repo')
             current_branch = self.observer.getStdout().strip()
-            # upstream_remote_url = repos[mergecheck_repo]['upstream_remote_url'] # needed in vara.py
             default_branch = repos[mergecheck_repo]['default_branch']
             repo_subdir = repos[mergecheck_repo]['checkout_subdir']
 
@@ -307,6 +308,25 @@ def configure(c):
     f.addStep(ucompile('python3', 'tidy-vara.py', '-p', '/mnt/build', '-j', '8', '--gcc',
         workdir='vara-llvm-features/tools/VaRA/test/',
         name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}, timeout=3600))
+
+    # ClangFormat
+    for repo in ['vara-llvm', 'vara-clang']:
+        # use mergecheck tool to make sure the 'upstream' remote is present
+        f.addStep(steps.Compile(
+            command=['/scratch/pjtest/mergecheck/build/bin/mergecheck', 'rebase',
+                     '--repo', '.' + repos[repo]['checkout_subdir'],
+                     '--remote-url', repos[repo]['upstream_remote_url'],
+                     '--remote-name', 'upstream',
+                     '--upstream', 'refs/remotes/upstream/master',
+                     '--branch', 'refs/remotes/upstream/master',
+                     '-v'],
+            workdir=ip(checkout_base_dir),
+            name='Add upstream remote to repository.', hideStepIf=True))
+
+    f.addStep(ucompile('bash', 'bb-clang-format.sh', '--all',
+                       workdir='vara-llvm/tools/VaRA/utils/buildbot',
+                       name='run ClangFormat', haltOnFailure=False, warnOnWarnings=True,
+                       env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
 
     # Mergecheck
     for repo in ['vara-llvm', 'vara-clang', 'vara']:

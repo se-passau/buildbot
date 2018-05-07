@@ -24,9 +24,9 @@ from zope.interface import implementer
 #   - git merge-base origin/vara-60-dev upstream/release_60
 ################################################################################
 
-project_name     = 'vara'
-trigger_branches = 'vara-dev|vara-60-dev'
-uchroot_src_root = '/mnt/vara-llvm'
+project_name      = 'vara'
+trigger_branches  = 'vara-dev|vara-60-dev'
+uchroot_src_root  = '/mnt/vara-llvm'
 checkout_base_dir = '%(prop:builddir)s/vara-llvm'
 
 repos = OrderedDict()
@@ -238,6 +238,25 @@ def configure(c):
     f.addStep(ucompile('python3', 'tidy-vara.py', '-p', '/mnt/build', '-j', '8', '--gcc',
         workdir='vara-llvm/tools/VaRA/test/',
         name='run Clang-Tidy', haltOnFailure=False, warnOnWarnings=True, env={'PATH': ["/mnt/build/bin", "${PATH}"]}, timeout=3600))
+
+    # ClangFormat
+    for repo in ['vara-llvm', 'vara-clang']:
+        # use mergecheck tool to make sure the 'upstream' remote is present
+        f.addStep(steps.Compile(
+            command=['/scratch/pjtest/mergecheck/build/bin/mergecheck', 'rebase',
+                     '--repo', '.' + repos[repo]['checkout_subdir'],
+                     '--remote-url', repos[repo]['upstream_remote_url'],
+                     '--remote-name', 'upstream',
+                     '--upstream', 'refs/remotes/upstream/master',
+                     '--branch', 'refs/remotes/upstream/master',
+                     '-v'],
+            workdir=ip(checkout_base_dir),
+            name='Add upstream remote to repository.', hideStepIf=True))
+
+    f.addStep(ucompile('bash', 'bb-clang-format.sh', '--all',
+                       workdir='vara-llvm/tools/VaRA/utils/buildbot',
+                       name='run ClangFormat', haltOnFailure=False, warnOnWarnings=True,
+                       env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
 
     # Mergecheck
     for repo in ['vara-llvm', 'vara-clang', 'vara']:
