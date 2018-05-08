@@ -325,7 +325,7 @@ def configure(c):
 
     # ClangFormat
     f.addStep(ucompile('bash', 'bb-clang-format.sh', '--all',
-                       workdir='vara-llvm/tools/VaRA/utils/buildbot',
+                       workdir='vara-llvm-features/tools/VaRA/utils/buildbot',
                        name='run ClangFormat', haltOnFailure=False, warnOnWarnings=True,
                        env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
 
