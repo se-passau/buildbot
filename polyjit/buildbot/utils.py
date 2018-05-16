@@ -111,7 +111,6 @@ def ucmd(*args, **kwargs):
                '-w', os.path.join("/mnt", workdir),
                '-M', ip("%(prop:builddir)s:/mnt"),
                logEnviron=logEnviron,
-               workdir=workdir,
                usePTY=use_pty,
                env=env,
                *new_args, **kwargs)
@@ -135,7 +134,6 @@ def ucompile(*args, **kwargs):
         '-r', P("uchroot_image_path"), '-w',
         os.path.join("/mnt", workdir),
         '-M', ip("%(prop:builddir)s:/mnt"),
-        workdir=workdir,
         usePTY=use_pty,
         env=env,
         *new_args, **kwargs)
