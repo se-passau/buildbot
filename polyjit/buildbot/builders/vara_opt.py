@@ -152,6 +152,7 @@ class GenerateGitCloneCommand(buildstep.ShellMixin, steps.BuildStep):
                 buildsteps.append(steps.Git(repourl=url, branch=branch, codebase=repo,
                                             name="checkout: {0}".format(url),
                                             description="checkout: {0}@{1}".format(url, branch),
+                                            timeout=1200, progress=True,
                                             workdir=P(str(repo).upper()+'_ROOT')))
 
         buildsteps.append(steps.ShellCommand(name='Create build directory',
