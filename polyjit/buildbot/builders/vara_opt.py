@@ -252,7 +252,8 @@ def configure(c):
             workdir=ip(CHECKOUT_BASE_DIR),
             name='Add upstream remote to repository.', hideStepIf=True))
 
-    f.addStep(ucompile('python3', 'tidy-vara.py', '-p', '/mnt/build', '-j', '8', '--gcc',
+    # Clang-Tidy
+    f.addStep(ucompile('python3', 'tidy-vara.py', '-p', UCHROOT_BUILD_DIR, '-j', '8', '--gcc',
                        workdir='vara-llvm/tools/VaRA/test/', name='run Clang-Tidy',
                        haltOnFailure=False, warnOnWarnings=True,
                        env={'PATH': ["/mnt/build/bin", "${PATH}"]}, timeout=3600))
