@@ -155,7 +155,7 @@ class GenerateGitCloneCommand(buildstep.ShellMixin, steps.BuildStep):
                                             workdir=P(str(repo).upper()+'_ROOT')))
 
         buildsteps.append(steps.ShellCommand(name='Create build directory',
-                                             command=['mkdir', 'build'],
+                                             command=['mkdir', '-p', 'build'],
                                              workdir=ip(CHECKOUT_BASE_DIR), hideStepIf=True))
 
         self.build.addStepsAfterCurrentStep(buildsteps)
