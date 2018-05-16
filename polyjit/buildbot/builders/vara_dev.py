@@ -257,14 +257,13 @@ def configure(c):
     f.addStep(ucompile('python3', 'tidy-vara.py', '-p', UCHROOT_BUILD_DIR, '-j', '8', '--gcc',
                        workdir='vara-llvm/tools/VaRA/test/', name='run Clang-Tidy',
                        haltOnFailure=False, warnOnWarnings=True,
-                       env={'PATH': ["/mnt/build/bin", "${PATH}"]}, timeout=3600))
+                       env={'PATH': [UCHROOT_BUILD_DIR + "/bin", "${PATH}"]}, timeout=3600))
 
     # ClangFormat
-    f.addStep(ucompile('bash', 'bb-clang-format.sh', '--cf-binary',
-                       UCHROOT_BUILD_DIR + '/bin/clang-format', '--all', '--line-numbers',
+    f.addStep(ucompile('bash', 'bb-clang-format.sh', '--all', '--line-numbers',
                        workdir='vara-llvm/tools/VaRA/utils/buildbot',
                        name='run ClangFormat', haltOnFailure=False, warnOnWarnings=True,
-                       env={'PATH': ["/mnt/build/bin", "${PATH}"]}))
+                       env={'PATH': [UCHROOT_BUILD_DIR + "/bin", "${PATH}"]}))
 
     # Mergecheck
     for repo in ['vara-llvm', 'vara-clang', 'vara']:
