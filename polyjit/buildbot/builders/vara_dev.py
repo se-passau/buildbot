@@ -211,7 +211,7 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
                             ],
                     workdir=ip(CHECKOUT_BASE_DIR),
                     name='Mergecheck \"' + mergecheck_repo + '\"',
-                    warnOnWarnings=False, warningPattern='^CONFLICT.*'),
+                    warnOnWarnings=False, warningPattern=r'^CONFLICT \((content|add\/add)\).*'),
             ])
 
             defer.returnValue(result)
