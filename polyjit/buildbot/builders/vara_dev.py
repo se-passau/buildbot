@@ -90,6 +90,10 @@ class GenerateMakeCleanCommand(buildstep.ShellMixin, steps.BuildStep):
         if force_build_clean:
             self.build.addStepsAfterCurrentStep([
                 define('FORCE_BUILD_CLEAN', 'true'),
+                ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
+                         haltOnFailure=False, flunkOnWarnings=False,
+                         flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False),
+                cmd("sleep 1", hideStepIf=True),
                 ucompile('ninja', 'clean', name='clean build dir',
                          workdir=UCHROOT_BUILD_DIR, haltOnFailure=True, warnOnWarnings=True)
             ])
@@ -224,6 +228,11 @@ def configure(c):
     f.addStep(define('UCHROOT_SRC_ROOT', UCHROOT_SRC_ROOT))
     f.addStep(define('UCHROOT_BUILD_DIR', UCHROOT_BUILD_DIR))
 
+    # CMake
+    f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
+                        haltOnFailure=False, flunkOnWarnings=False,
+                        flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
+    f.addStep(cmd("sleep 1", hideStepIf=True))
     f.addStep(ucompile('../tools/VaRA/utils/vara/builds/' + BUILD_SCRIPT,
                        env={'PATH': '/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin'},
                        name='cmake',
@@ -233,9 +242,19 @@ def configure(c):
     f.addStep(GenerateMakeCleanCommand(name="Dummy_2", command=['true'],
                                        haltOnFailure=True, hideStepIf=True))
 
+    # Compile Step
+    f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
+                        haltOnFailure=False, flunkOnWarnings=False,
+                        flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
+    f.addStep(cmd("sleep 1", hideStepIf=True))
     f.addStep(ucompile('ninja', haltOnFailure=True, warnOnWarnings=True, name='build VaRA',
                        workdir=UCHROOT_BUILD_DIR))
 
+    # Regression Tests step
+    f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
+                        haltOnFailure=False, flunkOnWarnings=False,
+                        flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
+    f.addStep(cmd("sleep 1", hideStepIf=True))
     f.addStep(ucompile('ninja', 'check-vara', name='run VaRA regression tests',
                        workdir=UCHROOT_BUILD_DIR,
                        haltOnFailure=False, warnOnWarnings=True))
@@ -254,12 +273,20 @@ def configure(c):
             name='Add upstream remote to repository.', hideStepIf=True))
 
     # Clang-Tidy
+    f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
+                        haltOnFailure=False, flunkOnWarnings=False,
+                        flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
+    f.addStep(cmd("sleep 1", hideStepIf=True))
     f.addStep(ucompile('python3', 'tidy-vara.py', '-p', UCHROOT_BUILD_DIR, '-j', '8', '--gcc',
                        workdir='vara-llvm/tools/VaRA/test/', name='run Clang-Tidy',
                        haltOnFailure=False, warnOnWarnings=True,
                        env={'PATH': [UCHROOT_BUILD_DIR + "/bin", "${PATH}"]}, timeout=3600))
 
     # ClangFormat
+    f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
+                        haltOnFailure=False, flunkOnWarnings=False,
+                        flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
+    f.addStep(cmd("sleep 1", hideStepIf=True))
     f.addStep(ucompile('bash', 'bb-clang-format.sh', '--all', '--line-numbers',
                        workdir='vara-llvm/tools/VaRA/utils/buildbot',
                        name='run ClangFormat', haltOnFailure=False, warnOnWarnings=True,
