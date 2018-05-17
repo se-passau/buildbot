@@ -230,8 +230,8 @@ def configure(c):
 
     # CMake
     f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
-                        haltOnFailure=False, flunkOnWarnings=False,
-                        flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
+                       haltOnFailure=False, flunkOnWarnings=False,
+                       flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
     f.addStep(cmd("sleep 1", hideStepIf=True))
     f.addStep(ucompile('../tools/VaRA/utils/vara/builds/' + BUILD_SCRIPT,
                        env={'PATH': '/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin'},
@@ -244,16 +244,16 @@ def configure(c):
 
     # Compile Step
     f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
-                        haltOnFailure=False, flunkOnWarnings=False,
-                        flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
+                       haltOnFailure=False, flunkOnWarnings=False,
+                       flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
     f.addStep(cmd("sleep 1", hideStepIf=True))
     f.addStep(ucompile('ninja', haltOnFailure=True, warnOnWarnings=True, name='build VaRA',
                        workdir=UCHROOT_BUILD_DIR))
 
-    # Regression Tests step
+    # Regression Test step
     f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
-                        haltOnFailure=False, flunkOnWarnings=False,
-                        flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
+                       haltOnFailure=False, flunkOnWarnings=False,
+                       flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
     f.addStep(cmd("sleep 1", hideStepIf=True))
     f.addStep(ucompile('ninja', 'check-vara', name='run VaRA regression tests',
                        workdir=UCHROOT_BUILD_DIR,
@@ -274,8 +274,8 @@ def configure(c):
 
     # Clang-Tidy
     f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
-                        haltOnFailure=False, flunkOnWarnings=False,
-                        flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
+                       haltOnFailure=False, flunkOnWarnings=False,
+                       flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
     f.addStep(cmd("sleep 1", hideStepIf=True))
     f.addStep(ucompile('python3', 'tidy-vara.py', '-p', UCHROOT_BUILD_DIR, '-j', '8', '--gcc',
                        workdir='vara-llvm/tools/VaRA/test/', name='run Clang-Tidy',
@@ -284,8 +284,8 @@ def configure(c):
 
     # ClangFormat
     f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
-                        haltOnFailure=False, flunkOnWarnings=False,
-                        flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
+                       haltOnFailure=False, flunkOnWarnings=False,
+                       flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
     f.addStep(cmd("sleep 1", hideStepIf=True))
     f.addStep(ucompile('bash', 'bb-clang-format.sh', '--all', '--line-numbers',
                        workdir='vara-llvm/tools/VaRA/utils/buildbot',
