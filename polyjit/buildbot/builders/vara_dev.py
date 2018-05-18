@@ -1,4 +1,5 @@
 import sys
+import re
 from collections import OrderedDict
 
 from twisted.internet import defer
@@ -25,10 +26,13 @@ UCHROOT_SRC_ROOT = '/mnt/vara-llvm'
 CHECKOUT_BASE_DIR = '%(prop:builddir)s/vara-llvm'
 
 # Adapt these values according to build type:
-PROJECT_NAME = 'vara-dev'
+PROJECT_NAME = 'vara-master-dev'
 TRIGGER_BRANCHES = 'vara-dev|vara-60-dev'
-UCHROOT_BUILD_DIR = UCHROOT_SRC_ROOT + '/build/dev'
+BUILD_SUBDIR = '/build/dev'
 BUILD_SCRIPT = 'build-dev.sh'
+BUILD_DIR = '%(prop:builddir)s/vara-llvm/build/dev'
+
+UCHROOT_BUILD_DIR = UCHROOT_SRC_ROOT + BUILD_SUBDIR
 
 # Also adapt these values:
 REPOS = OrderedDict()
@@ -88,12 +92,9 @@ class GenerateMakeCleanCommand(buildstep.ShellMixin, steps.BuildStep):
             force_build_clean = options['force_build_clean']
 
         if force_build_clean:
+            self.build.addStepsAfterCurrentStep(get_uchroot_workaround_steps())
             self.build.addStepsAfterCurrentStep([
                 define('FORCE_BUILD_CLEAN', 'true'),
-                ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
-                         haltOnFailure=False, flunkOnWarnings=False,
-                         flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False),
-                cmd("sleep 1", hideStepIf=True),
                 ucompile('ninja', 'clean', name='clean build dir',
                          workdir=UCHROOT_BUILD_DIR, haltOnFailure=True, warnOnWarnings=True)
             ])
@@ -168,6 +169,41 @@ class GenerateGitCloneCommand(buildstep.ShellMixin, steps.BuildStep):
         defer.returnValue(command.results())
 
 
+class GenerateBuildStepCommand(buildstep.ShellMixin, steps.BuildStep):
+
+    def __init__(self, **kwargs):
+        kwargs = self.setupShellMixin(kwargs)
+        steps.BuildStep.__init__(self, **kwargs)
+        self.observer = logobserver.BufferLogObserver()
+        self.addLogObserver('stdio', self.observer)
+
+    @defer.inlineCallbacks
+    def run(self):
+        command = yield self.makeRemoteShellCommand()
+        yield self.runCommand(command)
+
+        result = command.results()
+        if result == util.SUCCESS:
+            vara_files = self.observer.getStdout().strip().splitlines()
+            match_lines = []
+            for line in vara_files:
+                match_lines.append('.*' + re.escape(line) + '.*warning[: ].*')
+            # join all alternatives together and create pattern object
+            pattern = re.compile('|'.join(match_lines))
+
+            buildsteps = []
+            for step in get_uchroot_workaround_steps():
+                buildsteps.append(step)
+            buildsteps.append(ucompile('ninja', haltOnFailure=True, warnOnWarnings=True,
+                                       name='build VaRA',
+                                       warningPattern=pattern,
+                                       workdir=UCHROOT_BUILD_DIR))
+
+            self.build.addStepsAfterCurrentStep(buildsteps)
+
+            defer.returnValue(command.results())
+
+
 class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
 
     def __init__(self, **kwargs):
@@ -216,6 +252,15 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
 
             defer.returnValue(result)
 
+def get_uchroot_workaround_steps():
+    workaround_steps = []
+    workaround_steps.append(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
+                                     haltOnFailure=False, flunkOnWarnings=False,
+                                     flunkOnFailure=False, warnOnWarnings=False,
+                                     warnOnFailure=False))
+    workaround_steps.append(cmd("sleep 1", hideStepIf=True))
+    return workaround_steps
+
 # yapf: disable
 def configure(c):
     f = util.BuildFactory()
@@ -229,10 +274,8 @@ def configure(c):
     f.addStep(define('UCHROOT_BUILD_DIR', UCHROOT_BUILD_DIR))
 
     # CMake
-    f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
-                       haltOnFailure=False, flunkOnWarnings=False,
-                       flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
-    f.addStep(cmd("sleep 1", hideStepIf=True))
+    for step in get_uchroot_workaround_steps():
+        f.addStep(step)
     f.addStep(ucompile('../tools/VaRA/utils/vara/builds/' + BUILD_SCRIPT,
                        env={'PATH': '/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin'},
                        name='cmake',
@@ -241,23 +284,6 @@ def configure(c):
 
     f.addStep(GenerateMakeCleanCommand(name="Dummy_2", command=['true'],
                                        haltOnFailure=True, hideStepIf=True))
-
-    # Compile Step
-    f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
-                       haltOnFailure=False, flunkOnWarnings=False,
-                       flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
-    f.addStep(cmd("sleep 1", hideStepIf=True))
-    f.addStep(ucompile('ninja', haltOnFailure=True, warnOnWarnings=True, name='build VaRA',
-                       workdir=UCHROOT_BUILD_DIR))
-
-    # Regression Test step
-    f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
-                       haltOnFailure=False, flunkOnWarnings=False,
-                       flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
-    f.addStep(cmd("sleep 1", hideStepIf=True))
-    f.addStep(ucompile('ninja', 'check-vara', name='run VaRA regression tests',
-                       workdir=UCHROOT_BUILD_DIR,
-                       haltOnFailure=False, warnOnWarnings=True))
 
     # use mergecheck tool to make sure the 'upstream' remote is present
     for repo in ['vara-llvm', 'vara-clang']:
@@ -272,21 +298,37 @@ def configure(c):
             workdir=ip(CHECKOUT_BASE_DIR),
             name='Add upstream remote to repository.', hideStepIf=True))
 
+    # Prepare project file list to filter out compiler warnings
+    f.addStep(cmd("../../tools/VaRA/utils/vara/getVaraSourceFiles.sh",
+                  "--all", "--include-existing",
+                  "--relative-to", ip(BUILD_DIR),
+                  "--output", "buildbot-source-file-list.txt",
+                  workdir=ip(BUILD_DIR), hideStepIf=True))
+
+    # Compile Step
+    f.addStep(GenerateBuildStepCommand(name="Dummy_3",
+                                       command=['cat', 'buildbot-source-file-list.txt'],
+                                       workdir=ip(BUILD_DIR),
+                                       haltOnFailure=True, hideStepIf=True))
+
+    # Regression Test step
+    for step in get_uchroot_workaround_steps():
+        f.addStep(step)
+    f.addStep(ucompile('ninja', 'check-vara', name='run VaRA regression tests',
+                       workdir=UCHROOT_BUILD_DIR,
+                       haltOnFailure=False, warnOnWarnings=True))
+
     # Clang-Tidy
-    f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
-                       haltOnFailure=False, flunkOnWarnings=False,
-                       flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
-    f.addStep(cmd("sleep 1", hideStepIf=True))
+    for step in get_uchroot_workaround_steps():
+        f.addStep(step)
     f.addStep(ucompile('python3', 'tidy-vara.py', '-p', UCHROOT_BUILD_DIR, '-j', '8', '--gcc',
                        workdir='vara-llvm/tools/VaRA/test/', name='run Clang-Tidy',
                        haltOnFailure=False, warnOnWarnings=True,
                        env={'PATH': [UCHROOT_BUILD_DIR + "/bin", "${PATH}"]}, timeout=3600))
 
     # ClangFormat
-    f.addStep(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
-                       haltOnFailure=False, flunkOnWarnings=False,
-                       flunkOnFailure=False, warnOnWarnings=False, warnOnFailure=False))
-    f.addStep(cmd("sleep 1", hideStepIf=True))
+    for step in get_uchroot_workaround_steps():
+        f.addStep(step)
     f.addStep(ucompile('bash', 'bb-clang-format.sh', '--all', '--line-numbers',
                        workdir='vara-llvm/tools/VaRA/utils/buildbot',
                        name='run ClangFormat', haltOnFailure=False, warnOnWarnings=True,
@@ -295,7 +337,7 @@ def configure(c):
     # Mergecheck
     for repo in ['vara-llvm', 'vara-clang', 'vara']:
         f.addStep(define('mergecheck_repo', repo))
-        f.addStep(GenerateMergecheckCommand(name="Dummy_3", command=['git', 'symbolic-ref', 'HEAD'],
+        f.addStep(GenerateMergecheckCommand(name="Dummy_4", command=['git', 'symbolic-ref', 'HEAD'],
                                             workdir=ip(REPOS[repo]['checkout_dir']),
                                             haltOnFailure=True, hideStepIf=True))
 
