@@ -341,14 +341,14 @@ def configure(c):
                                             workdir=ip(REPOS[repo]['checkout_dir']),
                                             haltOnFailure=True, hideStepIf=True))
 
-    c['builders'].append(builder('build-' + PROJECT_NAME, None, ACCEPTED_BUILDERS, tags=['vara'],
+    c['builders'].append(builder(PROJECT_NAME, None, ACCEPTED_BUILDERS, tags=['vara'],
                                  factory=f))
 
 def schedule(c):
     force_sched = s_force(
         name="force-build-" + PROJECT_NAME,
         cb=FORCE_CODEBASE,
-        builders=["build-" + PROJECT_NAME],
+        builders=[PROJECT_NAME],
         properties=[
             util.NestedParameter(name="options", label="Build Options", layout="vertical", fields=[
                 util.BooleanParameter(name="force_build_clean", label="force a make clean",
@@ -361,14 +361,14 @@ def schedule(c):
     )
 
     c['schedulers'].extend([
-        s_abranch('build-' + PROJECT_NAME + '-sched', CODEBASE, ['build-' + PROJECT_NAME],
+        s_abranch(PROJECT_NAME + '-sched', CODEBASE, [PROJECT_NAME],
                   change_filter=filter.ChangeFilter(branch_re=TRIGGER_BRANCHES),
                   treeStableTimer=5 * 60),
         force_sched,
-        s_trigger('trigger-build-' + PROJECT_NAME, CODEBASE, ['build-' + PROJECT_NAME]),
+        s_trigger('trigger-' + PROJECT_NAME, CODEBASE, [PROJECT_NAME]),
         # TODO: Fix nightly scheduler (currently not working)
-        #s_nightly('nightly-sched-build-' + PROJECT_NAME, CODEBASE,
-        #          ['build-' + PROJECT_NAME],
+        #s_nightly('nightly-sched-' + PROJECT_NAME, CODEBASE,
+        #          [PROJECT_NAME],
         #          hour=22, minute=0)
     ])
 # yapf: enable
