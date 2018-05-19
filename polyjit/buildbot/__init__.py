@@ -5,4 +5,6 @@ from polyjit.buildbot.builders import superbuild
 from polyjit.buildbot.builders import vara
 from polyjit.buildbot.builders import vara_master_dev
 from polyjit.buildbot.builders import vara_master_opt
+from polyjit.buildbot.builders import vara_feature_dev
+from polyjit.buildbot.builders import vara_feature_opt
 from polyjit.buildbot.builders import varafeatures
