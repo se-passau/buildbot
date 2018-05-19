@@ -1,4 +1,4 @@
-__all__ = ["superbuild", "vara", "vara_master_dev", "vara_master_opt", "vara_feature_dev", "vara_feature_opt", "varafeatures"]
+__all__ = ["superbuild", "vara_master_dev", "vara_master_opt", "vara_feature_dev", "vara_feature_opt"]
 __ALL__ = []
 
 
