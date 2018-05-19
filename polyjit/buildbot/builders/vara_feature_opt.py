@@ -79,7 +79,7 @@ def trigger_branch_match(branch):
 
 @util.renderer
 @defer.inlineCallbacks
-def get_vara_results(props):
+def get_vara_feature_opt_results(props):
     all_logs = []
     master = props.master
     buildsteps = yield props.master.data.get(('builders', props.getProperty('buildername'),
