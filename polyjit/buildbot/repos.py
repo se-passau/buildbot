@@ -52,19 +52,19 @@ codebases = {
     },
     'vara': {
         'repository': 'https://github.com/se-passau/VaRA',
-        'repository_clone_url': 'git@github.com:vulder/VaRA',
+        'repository_clone_url': 'git@github.com:se-passau/VaRA',
         'branches': ['vara-dev'],
         'revision': None
     },
     'vara-llvm': {
         'repository': 'https://github.com/se-passau/vara-llvm',
-        'repository_clone_url': 'git@github.com:vulder/vara-llvm',
+        'repository_clone_url': 'git@github.com:se-passau/vara-llvm',
         'branches': ['vara-60-dev'],
         'revision': None
     },
     'vara-clang': {
         'repository': 'https://github.com/se-passau/vara-clang',
-        'repository_clone_url': 'git@github.com:vulder/vara-clang',
+        'repository_clone_url': 'git@github.com:se-passau/vara-clang',
         'branches': ['vara-60-dev'],
         'revision': None
     },
