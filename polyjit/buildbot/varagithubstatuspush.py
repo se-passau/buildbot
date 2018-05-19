@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-from buildbot.reporters.github import GitHubCommentPush
 from buildbot.reporters.github import GitHubStatusPush
 
 import re
@@ -122,7 +121,6 @@ class VaraGitHubStatusPush(GitHubStatusPush):
 
 
 class VaraGitHubPullRequestCommentPush(VaraGitHubStatusPush):
-    name = "GitHubCommentPush"
     neededDetails = dict(wantProperties=True)
 
     def setDefaults(self, context, startDescription, endDescription):
