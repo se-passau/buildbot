@@ -27,7 +27,7 @@ CHECKOUT_BASE_DIR = '%(prop:builddir)s/vara-llvm'
 
 # Adapt these values according to build type:
 PROJECT_NAME = 'vara-feature-opt'
-TRIGGER_BRANCH_REGEX = "^(refs\/pull\/\d+\/merge)$"
+TRIGGER_BRANCH_REGEX = r"^(refs\/pull\/\d+\/merge)$"
 BUILD_SUBDIR = '/build/opt'
 BUILD_SCRIPT = 'build-opt.sh'
 BUILD_DIR = '%(prop:builddir)s/vara-llvm/build/opt'
@@ -92,6 +92,7 @@ def get_vara_results(props):
         'run Clang-Tidy': True,
         'run ClangFormat': True,
     }
+    all_logs.append('## opt build result')
     for step in buildsteps:
         if step['name'] in pr_comment_steps:
             logs = yield master.data.get(("steps", step['stepid'], 'logs'))

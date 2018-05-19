@@ -27,7 +27,7 @@ CHECKOUT_BASE_DIR = '%(prop:builddir)s/vara-llvm'
 
 # Adapt these values according to build type:
 PROJECT_NAME = 'vara-feature-dev'
-TRIGGER_BRANCH_REGEX = "^(f-\S+|refs\/pull\/\d+\/merge)$"
+TRIGGER_BRANCH_REGEX = r"^(f-\S+|refs\/pull\/\d+\/merge)$"
 BUILD_SUBDIR = '/build/dev'
 BUILD_SCRIPT = 'build-dev.sh'
 BUILD_DIR = '%(prop:builddir)s/vara-llvm/build/dev'
@@ -92,6 +92,7 @@ def get_vara_results(props):
         'run Clang-Tidy': True,
         'run ClangFormat': True,
     }
+    all_logs.append('## dev build result')
     for step in buildsteps:
         if step['name'] in pr_comment_steps:
             logs = yield master.data.get(("steps", step['stepid'], 'logs'))
