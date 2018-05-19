@@ -39,7 +39,7 @@ codebases = {
         'revision': None
     },
     'compiler-rt': {
-        'repository': 'http://llvm.org/git/compiler-rt.git',
+        'repository': 'https://llvm.org/git/compiler-rt.git',
         'branches': ['master', 'release_60'],
         'branch': 'master',
         'revision': None
