@@ -2,19 +2,19 @@ from buildbot.plugins import *
 from buildbot.plugins import util
 
 codebases = {
-    'benchbuild': {
+    'pjit-benchbuild': {
         'repository': 'https://github.com/PolyJIT/benchbuild',
         'branches': ['master'],
         'branch': 'master',
         'revision': None
     },
-    'polli': {
+    'pjit-polli': {
         'repository': 'https://github.com/PolyJIT/polli',
         'branches': ['master'],
         'branch': 'master',
         'revision': None
     },
-    'polli-sb': {
+    'pjit-polli-sb': {
         'repository': 'https://github.com/PolyJIT/PolyJIT',
         'branches': ['master'],
         'branch': 'master',

@@ -1,10 +1,11 @@
+from collections import OrderedDict
 import sys
 
 from polyjit.buildbot.builders import register
 from polyjit.buildbot import slaves
 from polyjit.buildbot.utils import (builder, git, cmd, rmdir, pylint,
                                     s_sbranch, s_force, s_trigger, s_nightly)
-from polyjit.buildbot.repos import make_cb, make_new_cb, codebases
+from polyjit.buildbot.repos import make_cb, make_force_cb
 
 from buildbot.plugins import util
 from buildbot.changes import filter
@@ -16,8 +17,16 @@ ip_scratch = "%(prop:scratch:~/scratch/pjtest)s"
 ip_dirname = "%(prop:dirname:~empty)s"
 ip_str = ip_scratch + "/" + ip_dirname
 
-cb_benchbuild = make_cb(['benchbuild'])
-force_codebase = make_new_cb(['benchbuild'])
+REPOS = OrderedDict()
+REPOS['pjit-benchbuild'] = {
+    'repository': 'https://github.com/PolyJIT/benchbuild',
+    'default_branch': 'master',
+    'branch': 'master',
+    'revision': None
+}
+
+cb_benchbuild = make_cb(REPOS)
+force_codebase = make_force_cb(REPOS)
 accepted_builders = slaves.get_hostlist(slaves.infosun)
 
 
@@ -27,7 +36,7 @@ def configure(c):
         builder("build-benchbuild", None, accepted_builders,
                 tags=['polyjit'],
                 factory=BuildFactory([
-                    git('benchbuild', 'master', codebases),
+                    git('pjit-benchbuild', 'master', REPOS),
                     cmd("virtualenv", "-p", "python3", "_venv",
                         name="create virtualenv",
                         description="setup benchbuild virtual environment"),
