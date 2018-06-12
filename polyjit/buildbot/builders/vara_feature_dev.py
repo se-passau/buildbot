@@ -207,6 +207,11 @@ class GenerateGitCloneCommand(buildstep.ShellMixin, steps.BuildStep):
                                              command=['mkdir', '-p', 'build'],
                                              workdir=ip(CHECKOUT_BASE_DIR), hideStepIf=True))
 
+        buildsteps.append(steps.ShellCommand(name='Init git submodules',
+                                             command=['git', 'submodule', 'update', '--init'],
+                                             workdir=ip(CHECKOUT_BASE_DIR + '/tools/VaRA'),
+                                             hideStepIf=True))
+
         self.build.addStepsAfterCurrentStep(buildsteps)
 
         defer.returnValue(command.results())
