@@ -114,7 +114,7 @@ def get_vara_feature_opt_results(props):
                         for i, sl in enumerate(step_logs):
                             all_logs.append(sl[1:])
                         all_logs.append('```\n')
-                        all_logs.append('</details>')
+                        all_logs.append('</details>\n')
 
     defer.returnValue('\n'.join(all_logs))
 
