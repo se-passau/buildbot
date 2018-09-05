@@ -106,13 +106,15 @@ def get_vara_feature_dev_results(props):
                         step['name'], util.Results[step['results']]))
                     # full cmd output
                     if pr_comment_steps[step['name']]:
+                        all_logs.append('<details><summary>Click to show details</summary>\n')
                         all_logs.append('```')
                         log['stepname'] = step['name']
                         log['content'] = yield master.data.get(("logs", log['logid'], 'contents'))
                         step_logs = log['content']['content'].split('\n')
                         for i, sl in enumerate(step_logs):
                             all_logs.append(sl[1:])
-                        all_logs.append('```')
+                        all_logs.append('```\n')
+                        all_logs.append('</details>')
 
     defer.returnValue('\n'.join(all_logs))
 
