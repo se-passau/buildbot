@@ -102,7 +102,7 @@ def get_vara_feature_opt_results(props):
                     all_logs.append('* :heavy_check_mark: Step : {0} Result : {1}'.format(
                         step['name'], util.Results[step['results']]))
                 else:
-                    all_logs.append('### :boom: Step : {0} Result : {1}'.format(
+                    all_logs.append('* :boom: Step : {0} Result : {1}'.format(
                         step['name'], util.Results[step['results']]))
                     # full cmd output
                     if pr_comment_steps[step['name']]:
