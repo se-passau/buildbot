@@ -112,7 +112,7 @@ def get_vara_feature_dev_results(props):
                         log['content'] = yield master.data.get(("logs", log['logid'], 'contents'))
                         step_logs = log['content']['content'].split('\n')
                         for i, sl in enumerate(step_logs):
-                            all_logs.append(sl[1:])
+                            all_logs.append(sl)
                         all_logs.append('```\n')
                         all_logs.append('</details>\n')
 
