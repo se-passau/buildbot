@@ -92,14 +92,14 @@ def get_vara_feature_dev_results(props):
         'run Clang-Tidy': True,
         'run ClangFormat': True,
     }
-    all_logs.append('## dev build result')
+    all_logs.append('### dev build result')
     for step in buildsteps:
         if step['name'] in pr_comment_steps:
             logs = yield master.data.get(("steps", step['stepid'], 'logs'))
             if logs is not None:
                 log = logs[-1]
                 if util.Results[step['results']] == 'success':
-                    all_logs.append('### :heavy_check_mark: Step : {0} Result : {1}'.format(
+                    all_logs.append('* :heavy_check_mark: Step : {0} Result : {1}'.format(
                         step['name'], util.Results[step['results']]))
                 else:
                     all_logs.append('### :boom: Step : {0} Result : {1}'.format(
