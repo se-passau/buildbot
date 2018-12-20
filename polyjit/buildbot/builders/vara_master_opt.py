@@ -19,7 +19,7 @@ from buildbot.interfaces import IRenderable
 # Notes:
 #
 # Get the values for 'upstream_merge_base' with the following command:
-#   - git merge-base origin/vara-60-dev upstream/release_60
+#   - git merge-base origin/vara-70-dev upstream/release_70
 ################################################################################
 
 UCHROOT_SRC_ROOT = '/mnt/vara-llvm'
@@ -27,7 +27,7 @@ CHECKOUT_BASE_DIR = '%(prop:builddir)s/vara-llvm'
 
 # Adapt these values according to build type:
 PROJECT_NAME = 'vara-master-opt'
-TRIGGER_BRANCHES = 'vara-dev|vara-60-dev'
+TRIGGER_BRANCHES = 'vara-dev|vara-70-dev'
 BUILD_SUBDIR = '/build/opt'
 BUILD_SCRIPT = 'build-opt.sh'
 BUILD_DIR = '%(prop:builddir)s/vara-llvm/build/opt'
@@ -37,18 +37,18 @@ UCHROOT_BUILD_DIR = UCHROOT_SRC_ROOT + BUILD_SUBDIR
 # Also adapt these values:
 REPOS = OrderedDict()
 REPOS['vara-llvm'] = {
-    'default_branch': 'vara-60-dev',
+    'default_branch': 'vara-70-dev',
     'checkout_dir': CHECKOUT_BASE_DIR,
     'checkout_subdir': '',
     'upstream_remote_url': 'https://git.llvm.org/git/llvm.git/',
-    'upstream_merge_base': '089d4c0c490687db6c75f1d074e99c4d42936a50',
+    'upstream_merge_base': '7d87789bb6f9c5246c8dd8daf93fcaef6471abaf',
 }
 REPOS['vara-clang'] = {
-    'default_branch': 'vara-60-dev',
+    'default_branch': 'vara-70-dev',
     'checkout_dir': CHECKOUT_BASE_DIR + '/tools/clang',
     'checkout_subdir': '/tools/clang',
     'upstream_remote_url': 'https://git.llvm.org/git/clang.git/',
-    'upstream_merge_base': 'ff0c0d8ab3e316bb6e2741fedb3b545e198eab7a',
+    'upstream_merge_base': '65f84326edb6105fb0263f0b023719b491f8cf1a',
 }
 REPOS['vara'] = {
     'default_branch': 'vara-dev',
@@ -56,11 +56,11 @@ REPOS['vara'] = {
     'checkout_subdir': '/tools/VaRA',
 }
 REPOS['compiler-rt'] = {
-    'default_branch': 'release_60',
+    'default_branch': 'release_70',
     'checkout_dir': CHECKOUT_BASE_DIR + '/projects/compiler-rt',
 }
 REPOS['clang-tools-extra'] = {
-    'default_branch': 'release_60',
+    'default_branch': 'release_70',
     'checkout_dir': CHECKOUT_BASE_DIR + '/tools/clang/tools/extra',
 }
 
