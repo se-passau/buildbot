@@ -41,14 +41,14 @@ REPOS['vara-llvm'] = {
     'checkout_dir': CHECKOUT_BASE_DIR,
     'checkout_subdir': '',
     'upstream_remote_url': 'https://git.llvm.org/git/llvm.git/',
-    'upstream_merge_base': '7d87789bb6f9c5246c8dd8daf93fcaef6471abaf',
+    'upstream_merge_base': 'cd98f42d0747826062fc3d2d2fad383aedf58dd6',
 }
 REPOS['vara-clang'] = {
     'default_branch': 'vara-70-dev',
     'checkout_dir': CHECKOUT_BASE_DIR + '/tools/clang',
     'checkout_subdir': '/tools/clang',
     'upstream_remote_url': 'https://git.llvm.org/git/clang.git/',
-    'upstream_merge_base': '65f84326edb6105fb0263f0b023719b491f8cf1a',
+    'upstream_merge_base': '4519e2637fcc4bf6e3049a0a80e6a5e7b97667cb',
 }
 REPOS['vara'] = {
     'default_branch': 'vara-dev',
