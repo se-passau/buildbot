@@ -40,13 +40,13 @@ codebases = {
     },
     'compiler-rt': {
         'repository': 'https://llvm.org/git/compiler-rt.git',
-        'branches': ['master', 'release_60', 'release_70'],
+        'branches': ['master', 'release_70', 'release_80'],
         'branch': 'master',
         'revision': None
     },
     'clang-tools-extra': {
         'repository': 'https://git.llvm.org/git/clang-tools-extra.git/',
-        'branches': ['master', 'release_60', 'release_70'],
+        'branches': ['master', 'release_70', 'release_80'],
         'branch': 'master',
         'revision': None
     },
@@ -59,13 +59,13 @@ codebases = {
     'vara-llvm': {
         'repository': 'https://github.com/se-passau/vara-llvm',
         'repository_clone_url': 'git@github.com:se-passau/vara-llvm',
-        'branches': ['vara-60-dev', 'vara-70-dev'],
+        'branches': ['vara-70-dev', 'vara-80-dev'],
         'revision': None
     },
     'vara-clang': {
         'repository': 'https://github.com/se-passau/vara-clang',
         'repository_clone_url': 'git@github.com:se-passau/vara-clang',
-        'branches': ['vara-60-dev', 'vara-70-dev'],
+        'branches': ['vara-70-dev', 'vara-80-dev'],
         'revision': None
     },
 }
