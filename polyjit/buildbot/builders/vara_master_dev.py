@@ -204,6 +204,38 @@ class GenerateBuildStepCommand(buildstep.ShellMixin, steps.BuildStep):
             defer.returnValue(command.results())
 
 
+class GenerateClangFormatStepCommand(buildstep.ShellMixin, steps.BuildStep):
+
+    def __init__(self, **kwargs):
+        kwargs = self.setupShellMixin(kwargs)
+        steps.BuildStep.__init__(self, **kwargs)
+        self.observer = logobserver.BufferLogObserver()
+        self.addLogObserver('stdio', self.observer)
+
+    @defer.inlineCallbacks
+    def run(self):
+        command = yield self.makeRemoteShellCommand()
+        yield self.runCommand(command)
+
+        result = command.results()
+        if result == util.SUCCESS:
+            clang_format_version = self.observer.getStdout().strip().split(' ')[2]
+            step_name = 'run ClangFormat (version ' + clang_format_version + ')'
+
+            buildsteps = []
+            for step in get_uchroot_workaround_steps():
+                buildsteps.append(step)
+            buildsteps.append(ucompile('bash', 'bb-clang-format.sh', '--all', '--line-numbers',
+                                       '--cf-binary', '/opt/clang-format-static/clang-format',
+                                       workdir='vara-llvm/tools/VaRA/utils/buildbot',
+                                       name=step_name,
+                                       haltOnFailure=False, warnOnWarnings=True))
+
+            self.build.addStepsAfterCurrentStep(buildsteps)
+
+            defer.returnValue(command.results())
+
+
 class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
 
     def __init__(self, **kwargs):
@@ -327,17 +359,16 @@ def configure(c):
                        env={'PATH': [UCHROOT_BUILD_DIR + "/bin", "${PATH}"]}, timeout=3600))
 
     # ClangFormat
-    for step in get_uchroot_workaround_steps():
-        f.addStep(step)
-    f.addStep(ucompile('bash', 'bb-clang-format.sh', '--all', '--line-numbers',
-                       workdir='vara-llvm/tools/VaRA/utils/buildbot',
-                       name='run ClangFormat', haltOnFailure=False, warnOnWarnings=True,
-                       env={'PATH': [UCHROOT_BUILD_DIR + "/bin", "${PATH}"]}))
+    f.addStep(GenerateClangFormatStepCommand(name="Dummy_4",
+                                             command=['opt/clang-format-static/clang-format',
+                                                      '-version'],
+                                             workdir=ip('%(prop:uchroot_image_path)s'),
+                                             haltOnFailure=True, hideStepIf=True))
 
     # Mergecheck
     for repo in ['vara-llvm', 'vara-clang', 'vara']:
         f.addStep(define('mergecheck_repo', repo))
-        f.addStep(GenerateMergecheckCommand(name="Dummy_4", command=['git', 'symbolic-ref', 'HEAD'],
+        f.addStep(GenerateMergecheckCommand(name="Dummy_5", command=['git', 'symbolic-ref', 'HEAD'],
                                             workdir=ip(REPOS[repo]['checkout_dir']),
                                             haltOnFailure=True, hideStepIf=True))
 
