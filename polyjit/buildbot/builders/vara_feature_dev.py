@@ -428,7 +428,8 @@ def configure(c):
 
     # Prepare project file list to filter out compiler warnings
     f.addStep(cmd("../../tools/VaRA/utils/vara/getVaraSourceFiles.sh",
-                  "--all", "--include-existing",
+                  "--vara", "--clang", "--llvm",
+                  "--include-existing",
                   "--relative-to", ip(BUILD_DIR),
                   "--output", "buildbot-source-file-list.txt",
                   workdir=ip(BUILD_DIR), hideStepIf=True))

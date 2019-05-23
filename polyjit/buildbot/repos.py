@@ -50,6 +50,12 @@ codebases = {
         'branch': 'master',
         'revision': None
     },
+    'phasar': {
+        'repository': 'https://github.com/secure-software-engineering/phasar.git',
+        'branches': ['master', 'development'],
+        'branch': 'master',
+        'revision': None
+    },
     'vara': {
         'repository': 'https://github.com/se-passau/VaRA',
         'repository_clone_url': 'git@github.com:se-passau/VaRA',
@@ -59,13 +65,13 @@ codebases = {
     'vara-llvm': {
         'repository': 'https://github.com/se-passau/vara-llvm',
         'repository_clone_url': 'git@github.com:se-passau/vara-llvm',
-        'branches': ['vara-70-dev', 'vara-80-dev'],
+        'branches': ['vara-80-dev'],
         'revision': None
     },
     'vara-clang': {
         'repository': 'https://github.com/se-passau/vara-clang',
         'repository_clone_url': 'git@github.com:se-passau/vara-clang',
-        'branches': ['vara-70-dev', 'vara-80-dev'],
+        'branches': ['vara-80-dev'],
         'revision': None
     },
 }
