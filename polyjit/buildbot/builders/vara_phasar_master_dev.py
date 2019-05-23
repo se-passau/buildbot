@@ -377,8 +377,8 @@ def configure(c):
     #                                        workdir=ip(REPOS[repo]['checkout_dir']),
     #                                        haltOnFailure=True, hideStepIf=True))
 
-    #c['builders'].append(builder(PROJECT_NAME, None, ACCEPTED_BUILDERS, tags=['vara'],
-    #                             factory=f))
+    c['builders'].append(builder(PROJECT_NAME, None, ACCEPTED_BUILDERS, tags=['vara'],
+                                 factory=f))
 
 def schedule(c):
     force_sched = s_force(
