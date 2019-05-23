@@ -85,16 +85,16 @@ def get_vara_feature_opt_results(props):
     buildsteps = yield props.master.data.get(('builders', props.getProperty('buildername'),
                                               'builds', props.getProperty('buildnumber'), 'steps'))
     pr_comment_steps = {
-        # 'step_name': True, if detailled cmd output is required (in case of failure)
-        'cmake': True,
-        'build VaRA': True,
-        'run VaRA regression tests': True,
-        'run Clang-Tidy': True,
-        'run ClangFormat': True,
+        r'^cmake$': {'full_report': True},
+        r'^build VaRA$': {'full_report': True},
+        r'^run VaRA regression tests$': {'full_report': True},
+        r'^run Clang-Tidy$': {'full_report': True},
+        r'^run ClangFormat(?: \(version \S+\))?$': {'full_report': True},
     }
     all_logs.append('### opt build result')
     for step in buildsteps:
-        if step['name'] in pr_comment_steps:
+        step_options = next((v for k, v in pr_comment_steps.items() if re.match(k, step['name'])), None)
+        if step_options is not None:
             logs = yield master.data.get(("steps", step['stepid'], 'logs'))
             if logs is not None:
                 log = logs[-1]
@@ -104,8 +104,7 @@ def get_vara_feature_opt_results(props):
                 else:
                     all_logs.append(':boom: Step : {0} Result : {1}'.format(
                         step['name'], util.Results[step['results']]))
-                    # full cmd output
-                    if pr_comment_steps[step['name']]:
+                    if step_options['full_report']:
                         all_logs.append('<details><summary>Click to show details</summary>\n')
                         all_logs.append('```')
                         log['stepname'] = step['name']
