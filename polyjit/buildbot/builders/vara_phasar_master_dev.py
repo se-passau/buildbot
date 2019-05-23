@@ -28,11 +28,11 @@ CHECKOUT_BASE_DIR = '%(prop:builddir)s/vara-llvm'
 # Adapt these values according to build type:
 PROJECT_NAME = 'vara-phasar-master-dev'
 TRIGGER_BRANCHES = 'vara-dev|vara-80-dev|development'
-BUILD_SUBDIR = '/build/dev'
+BUILD_SUBDIR = 'dev'
 BUILD_SCRIPT = 'build-dev.sh'
 BUILD_DIR = '%(prop:builddir)s/vara-llvm/build/dev'
 
-UCHROOT_BUILD_DIR = UCHROOT_SRC_ROOT + BUILD_SUBDIR
+UCHROOT_BUILD_DIR = UCHROOT_SRC_ROOT + '/build/' + BUILD_SUBDIR
 
 # Also adapt these values:
 REPOS = OrderedDict()
@@ -313,6 +313,7 @@ def configure(c):
     for step in get_uchroot_workaround_steps():
         f.addStep(step)
     f.addStep(ucompile('../tools/VaRA/utils/vara/builds/' + BUILD_SCRIPT,
+                       BUILD_SUBDIR, '-DCLANG_ANALYZER_ENABLE_Z3_SOLVER=OFF',
                        env={'PATH': '/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin'},
                        name='cmake',
                        description=BUILD_SCRIPT,
