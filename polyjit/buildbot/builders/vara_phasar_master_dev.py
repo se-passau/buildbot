@@ -315,6 +315,7 @@ def configure(c):
     f.addStep(ucompile('../tools/VaRA/utils/vara/builds/' + BUILD_SCRIPT,
                        BUILD_SUBDIR, '-DCLANG_ANALYZER_ENABLE_Z3_SOLVER=OFF',
                        '-DLLVM_ENABLE_RTTI=ON', '-DLLVM_ENABLE_PIC=ON',
+                       '-DLLVM_ENABLE_EH=ON',
                        env={'PATH': '/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin'},
                        name='cmake',
                        description=BUILD_SCRIPT,
