@@ -59,13 +59,13 @@ codebases = {
     'vara': {
         'repository': 'https://github.com/se-passau/VaRA',
         'repository_clone_url': 'git@github.com:se-passau/VaRA',
-        'branches': ['vara-dev'],
+        'branches': ['vara-dev', 'f-AllowPhasarUsage'],
         'revision': None
     },
     'vara-llvm': {
         'repository': 'https://github.com/se-passau/vara-llvm',
         'repository_clone_url': 'git@github.com:se-passau/vara-llvm',
-        'branches': ['vara-80-dev'],
+        'branches': ['vara-80-dev', 'f-AllowPhasarUsage'],
         'revision': None
     },
     'vara-clang': {
