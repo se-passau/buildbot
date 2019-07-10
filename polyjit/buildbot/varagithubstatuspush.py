@@ -19,7 +19,6 @@ from buildbot.process.results import SUCCESS
 from buildbot.process.results import WARNINGS
 from buildbot.reporters import http
 from buildbot.util import httpclientservice
-from buildbot.util import unicode2NativeString
 from buildbot.util.giturlparse import giturlparse
 
 HOSTED_BASE_URL = 'https://api.github.com'
@@ -87,20 +86,12 @@ class VaraGitHubStatusPush(GitHubStatusPush):
                 repoOwner=repoOwner, repoName=repoName))
 
         try:
-            repo_user = unicode2NativeString(repoOwner)
-            repo_name = unicode2NativeString(repoName)
-            sha = unicode2NativeString(sha)
-            state = unicode2NativeString(state)
-            target_url = unicode2NativeString(build['url'])
-            context = unicode2NativeString(context)
-            issue = unicode2NativeString(issue)
-            description = unicode2NativeString(description)
             yield self.createStatus(
-                repo_user=repo_user,
-                repo_name=repo_name,
+                repo_user=repoOwner,
+                repo_name=repoName,
                 sha=sha,
                 state=state,
-                target_url=target_url,
+                target_url=build['url'],
                 context=context,
                 issue=issue,
                 description=description
