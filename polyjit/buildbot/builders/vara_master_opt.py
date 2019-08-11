@@ -357,7 +357,7 @@ def configure(c):
     f.addStep(ucompile('python3', 'tidy-vara.py', '-p', UCHROOT_BUILD_DIR, '-j', '8', '--gcc',
                        workdir='vara-llvm/tools/VaRA/test/', name='run Clang-Tidy',
                        haltOnFailure=False, warnOnWarnings=True,
-                       env={'PATH': [UCHROOT_BUILD_DIR + "/bin", "${PATH}"]}, timeout=3600))
+                       timeout=3600))
 
     # ClangFormat
     f.addStep(GenerateClangFormatStepCommand(name="Dummy_4",
