@@ -27,7 +27,7 @@ CHECKOUT_BASE_DIR = '%(prop:builddir)s/vara-llvm'
 
 # Adapt these values according to build type:
 PROJECT_NAME = 'vara-feature-opt'
-TRIGGER_BRANCH_REGEX = r"^(refs\/pull\/\d+\/merge)$"
+TRIGGER_BRANCH_REGEX = r"^(f-\S+|refs\/pull\/\d+\/merge)$"
 BUILD_SUBDIR = '/build/opt'
 BUILD_SCRIPT = 'build-opt.sh'
 BUILD_DIR = '%(prop:builddir)s/vara-llvm/build/opt'
