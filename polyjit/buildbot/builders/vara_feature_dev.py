@@ -292,8 +292,7 @@ class GenerateBuildStepCommand(buildstep.ShellMixin, steps.BuildStep):
             buildsteps = []
             for step in get_uchroot_workaround_steps():
                 buildsteps.append(step)
-            buildsteps.append(ucompile('ninja', '-d', 'explain',
-                                       haltOnFailure=True, warnOnWarnings=True,
+            buildsteps.append(ucompile('ninja', haltOnFailure=True, warnOnWarnings=True,
                                        name='build VaRA',
                                        warningPattern=pattern,
                                        workdir=UCHROOT_BUILD_DIR))
