@@ -396,10 +396,10 @@ def configure(c):
     f.addStep(define('UCHROOT_SRC_ROOT', UCHROOT_SRC_ROOT))
     f.addStep(define('UCHROOT_BUILD_DIR', UCHROOT_BUILD_DIR))
 
-    #f.addStep(GenerateGitCheckoutCommand(
-    #    name="Get branch names",
-    #    command=['./tools/VaRA/utils/buildbot/bb-get-branches.sh'], workdir=ip(CHECKOUT_BASE_DIR),
-    #    haltOnFailure=True, hideStepIf=True))
+    f.addStep(GenerateGitCheckoutCommand(
+        name="Get branch names",
+        command=['./tools/VaRA/utils/buildbot/bb-get-branches.sh'], workdir=ip(CHECKOUT_BASE_DIR),
+        haltOnFailure=True, hideStepIf=True))
 
     # CMake
     for step in get_uchroot_workaround_steps():
@@ -413,18 +413,18 @@ def configure(c):
     f.addStep(GenerateMakeCleanCommand(name="Dummy_2", command=['true'],
                                        haltOnFailure=True, hideStepIf=True))
 
-    ## use mergecheck tool to make sure the 'upstream' remote is present
-    #for repo in ['vara-llvm', 'vara-clang']:
-    #    f.addStep(steps.Compile(
-    #        command=['/scratch/pjtest/mergecheck/build/bin/mergecheck', 'rebase',
-    #                 '--repo', '.' + REPOS[repo]['checkout_subdir'],
-    #                 '--remote-url', REPOS[repo]['upstream_remote_url'],
-    #                 '--remote-name', 'upstream',
-    #                 '--upstream', 'refs/remotes/upstream/master',
-    #                 '--branch', 'refs/remotes/upstream/master',
-    #                 '-v'],
-    #        workdir=ip(CHECKOUT_BASE_DIR),
-    #        name='Add upstream remote to repository.', hideStepIf=True))
+    # use mergecheck tool to make sure the 'upstream' remote is present
+    for repo in ['vara-llvm', 'vara-clang']:
+        f.addStep(steps.Compile(
+            command=['/scratch/pjtest/mergecheck/build/bin/mergecheck', 'rebase',
+                     '--repo', '.' + REPOS[repo]['checkout_subdir'],
+                     '--remote-url', REPOS[repo]['upstream_remote_url'],
+                     '--remote-name', 'upstream',
+                     '--upstream', 'refs/remotes/upstream/master',
+                     '--branch', 'refs/remotes/upstream/master',
+                     '-v'],
+            workdir=ip(CHECKOUT_BASE_DIR),
+            name='Add upstream remote to repository.', hideStepIf=True))
 
     # Prepare project file list to filter out compiler warnings
     f.addStep(cmd("../../tools/VaRA/utils/vara/getVaraSourceFiles.sh",
@@ -462,12 +462,12 @@ def configure(c):
                                              workdir=ip('%(prop:uchroot_image_path)s'),
                                              haltOnFailure=True, hideStepIf=True))
 
-    ## Mergecheck
-    #for repo in ['vara-llvm', 'vara-clang', 'vara']:
-    #    f.addStep(define('mergecheck_repo', repo))
-    #    f.addStep(GenerateMergecheckCommand(name="Dummy_5", command=['git', 'symbolic-ref', 'HEAD'],
-    #                                        workdir=ip(REPOS[repo]['checkout_dir']),
-    #                                        haltOnFailure=True, hideStepIf=True))
+    # Mergecheck
+    for repo in ['vara-llvm', 'vara-clang', 'vara']:
+        f.addStep(define('mergecheck_repo', repo))
+        f.addStep(GenerateMergecheckCommand(name="Dummy_5", command=['git', 'symbolic-ref', 'HEAD'],
+                                            workdir=ip(REPOS[repo]['checkout_dir']),
+                                            haltOnFailure=True, hideStepIf=True))
 
     c['builders'].append(builder(PROJECT_NAME, None, ACCEPTED_BUILDERS, tags=['vara'],
                                  factory=f))
