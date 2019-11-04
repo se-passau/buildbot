@@ -461,13 +461,6 @@ def configure(c):
                                              workdir=ip('%(prop:uchroot_image_path)s'),
                                              haltOnFailure=True, hideStepIf=True))
 
-    # Mergecheck
-    for repo in ['vara-llvm', 'vara-clang', 'vara']:
-        f.addStep(define('mergecheck_repo', repo))
-        f.addStep(GenerateMergecheckCommand(name="Dummy_5", command=['git', 'symbolic-ref', 'HEAD'],
-                                            workdir=ip(REPOS[repo]['checkout_dir']),
-                                            haltOnFailure=True, hideStepIf=True))
-
     c['builders'].append(builder(PROJECT_NAME, None, ACCEPTED_BUILDERS, tags=['vara'],
                                  factory=f))
 
