@@ -19,7 +19,7 @@ from buildbot.interfaces import IRenderable
 # Notes:
 #
 # Get the values for 'upstream_merge_base' with the following command:
-#   - git merge-base origin/vara-80-dev upstream/release_80
+#   - git merge-base origin/vara-80-dev upstream/release_90
 ################################################################################
 
 UCHROOT_SRC_ROOT = '/mnt/vara-llvm'
@@ -60,11 +60,11 @@ REPOS['phasar'] = {
     'checkout_dir': CHECKOUT_BASE_DIR + '/tools/phasar',
 }
 REPOS['compiler-rt'] = {
-    'default_branch': 'release_80',
+    'default_branch': 'release_90',
     'checkout_dir': CHECKOUT_BASE_DIR + '/projects/compiler-rt',
 }
 REPOS['clang-tools-extra'] = {
-    'default_branch': 'release_80',
+    'default_branch': 'release_90',
     'checkout_dir': CHECKOUT_BASE_DIR + '/tools/clang/tools/extra',
 }
 

@@ -40,13 +40,13 @@ codebases = {
     },
     'compiler-rt': {
         'repository': 'https://llvm.org/git/compiler-rt.git',
-        'branches': ['master', 'release_70', 'release_80'],
+        'branches': ['master', 'release_70', 'release_80', 'release_90'],
         'branch': 'master',
         'revision': None
     },
     'clang-tools-extra': {
         'repository': 'https://git.llvm.org/git/clang-tools-extra.git/',
-        'branches': ['master', 'release_70', 'release_80'],
+        'branches': ['master', 'release_70', 'release_80', 'release_90'],
         'branch': 'master',
         'revision': None
     },
