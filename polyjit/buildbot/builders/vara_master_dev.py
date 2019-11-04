@@ -19,7 +19,7 @@ from buildbot.interfaces import IRenderable
 # Notes:
 #
 # Get the values for 'upstream_merge_base' with the following command:
-#   - git merge-base origin/vara-80-dev upstream/release_90
+#   - git merge-base origin/vara-90-dev upstream/release_90
 ################################################################################
 
 UCHROOT_SRC_ROOT = '/mnt/vara-llvm'
@@ -27,7 +27,7 @@ CHECKOUT_BASE_DIR = '%(prop:builddir)s/vara-llvm'
 
 # Adapt these values according to build type:
 PROJECT_NAME = 'vara-master-dev'
-TRIGGER_BRANCHES = 'vara-dev|vara-80-dev'
+TRIGGER_BRANCHES = 'vara-dev|vara-90-dev'
 BUILD_SUBDIR = '/build/dev'
 BUILD_SCRIPT = 'build-dev.sh'
 BUILD_DIR = '%(prop:builddir)s/vara-llvm/build/dev'
@@ -37,14 +37,14 @@ UCHROOT_BUILD_DIR = UCHROOT_SRC_ROOT + BUILD_SUBDIR
 # Also adapt these values:
 REPOS = OrderedDict()
 REPOS['vara-llvm'] = {
-    'default_branch': 'vara-80-dev',
+    'default_branch': 'vara-90-dev',
     'checkout_dir': CHECKOUT_BASE_DIR,
     'checkout_subdir': '',
     'upstream_remote_url': 'https://git.llvm.org/git/llvm.git/',
     'upstream_merge_base': '18e41dc964f916504ec90dba523826ac74d235c4',
 }
 REPOS['vara-clang'] = {
-    'default_branch': 'vara-80-dev',
+    'default_branch': 'vara-90-dev',
     'checkout_dir': CHECKOUT_BASE_DIR + '/tools/clang',
     'checkout_subdir': '/tools/clang',
     'upstream_remote_url': 'https://git.llvm.org/git/clang.git/',
