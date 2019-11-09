@@ -268,7 +268,7 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
 
             self.build.addStepsAfterCurrentStep([
                 steps.Compile(
-                    command=['/scratch/pjtest/mergecheck/build/bin/mergecheck', 'rebase',
+                    command=['/local/hdd/buildbot/mergecheck/build/bin/mergecheck', 'rebase',
                              '--repo', '.' + repo_subdir,
                              '--remote-url', upstream_remote_url,
                              '--remote-name', 'upstream',
@@ -320,7 +320,7 @@ def configure(c):
     # use mergecheck tool to make sure the 'upstream' remote is present
     for repo in ['vara-llvm', 'vara-clang']:
         f.addStep(steps.Compile(
-            command=['/scratch/pjtest/mergecheck/build/bin/mergecheck', 'rebase',
+            command=['/local/hdd/buildbot/mergecheck/build/bin/mergecheck', 'rebase',
                      '--repo', '.' + REPOS[repo]['checkout_subdir'],
                      '--remote-url', REPOS[repo]['upstream_remote_url'],
                      '--remote-name', 'upstream',
