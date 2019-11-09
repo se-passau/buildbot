@@ -12,7 +12,7 @@ infosun = {
         }
     },
     "bayreuther02": {
-        "host": "bayreuther01",
+        "host": "bayreuther02",
         "password": None,
         "properties": {
             "uchroot_image_path": "/local/hdd/buildbot/disco-image/",
