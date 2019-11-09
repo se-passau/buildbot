@@ -2,51 +2,15 @@ from buildbot.plugins import *
 from buildbot.plugins import util
 
 codebases = {
-    'pjit-benchbuild': {
-        'repository': 'https://github.com/PolyJIT/benchbuild',
-        'branches': ['master'],
-        'branch': 'master',
-        'revision': None
-    },
-    'pjit-polli': {
-        'repository': 'https://github.com/PolyJIT/polli',
-        'branches': ['master'],
-        'branch': 'master',
-        'revision': None
-    },
-    'pjit-polli-sb': {
-        'repository': 'https://github.com/PolyJIT/PolyJIT',
-        'branches': ['master'],
-        'branch': 'master',
-        'revision': None
-    },
-    'polly': {
-        'repository': 'https://github.com/PolyJIT/polly',
-        'branches': ['master'],
-        'branch': 'master',
-        'revision': None
-    },
-    'llvm': {
-        'repository': 'https://github.com/PolyJIT/llvm',
-        'branches': ['master'],
-        'branch': 'master',
-        'revision': None
-    },
-    'clang': {
-        'repository': 'https://github.com/PolyJIT/clang',
-        'branches': ['master'],
-        'branch': 'master',
-        'revision': None
-    },
     'compiler-rt': {
         'repository': 'https://llvm.org/git/compiler-rt.git',
-        'branches': ['master', 'release_70', 'release_80', 'release_90'],
+        'branches': ['master', 'release_90'],
         'branch': 'master',
         'revision': None
     },
     'clang-tools-extra': {
         'repository': 'https://git.llvm.org/git/clang-tools-extra.git/',
-        'branches': ['master', 'release_70', 'release_80', 'release_90'],
+        'branches': ['master', 'release_90'],
         'branch': 'master',
         'revision': None
     },
