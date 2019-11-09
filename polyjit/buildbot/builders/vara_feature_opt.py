@@ -71,7 +71,7 @@ FORCE_CODEBASE = make_force_cb(REPOS)
 
 P = util.Property
 
-ACCEPTED_BUILDERS = slaves.get_hostlist(slaves.infosun, predicate=lambda host: host["host"] in {'ligeti', 'debussy'})
+ACCEPTED_BUILDERS = slaves.get_hostlist(slaves.infosun, predicate=lambda host: host["host"] in {'bayreuther01', 'bayreuther02'})
 
 def trigger_branch_match(branch):
     pattern = re.compile(TRIGGER_BRANCH_REGEX)

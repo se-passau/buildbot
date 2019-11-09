@@ -75,7 +75,7 @@ FORCE_CODEBASE = make_force_cb(REPOS)
 
 P = util.Property
 
-ACCEPTED_BUILDERS = slaves.get_hostlist(slaves.infosun, predicate=lambda host: host["host"] in {'debussy'})
+ACCEPTED_BUILDERS = slaves.get_hostlist(slaves.infosun, predicate=lambda host: host["host"] in {'bayreuther01', 'bayreuther02'})
 
 class GenerateMakeCleanCommand(buildstep.ShellMixin, steps.BuildStep):
 
