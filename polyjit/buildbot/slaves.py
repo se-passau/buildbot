@@ -1,43 +1,22 @@
 from buildbot.plugins import worker
 
 infosun = {
-    "polyjit-ci": {
-        "host": "polyjit-ci",
+    "bayreuther01": {
+        "host": "bayreuther01",
         "password": None,
         "properties": {
-            "uchroot_image_path": "/data/polyjit/xenial-image/",
-            "uchroot_binary": "/data/polyjit/erlent/build/uchroot",
-            "can_build_llvm_debug": False
-        },
-    },
-    "debussy": {
-        "host": "debussy",
-        "password": None,
-        "properties": {
-            "llvm_prefix": "/scratch/pjtest/llvm-03-11-2017_5.0",
-            "llvm_libs": "/scratch/pjtest/llvm-03-11-2017_5.0/lib",
-            "cc": "/scratch/pjtest/llvm-03-11-2017_5.0/bin/clang",
-            "cxx": "/scratch/pjtest/llvm-03-11-2017_5.0/bin/clang++",
-            "uchroot_image_path": "/local/hdd/buildbot-polyjit/disco-image/",
-            "uchroot_binary": "/scratch/pjtest/erlent/build/uchroot",
-            "testinputs": "/scratch/pjtest/pprof-test-data",
-            "cmake_prefix": "/scratch/pjtest/opt/cmake",
+            "uchroot_image_path": "/local/hdd/buildbot/disco-image/",
+            "uchroot_binary": "/local/hdd/buildbot/erlent/build/uchroot",
             "has_munged": True,
             "can_build_llvm_debug": True
         }
     },
-    "ligeti": {
-        "host": "ligeti",
+    "bayreuther02": {
+        "host": "bayreuther01",
         "password": None,
         "properties": {
-            "llvm_prefix": "/scratch/pjtest/llvm-03-11-2017_5.0",
-            "llvm_libs": "/scratch/pjtest/llvm-03-11-2017_5.0/lib",
-            "cc": "/scratch/pjtest/llvm-03-11-2017_5.0/bin/clang",
-            "cxx": "/scratch/pjtest/llvm-03-11-2017_5.0/bin/clang++",
-            "uchroot_image_path": "/local/hdd/buildbot-polyjit/disco-image/",
-            "uchroot_binary": "/scratch/pjtest/erlent/build/uchroot",
-            "testinputs": "/scratch/pjtest/pprof-test-data",
-            "cmake_prefix": "/scratch/pjtest/opt/cmake",
+            "uchroot_image_path": "/local/hdd/buildbot/disco-image/",
+            "uchroot_binary": "/local/hdd/buildbot/erlent/build/uchroot",
             "has_munged": True,
             "can_build_llvm_debug": True
         }
