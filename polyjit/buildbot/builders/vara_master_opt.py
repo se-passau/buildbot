@@ -47,8 +47,8 @@ REPOS['vara-llvm-project'] = {
 REPOS['vara'] = {
     'default_branch': 'vara-dev',
     #'checkout_dir': CHECKOUT_BASE_DIR + '/tools/VaRA',
-    'checkout_dir': CHECKOUT_BASE_DIR + '/vara-llvm-project',
-    'checkout_subdir': '/vara-llvm-project',
+    'checkout_dir': CHECKOUT_BASE_DIR + '/VaRA',
+    'checkout_subdir': '/VaRA',
 }
 
 ################################################################################
