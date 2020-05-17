@@ -295,7 +295,7 @@ def configure(c):
     # CMake
     for step in get_uchroot_workaround_steps():
         f.addStep(step)
-    f.addStep(ucompile('../tools/VaRA/utils/vara/builds/' + BUILD_SCRIPT,
+    f.addStep(ucompile('../VaRA/utils/vara/builds/' + BUILD_SCRIPT,
                        env={'PATH': '/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin'},
                        name='cmake',
                        description=BUILD_SCRIPT,
