@@ -296,6 +296,7 @@ def configure(c):
     for step in get_uchroot_workaround_steps():
         f.addStep(step)
     f.addStep(ucompile('../vara/utils/vara/builds/' + BUILD_SCRIPT,
+                       '-DCMAKE_POSITION_INDEPENDENT_CODE=TRUE',
                        env={'PATH': '/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin'},
                        name='cmake',
                        description=BUILD_SCRIPT,
