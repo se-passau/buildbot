@@ -149,7 +149,7 @@ class GenerateGitCloneCommand(buildstep.ShellMixin, steps.BuildStep):
 
         buildsteps.append(steps.ShellCommand(name='Create build directory',
                                              command=['mkdir', '-p', 'build'],
-                                             workdir=ip(CHECKOUT_BASE_DIR), hideStepIf=True))
+                                             workdir=ip(CHECKOUT_BASE_DIR), hideStepIf=False))
 
         self.build.addStepsAfterCurrentStep(buildsteps)
 
@@ -273,11 +273,11 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
 
 def get_uchroot_workaround_steps():
     workaround_steps = []
-    workaround_steps.append(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
+    workaround_steps.append(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=False,
                                      haltOnFailure=False, flunkOnWarnings=False,
                                      flunkOnFailure=False, warnOnWarnings=False,
                                      warnOnFailure=False))
-    workaround_steps.append(cmd("sleep 1", hideStepIf=True))
+    workaround_steps.append(cmd("sleep 1", hideStepIf=False))
     return workaround_steps
 
 # yapf: disable
@@ -287,7 +287,7 @@ def configure(c):
     # TODO Check if this can be done without a dummy command
     #f.addStep(GenerateGitCloneCommand())
     f.addStep(GenerateGitCloneCommand(name="Dummy_1", command=['true'],
-                                      haltOnFailure=True, hideStepIf=True))
+                                      haltOnFailure=True, hideStepIf=False))
 
     f.addStep(define('UCHROOT_SRC_ROOT', UCHROOT_SRC_ROOT))
     f.addStep(define('UCHROOT_BUILD_DIR', UCHROOT_BUILD_DIR))
@@ -302,7 +302,7 @@ def configure(c):
                        workdir=UCHROOT_SRC_ROOT + '/build'))
 
     f.addStep(GenerateMakeCleanCommand(name="Dummy_2", command=['true'],
-                                       haltOnFailure=True, hideStepIf=True))
+                                       haltOnFailure=True, hideStepIf=False))
 
     # use mergecheck tool to make sure the 'upstream' remote is present
     # TODO: Fix
@@ -316,7 +316,7 @@ def configure(c):
                      '--branch', 'refs/remotes/upstream/master',
                      '-v'],
             workdir=ip(CHECKOUT_BASE_DIR),
-            name='Add upstream remote to repository.', hideStepIf=True))
+            name='Add upstream remote to repository.', hideStepIf=False))
 
     # Prepare project file list to filter out compiler warnings
     f.addStep(cmd("../../tools/VaRA/utils/vara/getVaraSourceFiles.sh",
@@ -324,13 +324,13 @@ def configure(c):
                   "--include-existing",
                   "--relative-to", ip(BUILD_DIR),
                   "--output", "buildbot-source-file-list.txt",
-                  workdir=ip(BUILD_DIR), hideStepIf=True))
+                  workdir=ip(BUILD_DIR), hideStepIf=False))
 
     # Compile Step
     f.addStep(GenerateBuildStepCommand(name="Dummy_3",
                                        command=['cat', 'buildbot-source-file-list.txt'],
                                        workdir=ip(BUILD_DIR),
-                                       haltOnFailure=True, hideStepIf=True))
+                                       haltOnFailure=True, hideStepIf=False))
 
     # Regression Test step
     for step in get_uchroot_workaround_steps():
@@ -352,7 +352,7 @@ def configure(c):
                                              command=['opt/clang-format-static/clang-format',
                                                       '-version'],
                                              workdir=ip('%(prop:uchroot_image_path)s'),
-                                             haltOnFailure=True, hideStepIf=True))
+                                             haltOnFailure=True, hideStepIf=False))
 
     c['builders'].append(builder(PROJECT_NAME, None, ACCEPTED_BUILDERS, tags=['vara'],
                                  factory=f))
