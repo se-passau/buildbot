@@ -40,7 +40,8 @@ REPOS['vara-llvm-project'] = {
     'default_branch': 'vara-100-dev',
     'checkout_dir': CHECKOUT_BASE_DIR,
     'checkout_subdir': '',
-    'upstream_remote_url': 'https://git.llvm.org/git/llvm.git/', # TODO
+    #'upstream_remote_url': 'https://git.llvm.org/git/llvm.git/', # TODO
+    'upstream_remote_url': 'https://github.com/llvm/llvm-project',
     'upstream_merge_base': '18e41dc964f916504ec90dba523826ac74d235c4',
 }
 REPOS['vara'] = {
@@ -304,7 +305,8 @@ def configure(c):
                                        haltOnFailure=True, hideStepIf=True))
 
     # use mergecheck tool to make sure the 'upstream' remote is present
-    for repo in ['vara-llvm', 'vara-clang']:
+    # TODO: Fix
+    for repo in ['vara-llvm-project']:
         f.addStep(steps.Compile(
             command=['/local/hdd/buildbot/mergecheck/build/bin/mergecheck', 'rebase',
                      '--repo', '.' + REPOS[repo]['checkout_subdir'],
