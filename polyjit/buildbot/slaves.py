@@ -5,7 +5,7 @@ infosun = {
         "host": "bayreuther01",
         "password": None,
         "properties": {
-            "uchroot_image_path": "/local/hdd/buildbot/disco-image/",
+            "uchroot_image_path": "/local/hdd/buildbot/focal-image/",
             "uchroot_binary": "/local/hdd/buildbot/erlent/build/uchroot",
             "has_munged": True,
             "can_build_llvm_debug": True
@@ -15,7 +15,7 @@ infosun = {
         "host": "bayreuther02",
         "password": None,
         "properties": {
-            "uchroot_image_path": "/local/hdd/buildbot/disco-image/",
+            "uchroot_image_path": "/local/hdd/buildbot/focal-image/",
             "uchroot_binary": "/local/hdd/buildbot/erlent/build/uchroot",
             "has_munged": True,
             "can_build_llvm_debug": True
