@@ -31,7 +31,7 @@ codebases = {
     'vara': {
         'repository': 'https://github.com/se-passau/VaRA',
         'repository_clone_url': 'git@github.com:se-passau/VaRA',
-        'branches': ['vara-dev'],
+        'branches': ['vara-dev', 'f-breitenj-bb'],
         'revision': None
     },
     # TODO: Remove
