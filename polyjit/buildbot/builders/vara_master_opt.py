@@ -319,7 +319,7 @@ def configure(c):
             name='Add upstream remote to repository.', hideStepIf=False))
 
     # Prepare project file list to filter out compiler warnings
-    f.addStep(cmd("../../tools/VaRA/utils/vara/getVaraSourceFiles.sh",
+    f.addStep(cmd("../vara/utils/vara/getVaraSourceFiles.sh",
                   "--vara", "--clang", "--llvm",
                   "--include-existing",
                   "--relative-to", ip(BUILD_DIR),
