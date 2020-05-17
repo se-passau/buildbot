@@ -2,6 +2,7 @@ from buildbot.plugins import *
 from buildbot.plugins import util
 
 codebases = {
+    # TODO: Remove
     'compiler-rt': {
         'repository': 'https://llvm.org/git/compiler-rt.git',
         'branches': ['master', 'release_90'],
@@ -14,24 +15,33 @@ codebases = {
         'branch': 'master',
         'revision': None
     },
+    # TODO: Remove
     'phasar': {
         'repository': 'https://github.com/secure-software-engineering/phasar.git',
         'branches': ['master', 'development'],
         'branch': 'master',
         'revision': None
     },
+    'vara-llvm-project': {
+        'repository': 'https://github.com/se-passau/vara-llvm-project',
+        'repository_clone_url': 'git@github.com:se-passau/vara-llvm-project',
+        'branches': ['vara-100-dev'],
+        'revision': None
+    },
     'vara': {
         'repository': 'https://github.com/se-passau/VaRA',
         'repository_clone_url': 'git@github.com:se-passau/VaRA',
-        'branches': ['vara-dev', 'f-AllowPhasarUsage', 'f-FixPhasarInstalllinkagebreack'],
+        'branches': ['vara-dev'],
         'revision': None
     },
+    # TODO: Remove
     'vara-llvm': {
         'repository': 'https://github.com/se-passau/vara-llvm',
         'repository_clone_url': 'git@github.com:se-passau/vara-llvm',
         'branches': ['vara-90-dev', 'f-AllowPhasarUsage'],
         'revision': None
     },
+    # TODO: Remove
     'vara-clang': {
         'repository': 'https://github.com/se-passau/vara-clang',
         'repository_clone_url': 'git@github.com:se-passau/vara-clang',

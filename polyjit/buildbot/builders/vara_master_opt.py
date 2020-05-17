@@ -27,7 +27,7 @@ CHECKOUT_BASE_DIR = '%(prop:builddir)s/vara-llvm'
 
 # Adapt these values according to build type:
 PROJECT_NAME = 'vara-master-opt'
-TRIGGER_BRANCHES = 'vara-dev|vara-90-dev'
+TRIGGER_BRANCHES = 'vara-dev|vara-100-dev'
 BUILD_SUBDIR = '/build/opt'
 BUILD_SCRIPT = 'build-opt.sh'
 BUILD_DIR = '%(prop:builddir)s/vara-llvm/build/opt'
@@ -36,32 +36,18 @@ UCHROOT_BUILD_DIR = UCHROOT_SRC_ROOT + BUILD_SUBDIR
 
 # Also adapt these values:
 REPOS = OrderedDict()
-REPOS['vara-llvm'] = {
-    'default_branch': 'vara-90-dev',
+REPOS['vara-llvm-project'] = {
+    'default_branch': 'vara-100-dev',
     'checkout_dir': CHECKOUT_BASE_DIR,
     'checkout_subdir': '',
-    'upstream_remote_url': 'https://git.llvm.org/git/llvm.git/',
+    'upstream_remote_url': 'https://git.llvm.org/git/llvm.git/', # TODO
     'upstream_merge_base': '18e41dc964f916504ec90dba523826ac74d235c4',
-}
-REPOS['vara-clang'] = {
-    'default_branch': 'vara-90-dev',
-    'checkout_dir': CHECKOUT_BASE_DIR + '/tools/clang',
-    'checkout_subdir': '/tools/clang',
-    'upstream_remote_url': 'https://git.llvm.org/git/clang.git/',
-    'upstream_merge_base': 'a03da8be08a208122e292016cb6cea1f30229677',
 }
 REPOS['vara'] = {
     'default_branch': 'vara-dev',
-    'checkout_dir': CHECKOUT_BASE_DIR + '/tools/VaRA',
-    'checkout_subdir': '/tools/VaRA',
-}
-REPOS['compiler-rt'] = {
-    'default_branch': 'release_90',
-    'checkout_dir': CHECKOUT_BASE_DIR + '/projects/compiler-rt',
-}
-REPOS['clang-tools-extra'] = {
-    'default_branch': 'release_90',
-    'checkout_dir': CHECKOUT_BASE_DIR + '/tools/clang/tools/extra',
+    #'checkout_dir': CHECKOUT_BASE_DIR + '/tools/VaRA',
+    'checkout_dir': CHECKOUT_BASE_DIR + '/vara-llvm-project',
+    'checkout_subdir': '/vara-llvm-project',
 }
 
 ################################################################################
