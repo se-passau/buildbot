@@ -37,7 +37,9 @@ UCHROOT_BUILD_DIR = UCHROOT_SRC_ROOT + BUILD_SUBDIR
 # Also adapt these values:
 REPOS = OrderedDict()
 REPOS['vara-llvm-project'] = {
-    'default_branch': 'vara-100-dev',
+    # TODO
+    #'default_branch': 'vara-100-dev',
+    'default_branch': 'f-breitenj-bb',
     'checkout_dir': CHECKOUT_BASE_DIR,
     'checkout_subdir': '',
     #'upstream_remote_url': 'https://git.llvm.org/git/llvm.git/', # TODO
