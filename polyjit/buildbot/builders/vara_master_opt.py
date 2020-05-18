@@ -213,7 +213,7 @@ class GenerateClangFormatStepCommand(buildstep.ShellMixin, steps.BuildStep):
                 buildsteps.append(step)
             buildsteps.append(ucompile('bash', 'bb-clang-format.sh', '--all', '--line-numbers',
                                        '--cf-binary', '/opt/clang-format-static/clang-format',
-                                       workdir='../../vara/utils/buildbot',
+                                       workdir='vara/utils/buildbot',
                                        name=step_name,
                                        haltOnFailure=False, warnOnWarnings=True))
 
@@ -344,7 +344,7 @@ def configure(c):
     for step in get_uchroot_workaround_steps():
         f.addStep(step)
     f.addStep(ucompile('python3', 'tidy-vara.py', '-p', UCHROOT_BUILD_DIR, '-j', '8', '--gcc',
-                       workdir='../../vara/test/', name='run Clang-Tidy',
+                       workdir='vara/test/', name='run Clang-Tidy',
                        haltOnFailure=False, warnOnWarnings=True,
                        timeout=3600))
 
