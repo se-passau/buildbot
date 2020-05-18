@@ -40,7 +40,6 @@ REPOS['vara-llvm-project'] = {
     'default_branch': 'vara-100-dev',
     'checkout_dir': CHECKOUT_BASE_DIR,
     'checkout_subdir': '',
-    #'upstream_remote_url': 'https://git.llvm.org/git/llvm.git/', # TODO
     'upstream_remote_url': 'https://github.com/llvm/llvm-project',
     'upstream_merge_base': '18e41dc964f916504ec90dba523826ac74d235c4',
 }
@@ -148,7 +147,7 @@ class GenerateGitCloneCommand(buildstep.ShellMixin, steps.BuildStep):
 
         buildsteps.append(steps.ShellCommand(name='Create build directory',
                                              command=['mkdir', '-p', 'build'],
-                                             workdir=ip(CHECKOUT_BASE_DIR), hideStepIf=False))
+                                             workdir=ip(CHECKOUT_BASE_DIR), hideStepIf=True))
 
         self.build.addStepsAfterCurrentStep(buildsteps)
 
@@ -272,11 +271,11 @@ class GenerateMergecheckCommand(buildstep.ShellMixin, steps.BuildStep):
 
 def get_uchroot_workaround_steps():
     workaround_steps = []
-    workaround_steps.append(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=False,
+    workaround_steps.append(ucompile('true', name='uchroot /proc bug workaround', hideStepIf=True,
                                      haltOnFailure=False, flunkOnWarnings=False,
                                      flunkOnFailure=False, warnOnWarnings=False,
                                      warnOnFailure=False))
-    workaround_steps.append(cmd("sleep 1", hideStepIf=False))
+    workaround_steps.append(cmd("sleep 1", hideStepIf=True))
     return workaround_steps
 
 # yapf: disable
@@ -286,7 +285,7 @@ def configure(c):
     # TODO Check if this can be done without a dummy command
     #f.addStep(GenerateGitCloneCommand())
     f.addStep(GenerateGitCloneCommand(name="Dummy_1", command=['true'],
-                                      haltOnFailure=True, hideStepIf=False))
+                                      haltOnFailure=True, hideStepIf=True))
 
     f.addStep(define('UCHROOT_SRC_ROOT', UCHROOT_SRC_ROOT))
     f.addStep(define('UCHROOT_BUILD_DIR', UCHROOT_BUILD_DIR))
@@ -295,15 +294,13 @@ def configure(c):
     for step in get_uchroot_workaround_steps():
         f.addStep(step)
     f.addStep(ucompile('../vara/utils/vara/builds/' + BUILD_SCRIPT,
-                       'opt',
-                       '-DCMAKE_POSITION_INDEPENDENT_CODE=TRUE',
                        env={'PATH': '/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin'},
                        name='cmake',
                        description=BUILD_SCRIPT,
                        workdir=UCHROOT_SRC_ROOT + '/build'))
 
     f.addStep(GenerateMakeCleanCommand(name="Dummy_2", command=['true'],
-                                       haltOnFailure=True, hideStepIf=False))
+                                       haltOnFailure=True, hideStepIf=True))
 
     # use mergecheck tool to make sure the 'upstream' remote is present
     # TODO: Fix
@@ -325,13 +322,13 @@ def configure(c):
                   "--include-existing",
                   "--relative-to", ip(BUILD_DIR),
                   "--output", "buildbot-source-file-list.txt",
-                  workdir=ip(BUILD_DIR), hideStepIf=False))
+                  workdir=ip(BUILD_DIR), hideStepIf=True))
 
     # Compile Step
     f.addStep(GenerateBuildStepCommand(name="Dummy_3",
                                        command=['cat', 'buildbot-source-file-list.txt'],
                                        workdir=ip(BUILD_DIR),
-                                       haltOnFailure=True, hideStepIf=False))
+                                       haltOnFailure=True, hideStepIf=True))
 
     # Regression Test step
     for step in get_uchroot_workaround_steps():
@@ -353,7 +350,7 @@ def configure(c):
                                              command=['opt/clang-format-static/clang-format',
                                                       '-version'],
                                              workdir=ip('%(prop:uchroot_image_path)s'),
-                                             haltOnFailure=True, hideStepIf=False))
+                                             haltOnFailure=True, hideStepIf=True))
 
     c['builders'].append(builder(PROJECT_NAME, None, ACCEPTED_BUILDERS, tags=['vara'],
                                  factory=f))
