@@ -303,7 +303,6 @@ def configure(c):
                                        haltOnFailure=True, hideStepIf=True))
 
     # use mergecheck tool to make sure the 'upstream' remote is present
-    # TODO: Fix
     for repo in ['vara-llvm-project']:
         f.addStep(steps.Compile(
             command=['/local/hdd/buildbot/mergecheck/build/bin/mergecheck', 'rebase',
@@ -314,7 +313,7 @@ def configure(c):
                      '--branch', 'refs/remotes/upstream/master',
                      '-v'],
             workdir=ip(CHECKOUT_BASE_DIR),
-            name='Add upstream remote to repository.', hideStepIf=False))
+            name='Add upstream remote to repository.', hideStepIf=True))
 
     # Prepare project file list to filter out compiler warnings
     f.addStep(cmd("../../vara/utils/vara/getVaraSourceFiles.sh",
