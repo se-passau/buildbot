@@ -43,26 +43,26 @@ REPOS['vara-llvm-project'] = {
     'upstream_remote_url': 'https://github.com/llvm/llvm-project',
     'upstream_merge_base': '18e41dc964f916504ec90dba523826ac74d235c4',
 }
-REPOS['vara-clang'] = {
-    'default_branch': 'vara-90-dev',
-    'checkout_dir': CHECKOUT_BASE_DIR + '/tools/clang',
-    'checkout_subdir': '/tools/clang',
-    'upstream_remote_url': 'https://git.llvm.org/git/clang.git/',
-    'upstream_merge_base': 'a03da8be08a208122e292016cb6cea1f30229677',
-}
 REPOS['vara'] = {
     'default_branch': 'vara-dev',
     'checkout_dir': CHECKOUT_BASE_DIR + '/vara',
     'checkout_subdir': '/vara',
 }
-REPOS['compiler-rt'] = {
-    'default_branch': 'release_90',
-    'checkout_dir': CHECKOUT_BASE_DIR + '/projects/compiler-rt',
-}
-REPOS['clang-tools-extra'] = {
-    'default_branch': 'release_90',
-    'checkout_dir': CHECKOUT_BASE_DIR + '/tools/clang/tools/extra',
-}
+#REPOS['vara-clang'] = {
+#    'default_branch': 'vara-90-dev',
+#    'checkout_dir': CHECKOUT_BASE_DIR + '/tools/clang',
+#    'checkout_subdir': '/tools/clang',
+#    'upstream_remote_url': 'https://git.llvm.org/git/clang.git/',
+#    'upstream_merge_base': 'a03da8be08a208122e292016cb6cea1f30229677',
+#}
+#REPOS['compiler-rt'] = {
+#    'default_branch': 'release_90',
+#    'checkout_dir': CHECKOUT_BASE_DIR + '/projects/compiler-rt',
+#}
+#REPOS['clang-tools-extra'] = {
+#    'default_branch': 'release_90',
+#    'checkout_dir': CHECKOUT_BASE_DIR + '/tools/clang/tools/extra',
+#}
 
 ################################################################################
 
@@ -242,7 +242,7 @@ class GenerateGitCheckoutCommand(buildstep.ShellMixin, steps.BuildStep):
                     define('branch', checkout_feature_br),
                     steps.ShellCommand(
                         name='Checking out feature branch \"' + str(checkout_feature_br) + '\"',
-                        command=['./tools/VaRA/utils/buildbot/bb-checkout-branches.sh',
+                        command=['./vara/utils/buildbot/bb-checkout-branches.sh',
                                  checkout_feature_br],
                         workdir=ip(CHECKOUT_BASE_DIR)),
                 ])
@@ -257,7 +257,7 @@ class GenerateGitCheckoutCommand(buildstep.ShellMixin, steps.BuildStep):
                     define('branch', ''),
                     steps.ShellCommand(
                         name=ip('Checking out feature branch \"%(prop:FEATURE)s\"'),
-                        command=['./tools/VaRA/utils/buildbot/bb-checkout-branches.sh',
+                        command=['./vara/utils/buildbot/bb-checkout-branches.sh',
                                  force_feature],
                         workdir=ip(CHECKOUT_BASE_DIR)),
                 ])
@@ -395,7 +395,7 @@ def configure(c):
 
     f.addStep(GenerateGitCheckoutCommand(
         name="Get branch names",
-        command=['./tools/VaRA/utils/buildbot/bb-get-branches.sh'], workdir=ip(CHECKOUT_BASE_DIR),
+        command=['./vara/utils/buildbot/bb-get-branches.sh'], workdir=ip(CHECKOUT_BASE_DIR),
         haltOnFailure=True, hideStepIf=True))
 
     # CMake
