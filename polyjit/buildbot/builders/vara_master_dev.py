@@ -27,7 +27,7 @@ CHECKOUT_BASE_DIR = '%(prop:builddir)s/vara-llvm'
 
 # Adapt these values according to build type:
 PROJECT_NAME = 'vara-master-dev'
-TRIGGER_BRANCHES = 'vara-dev|vara-90-dev'
+TRIGGER_BRANCHES = 'vara-dev|vara-100-dev'
 BUILD_SUBDIR = '/build/dev'
 BUILD_SCRIPT = 'build-dev.sh'
 BUILD_DIR = '%(prop:builddir)s/vara-llvm/build/dev'
@@ -36,11 +36,11 @@ UCHROOT_BUILD_DIR = UCHROOT_SRC_ROOT + BUILD_SUBDIR
 
 # Also adapt these values:
 REPOS = OrderedDict()
-REPOS['vara-llvm'] = {
+REPOS['vara-llvm-project'] = {
     'default_branch': 'vara-90-dev',
     'checkout_dir': CHECKOUT_BASE_DIR,
     'checkout_subdir': '',
-    'upstream_remote_url': 'https://git.llvm.org/git/llvm.git/',
+    'upstream_remote_url': 'https://github.com/llvm/llvm-project',
     'upstream_merge_base': '18e41dc964f916504ec90dba523826ac74d235c4',
 }
 REPOS['vara-clang'] = {
@@ -52,8 +52,8 @@ REPOS['vara-clang'] = {
 }
 REPOS['vara'] = {
     'default_branch': 'vara-dev',
-    'checkout_dir': CHECKOUT_BASE_DIR + '/tools/VaRA',
-    'checkout_subdir': '/tools/VaRA',
+    'checkout_dir': CHECKOUT_BASE_DIR + '/vara',
+    'checkout_subdir': '/vara',
 }
 REPOS['compiler-rt'] = {
     'default_branch': 'release_90',
@@ -227,7 +227,7 @@ class GenerateClangFormatStepCommand(buildstep.ShellMixin, steps.BuildStep):
                 buildsteps.append(step)
             buildsteps.append(ucompile('bash', 'bb-clang-format.sh', '--all', '--line-numbers',
                                        '--cf-binary', '/opt/clang-format-static/clang-format',
-                                       workdir='vara-llvm/tools/VaRA/utils/buildbot',
+                                       workdir='vara-llvm/vara/utils/buildbot',
                                        name=step_name,
                                        haltOnFailure=False, warnOnWarnings=True))
 
@@ -308,7 +308,7 @@ def configure(c):
     # CMake
     for step in get_uchroot_workaround_steps():
         f.addStep(step)
-    f.addStep(ucompile('../tools/VaRA/utils/vara/builds/' + BUILD_SCRIPT,
+    f.addStep(ucompile('../vara/utils/vara/builds/' + BUILD_SCRIPT,
                        env={'PATH': '/opt/cmake/bin:/usr/local/bin:/usr/bin:/bin'},
                        name='cmake',
                        description=BUILD_SCRIPT,
@@ -318,7 +318,7 @@ def configure(c):
                                        haltOnFailure=True, hideStepIf=True))
 
     # use mergecheck tool to make sure the 'upstream' remote is present
-    for repo in ['vara-llvm', 'vara-clang']:
+    for repo in ['vara-llvm-project']:
         f.addStep(steps.Compile(
             command=['/local/hdd/buildbot/mergecheck/build/bin/mergecheck', 'rebase',
                      '--repo', '.' + REPOS[repo]['checkout_subdir'],
@@ -331,7 +331,7 @@ def configure(c):
             name='Add upstream remote to repository.', hideStepIf=True))
 
     # Prepare project file list to filter out compiler warnings
-    f.addStep(cmd("../../tools/VaRA/utils/vara/getVaraSourceFiles.sh",
+    f.addStep(cmd("../../vara/utils/vara/getVaraSourceFiles.sh",
                   "--vara", "--clang", "--llvm",
                   "--include-existing",
                   "--relative-to", ip(BUILD_DIR),
@@ -355,7 +355,7 @@ def configure(c):
     for step in get_uchroot_workaround_steps():
         f.addStep(step)
     f.addStep(ucompile('python3', 'tidy-vara.py', '-p', UCHROOT_BUILD_DIR, '-j', '8', '--gcc',
-                       workdir='vara-llvm/tools/VaRA/test/', name='run Clang-Tidy',
+                       workdir='vara-llvm/vara/test/', name='run Clang-Tidy',
                        haltOnFailure=False, warnOnWarnings=True,
                        timeout=3600))
 
