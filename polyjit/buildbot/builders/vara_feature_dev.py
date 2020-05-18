@@ -36,7 +36,7 @@ UCHROOT_BUILD_DIR = UCHROOT_SRC_ROOT + BUILD_SUBDIR
 
 # Also adapt these values:
 REPOS = OrderedDict()
-REPOS['vara-llvm'] = {
+REPOS['vara-llvm-project'] = {
     'default_branch': 'vara-100-dev',
     'checkout_dir': CHECKOUT_BASE_DIR,
     'checkout_subdir': '',
